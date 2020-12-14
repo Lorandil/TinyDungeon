@@ -18,7 +18,7 @@ uint8_t dir  = NORTH;
 
 uint8_t level_height = 8;
 uint8_t level_width = 8;
-uint8_t *level = Level_1;
+const uint8_t *level = Level_1;
 
 #define LEVEL_SIZE_X  8
 #define LEVEL_SIZE_Y  8
@@ -39,13 +39,10 @@ void loop()
 {
   Tiny_Flip();
 
-_delay_ms( 200 );  
-
-  if ( isLeftPressed() && ( playerX > 0 ) ) { playerX--; }
-  if ( isRightPressed() && ( playerX < level_width ) ) { playerX++; }
-  if ( isUpPressed() && ( playerY > 0 ) ) { playerY--; }
-  if ( isDownPressed() && ( playerY < level_height ) ) { playerY++; }
-  if ( isFirePressed() ) { dir++; dir &= 0x03; }
+  // update player's position and orientation
+  checkPlayerMovement();
+ 
+  _delay_ms( 200 );
 }
 
 /*--------------------------------------------------------*/
@@ -163,4 +160,65 @@ uint8_t *getCell( int8_t x, int8_t y, const int8_t distance, const uint8_t orien
   }
 
   return( level + y * level_width + x );
+}
+
+/*--------------------------------------------------------*/
+void checkPlayerMovement()
+{
+  if ( isLeftPressed() ) 
+  {
+    // turn left
+    dir = ( dir - 1 ) & 0x03;
+  }
+  if ( isRightPressed() )
+  {
+    // turn right
+    dir = ( dir + 1 ) & 0x03;
+  }
+  if ( isUpPressed() )
+  {
+    switch( dir )
+    {
+      case NORTH:
+        playerY--;
+        break;
+      case EAST:
+        playerX++;
+        break;
+      case SOUTH:
+        playerY++;
+        break;
+      case WEST:
+        playerX--;
+        break;
+    }
+    //playerX += int8_t( pgm_read_byte( &playerMovement[dir].posOffset[UP].x ) );
+    //playerY += int8_t( pgm_read_byte( &playerMovement[dir].posOffset[UP].y ) );
+  }
+  if ( isDownPressed() )
+  {
+    switch( dir )
+    {
+      case NORTH:
+        playerY++;
+        break;
+      case EAST:
+        playerX--;
+        break;
+      case SOUTH:
+        playerY--;
+        break;
+      case WEST:
+        playerX++;
+        break;
+    }
+    //playerX += int8_t( pgm_read_byte( &playerMovement[dir].posOffset[DOWN].x ) );
+    //playerY += int8_t( pgm_read_byte( &playerMovement[dir].posOffset[DOWN].y ) );
+  }
+  
+  // limit the positions
+  if ( playerX < 0 ) { playerX = 0; }
+  if ( playerX >= level_width ) { playerX = level_width - 1; }
+  if ( playerY < 0 ) { playerY = 0; }
+  if ( playerY >= level_height ) { playerY = level_height - 1; }
 }
