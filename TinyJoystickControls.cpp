@@ -1,4 +1,5 @@
 #include <Arduino.h>
+#include <ssd1306xled.h>
 
 /*-------------------------------------------------------*/
 bool isLeftPressed()
@@ -32,4 +33,19 @@ bool isDownPressed()
 bool isFirePressed()
 {
   return( digitalRead( 1 ) == 0 );
+}
+
+/*-------------------------------------------------------*/
+// This code was borrowed from Daniel C's Tiny-invaders :)
+void Sound(uint8_t freq,uint8_t dur){
+  for (uint8_t t=0;t<dur;t++){
+    if (freq!=0) {PORTB = PORTB|0b00010000;}
+    for (uint8_t t=0;t<(255-freq);t++){
+      _delay_us(1);
+    }
+    PORTB = PORTB&0b11101111;
+    for (uint8_t t=0;t<(255-freq);t++){
+      _delay_us(1);
+    }
+  }
 }

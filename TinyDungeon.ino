@@ -159,10 +159,7 @@ uint8_t *getCell( int8_t x, int8_t y, const int8_t distance, const int8_t offset
     }
   }
 
-  if ( y < 0 ) { y += level_height; }
-  if ( y >= level_height ) { y -= level_height; }
-  if ( x < 0 ) { x += level_width; }
-  if ( x >= level_width ) { x -= level_width; }
+  limitDungeonPosition( x, y );
 
   return( level + y * level_width + x );
 }
@@ -182,6 +179,9 @@ void checkPlayerMovement()
   }
   if ( isUpPressed() )
   {
+    Sound(100,1);
+    Sound(200,1);
+    
     switch( dir )
     {
       case NORTH:
@@ -197,11 +197,12 @@ void checkPlayerMovement()
         playerX--;
         break;
     }
-    //playerX += int8_t( pgm_read_byte( &playerMovement[dir].posOffset[UP].x ) );
-    //playerY += int8_t( pgm_read_byte( &playerMovement[dir].posOffset[UP].y ) );
   }
   if ( isDownPressed() )
   {
+    Sound(100,1);
+    Sound(200,1);
+
     switch( dir )
     {
       case NORTH:
@@ -217,13 +218,18 @@ void checkPlayerMovement()
         playerX++;
         break;
     }
-    //playerX += int8_t( pgm_read_byte( &playerMovement[dir].posOffset[DOWN].x ) );
-    //playerY += int8_t( pgm_read_byte( &playerMovement[dir].posOffset[DOWN].y ) );
   }
   
   // limit the positions
-  if ( playerX < 0 ) { playerX = 0; }
-  if ( playerX >= level_width ) { playerX = level_width - 1; }
-  if ( playerY < 0 ) { playerY = 0; }
-  if ( playerY >= level_height ) { playerY = level_height - 1; }
+  limitDungeonPosition( playerX, playerY );
+}
+
+/*--------------------------------------------------------*/
+// Limits the position in the dungeon, but enables wrap-around :)
+void limitDungeonPosition( int8_t &x, int8_t &y )
+{
+  if ( x < 0 ) { x += level_width; }
+  if ( x >= level_width ) { x -= level_width; }
+  if ( y < 0 ) { y += level_height; }
+  if ( y >= level_height ) { y -= level_height; }
 }
