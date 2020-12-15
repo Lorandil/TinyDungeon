@@ -80,41 +80,41 @@ uint8_t getWallPixels( const int8_t x, const int8_t y )
   uint8_t pixel = 0;
   
   // check for a wall right in front
-  if ( ( pgm_read_byte( getCell( playerX, playerY, 1, dir ) ) & WALL_MASK ) == WALL )
+  if ( ( pgm_read_byte( getCell( playerX, playerY, 1, 0, dir ) ) & WALL_MASK ) == WALL )
   {
     pixel = pgm_read_byte( frontWalls_D1 + y * 96 + x );
   }
   // now it's getting trickier:
   // - we need to check if a wall is to the left or right, too!
-  else if (    ( ( x <= 24 ) && ( ( pgm_read_byte( getCell( playerX - 1, playerY, 1, dir ) ) & WALL_MASK ) == WALL ) )
-            || ( ( x >= 71 ) && ( ( pgm_read_byte( getCell( playerX + 1, playerY, 1, dir ) ) & WALL_MASK ) == WALL ) )
+  else if (    ( ( x <= 24 ) && ( ( pgm_read_byte( getCell( playerX, playerY, 1, -1, dir ) ) & WALL_MASK ) == WALL ) )
+            || ( ( x >= 71 ) && ( ( pgm_read_byte( getCell( playerX, playerY, 1, +1, dir ) ) & WALL_MASK ) == WALL ) )
           )
   {
     pixel = pgm_read_byte( leftRightWalls + y * 96 + x );
   }
   
   // check for a wall in front in distance 2
-  else if (    ( ( x > 24 ) && ( x < 71 ) &&( pgm_read_byte( getCell( playerX, playerY, 2, dir ) ) & WALL_MASK ) == WALL )
-            || ( ( x <= 24 ) && ( pgm_read_byte( getCell( playerX - 1, playerY, 2, dir ) ) & WALL_MASK ) == WALL )
-            || ( ( x >= 71 ) && ( pgm_read_byte( getCell( playerX + 1, playerY, 2, dir ) ) & WALL_MASK ) == WALL )
+  else if (    ( ( x > 24 ) && ( x < 71 ) &&( pgm_read_byte( getCell( playerX, playerY, 2, 0, dir ) ) & WALL_MASK ) == WALL )
+            || ( ( x <= 24 ) && ( pgm_read_byte( getCell( playerX, playerY, 2, -1, dir ) ) & WALL_MASK ) == WALL )
+            || ( ( x >= 71 ) && ( pgm_read_byte( getCell( playerX, playerY, 2, +1, dir ) ) & WALL_MASK ) == WALL )
           )
   {
     pixel = pgm_read_byte( frontWalls_D2 + y * 96 + x );
   }
   // check for walls to the left and right in 2 steps distance
-  else if (    ( ( x > 24 ) && ( x <= 37 ) && ( ( pgm_read_byte( getCell( playerX - 1, playerY, 2, dir ) ) & WALL_MASK ) == WALL ) )
-            || ( ( x >= 58 ) && ( x < 71 ) && ( ( pgm_read_byte( getCell( playerX + 1, playerY, 2, dir ) ) & WALL_MASK ) == WALL ) )
+  else if (    ( ( x > 24 ) && ( x <= 37 ) && ( ( pgm_read_byte( getCell( playerX, playerY, 2, -1, dir ) ) & WALL_MASK ) == WALL ) )
+            || ( ( x >= 58 ) && ( x < 71 ) && ( ( pgm_read_byte( getCell( playerX, playerY, 2, +1, dir ) ) & WALL_MASK ) == WALL ) )
           )
   {
     pixel = pgm_read_byte( leftRightWalls + y * 96 + x );
   }
   
   // check for a wall in front in distance 3
-  else if (    ( ( x <= 11 )                && ( pgm_read_byte( getCell( playerX - 2, playerY, 3, dir ) ) & WALL_MASK ) == WALL )
-            || ( ( x >  11 ) && ( x <= 35 ) && ( pgm_read_byte( getCell( playerX - 1, playerY, 3, dir ) ) & WALL_MASK ) == WALL )
-            || ( ( x >  35 ) && ( x <= 59 ) && ( pgm_read_byte( getCell( playerX    , playerY, 3, dir ) ) & WALL_MASK ) == WALL )
-            || ( ( x >  59 ) && ( x <  84 ) && ( pgm_read_byte( getCell( playerX + 1, playerY, 3, dir ) ) & WALL_MASK ) == WALL )
-            || ( ( x >= 84 )                && ( pgm_read_byte( getCell( playerX + 2, playerY, 3, dir ) ) & WALL_MASK ) == WALL )
+  else if (    ( ( x <= 11 )                && ( pgm_read_byte( getCell( playerX, playerY, 3, -2, dir ) ) & WALL_MASK ) == WALL )
+            || ( ( x >  11 ) && ( x <= 35 ) && ( pgm_read_byte( getCell( playerX, playerY, 3, -1, dir ) ) & WALL_MASK ) == WALL )
+            || ( ( x >  35 ) && ( x <= 59 ) && ( pgm_read_byte( getCell( playerX, playerY, 3,  0, dir ) ) & WALL_MASK ) == WALL )
+            || ( ( x >  59 ) && ( x <  84 ) && ( pgm_read_byte( getCell( playerX, playerY, 3, +1, dir ) ) & WALL_MASK ) == WALL )
+            || ( ( x >= 84 )                && ( pgm_read_byte( getCell( playerX, playerY, 3, +2, dir ) ) & WALL_MASK ) == WALL )
           )
   {
     pixel = pgm_read_byte( frontWalls_D3 + y * 96 + x );
@@ -129,35 +129,40 @@ uint8_t getWallPixels( const int8_t x, const int8_t y )
 // - in direction 'orientation'
 // - from position 'x', 'y'
 // This function supports a wrap-around, so endless corridors are possible :)
-uint8_t *getCell( int8_t x, int8_t y, const int8_t distance, const uint8_t orientation )
+uint8_t *getCell( int8_t x, int8_t y, const int8_t distance, const int8_t offsetLR, const uint8_t orientation )
 {
   switch( orientation )
   {
     case NORTH:
     {
       y -= distance;
-      if ( y < 0 ) { y += level_height; }
+      x += offsetLR;
       break;
     }
     case SOUTH:
     {
       y += distance;
-      if ( y >= level_height ) { y -= level_height; }
+      x -= offsetLR;
       break;
     }
     case EAST:
     {
       x += distance;
-      if ( x >= level_width ) { x -= level_width; }
+      y += offsetLR;
       break;
     }
     case WEST:
     {
       x -= distance;
-      if ( x < 0 ) { x += level_width; }
+      y -= offsetLR;
       break;
     }
   }
+
+  if ( y < 0 ) { y += level_height; }
+  if ( y >= level_height ) { y -= level_height; }
+  if ( x < 0 ) { x += level_width; }
+  if ( x >= level_width ) { x -= level_width; }
 
   return( level + y * level_width + x );
 }
