@@ -13,7 +13,7 @@
 #include "TinyJoystickControls.h"
 
 int8_t playerX = 6;
-int8_t playerY = 3;
+int8_t playerY = 2;
 uint8_t dir  = NORTH;
 
 uint8_t level_height = 8;
@@ -78,7 +78,36 @@ void Tiny_Flip()
 uint8_t getWallPixels( const int8_t x, const int8_t y )
 {
   uint8_t pixel = 0;
+
+#if 1
+  SIMPLE_WALL_INFO *wallInfoPtr = arrayOfWallInfo;
+
+  // iterate through the whole list (at least as long as it's necessary)
+  while( true )
+  {
+    // the entry is in PROGMEM, so we need to copy it to RAM first...
+    SIMPLE_WALL_INFO wallInfo;
+    memcpy_P( &wallInfo, wallInfoPtr, sizeof( wallInfo ) );
+
+    // end of list reached?
+    if ( wallInfo.wallBitmap == NULL ) { break; }
+
+    // check conditions
+    if ( ( x >= wallInfo.startPosX ) && ( x <= wallInfo.endPosX ) )
+    {
+      if ( ( pgm_read_byte( getCell( playerX, playerY, wallInfo.viewDistance, wallInfo.leftRightOffset, dir ) ) & WALL_MASK ) == wallInfo.objectMask )
+      {
+        pixel = pgm_read_byte( wallInfo.wallBitmap + y * 96 + x );
+        // that's it!
+        break;
+      }
+    }
+    // move to next entry
+    wallInfoPtr++;
+  }
   
+#else
+
   // check for a wall right in front
   if ( ( pgm_read_byte( getCell( playerX, playerY, 1, 0, dir ) ) & WALL_MASK ) == WALL )
   {
@@ -119,6 +148,8 @@ uint8_t getWallPixels( const int8_t x, const int8_t y )
   {
     pixel = pgm_read_byte( frontWalls_D3 + y * 96 + x );
   }
+
+#endif
 
   return( pixel );
 }
@@ -177,10 +208,10 @@ void checkPlayerMovement()
     // turn right
     dir = ( dir + 1 ) & 0x03;
   }
+
   if ( isUpPressed() )
   {
-    Sound(100,1);
-    Sound(200,1);
+    stepsSound();
     
     switch( dir )
     {
@@ -200,8 +231,7 @@ void checkPlayerMovement()
   }
   if ( isDownPressed() )
   {
-    Sound(100,1);
-    Sound(200,1);
+    stepsSound();
 
     switch( dir )
     {
@@ -232,4 +262,11 @@ void limitDungeonPosition( int8_t &x, int8_t &y )
   if ( x >= level_width ) { x -= level_width; }
   if ( y < 0 ) { y += level_height; }
   if ( y >= level_height ) { y -= level_height; }
+}
+
+/*--------------------------------------------------------*/
+void stepsSound()
+{
+  Sound(100,1);
+  Sound(200,1);
 }
