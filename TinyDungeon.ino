@@ -41,8 +41,6 @@ void loop()
 
   // update player's position and orientation
   checkPlayerMovement();
- 
-  _delay_ms( 200 );
 }
 
 /*--------------------------------------------------------*/
@@ -79,14 +77,14 @@ uint8_t getWallPixels( const int8_t x, const int8_t y )
 {
   uint8_t pixel = 0;
 
-#if 1
+  SIMPLE_WALL_INFO wallInfo;
+  
   SIMPLE_WALL_INFO *wallInfoPtr = arrayOfWallInfo;
 
   // iterate through the whole list (at least as long as it's necessary)
   while( true )
   {
-    // the entry is in PROGMEM, so we need to copy it to RAM first...
-    SIMPLE_WALL_INFO wallInfo;
+    // the structure resides in PROGMEM, so we need to copy it to RAM first...
     memcpy_P( &wallInfo, wallInfoPtr, sizeof( wallInfo ) );
 
     // end of list reached?
@@ -106,51 +104,6 @@ uint8_t getWallPixels( const int8_t x, const int8_t y )
     wallInfoPtr++;
   }
   
-#else
-
-  // check for a wall right in front
-  if ( ( pgm_read_byte( getCell( playerX, playerY, 1, 0, dir ) ) & WALL_MASK ) == WALL )
-  {
-    pixel = pgm_read_byte( frontWalls_D1 + y * 96 + x );
-  }
-  // now it's getting trickier:
-  // - we need to check if a wall is to the left or right, too!
-  else if (    ( ( x <= 24 ) && ( ( pgm_read_byte( getCell( playerX, playerY, 1, -1, dir ) ) & WALL_MASK ) == WALL ) )
-            || ( ( x >= 71 ) && ( ( pgm_read_byte( getCell( playerX, playerY, 1, +1, dir ) ) & WALL_MASK ) == WALL ) )
-          )
-  {
-    pixel = pgm_read_byte( leftRightWalls + y * 96 + x );
-  }
-  
-  // check for a wall in front in distance 2
-  else if (    ( ( x > 24 ) && ( x < 71 ) &&( pgm_read_byte( getCell( playerX, playerY, 2, 0, dir ) ) & WALL_MASK ) == WALL )
-            || ( ( x <= 24 ) && ( pgm_read_byte( getCell( playerX, playerY, 2, -1, dir ) ) & WALL_MASK ) == WALL )
-            || ( ( x >= 71 ) && ( pgm_read_byte( getCell( playerX, playerY, 2, +1, dir ) ) & WALL_MASK ) == WALL )
-          )
-  {
-    pixel = pgm_read_byte( frontWalls_D2 + y * 96 + x );
-  }
-  // check for walls to the left and right in 2 steps distance
-  else if (    ( ( x > 24 ) && ( x <= 37 ) && ( ( pgm_read_byte( getCell( playerX, playerY, 2, -1, dir ) ) & WALL_MASK ) == WALL ) )
-            || ( ( x >= 58 ) && ( x < 71 ) && ( ( pgm_read_byte( getCell( playerX, playerY, 2, +1, dir ) ) & WALL_MASK ) == WALL ) )
-          )
-  {
-    pixel = pgm_read_byte( leftRightWalls + y * 96 + x );
-  }
-  
-  // check for a wall in front in distance 3
-  else if (    ( ( x <= 11 )                && ( pgm_read_byte( getCell( playerX, playerY, 3, -2, dir ) ) & WALL_MASK ) == WALL )
-            || ( ( x >  11 ) && ( x <= 35 ) && ( pgm_read_byte( getCell( playerX, playerY, 3, -1, dir ) ) & WALL_MASK ) == WALL )
-            || ( ( x >  35 ) && ( x <= 59 ) && ( pgm_read_byte( getCell( playerX, playerY, 3,  0, dir ) ) & WALL_MASK ) == WALL )
-            || ( ( x >  59 ) && ( x <  84 ) && ( pgm_read_byte( getCell( playerX, playerY, 3, +1, dir ) ) & WALL_MASK ) == WALL )
-            || ( ( x >= 84 )                && ( pgm_read_byte( getCell( playerX, playerY, 3, +2, dir ) ) & WALL_MASK ) == WALL )
-          )
-  {
-    pixel = pgm_read_byte( frontWalls_D3 + y * 96 + x );
-  }
-
-#endif
-
   return( pixel );
 }
 
@@ -202,16 +155,19 @@ void checkPlayerMovement()
   {
     // turn left
     dir = ( dir - 1 ) & 0x03;
+    stepSound();
   }
   if ( isRightPressed() )
   {
     // turn right
     dir = ( dir + 1 ) & 0x03;
+    stepSound();
   }
 
   if ( isUpPressed() )
   {
-    stepsSound();
+    stepSound();
+    stepSound();
     
     switch( dir )
     {
@@ -231,7 +187,8 @@ void checkPlayerMovement()
   }
   if ( isDownPressed() )
   {
-    stepsSound();
+    stepSound();
+    stepSound();
 
     switch( dir )
     {
@@ -265,8 +222,9 @@ void limitDungeonPosition( int8_t &x, int8_t &y )
 }
 
 /*--------------------------------------------------------*/
-void stepsSound()
+void stepSound()
 {
   Sound(100,1);
   Sound(200,1);
+  _delay_ms( 100 );
 }
