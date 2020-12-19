@@ -34,9 +34,36 @@ enum
   MAX_ORIENTATION = 4,
 };
 
+
+typedef struct
+{
+  // width x height
+  int8_t width;
+  int8_t height;
+  // stairs up
+  int8_t upX;
+  int8_t upY;
+  // stairs down
+  int8_t downX;
+  int8_t downY;
+  // level number
+  int8_t levelNumber;
+  
+} LEVEL_HEADER;
+
 // simple level - 1 byte per cell, level size is 8x8 (probably flexible later)
 const uint8_t  Level_1[] PROGMEM = 
 {
+  // width x height
+   8,  8,
+  // stairs up
+  0xFF, 0xFF,
+  // stairs down
+  0xFF, 0xFF,
+  // level number
+   1,
+
+  // plain level data
 //  0      1      2      3      4      5      6      7
   WALL , WALL , WALL , WALL , WALL , WALL , WALL , WALL , // 0
     0  ,   0  ,   0  ,   0  , WALL , WALL ,   0  , WALL , // 1

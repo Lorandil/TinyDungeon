@@ -15,12 +15,10 @@ int8_t playerX = 6;
 int8_t playerY = 2;
 uint8_t dir  = NORTH;
 
-uint8_t level_height = 8;
-uint8_t level_width = 8;
-const uint8_t *level = Level_1;
-
-#define LEVEL_SIZE_X  8
-#define LEVEL_SIZE_Y  8
+uint8_t levelHeight;
+uint8_t levelWidth;
+const uint8_t MAX_LEVEL_BYTES = 128;
+const uint8_t currentLevel[MAX_LEVEL_BYTES];
 
 /*--------------------------------------------------------*/
 void setup()
@@ -36,10 +34,20 @@ void setup()
 /*--------------------------------------------------------*/
 void loop()
 {
-  Tiny_Flip();
+  // Prepare first level
+  LEVEL_HEADER *header = (LEVEL_HEADER *)Level_1;
+  levelWidth = header->width;
+  levelHeight = header->height;
+  // copy the level data to RAM
+  memcpy_P( currentLevel, Level_1 + sizeof( LEVEL_HEADER ), levelWidth * levelHeight );
 
-  // update player's position and orientation
-  checkPlayerMovement();
+  while( 1 )
+  {
+    Tiny_Flip();
+  
+    // update player's position and orientation
+    checkPlayerMovement();
+  }
 }
 
 /*--------------------------------------------------------*/
@@ -92,9 +100,16 @@ uint8_t getWallPixels( const int8_t x, const int8_t y )
     // check conditions
     if ( ( x >= wallInfo.startPosX ) && ( x <= wallInfo.endPosX ) )
     {
-      if ( ( pgm_read_byte( getCell( playerX, playerY, wallInfo.viewDistance, wallInfo.leftRightOffset, dir ) ) & WALL_MASK ) == wallInfo.objectMask )
+      if ( ( *( getCell( playerX, playerY, wallInfo.viewDistance, wallInfo.leftRightOffset, dir ) ) & WALL_MASK ) == wallInfo.objectMask )
       {
-        pixel = pgm_read_byte( wallInfo.wallBitmap + y * 96 + x );
+        if ( ( playerX + playerY ) & 0x01 )
+        {
+          pixel = pgm_read_byte( wallInfo.wallBitmap + y * 96 + x );
+        }
+        else
+        {
+          pixel = pgm_read_byte( wallInfo.wallBitmap + y * 96 + 95 - x );
+        }
         // that's it!
         break;
       }
@@ -144,7 +159,7 @@ uint8_t *getCell( int8_t x, int8_t y, const int8_t distance, const int8_t offset
 
   limitDungeonPosition( x, y );
 
-  return( level + y * level_width + x );
+  return( currentLevel + y * levelWidth + x );
 }
 
 /*--------------------------------------------------------*/
@@ -165,44 +180,58 @@ void checkPlayerMovement()
 
   if ( isUpPressed() )
   {
-    stepSound();
-    stepSound();
-    
-    switch( dir )
+    if ( ( *( getCell( playerX, playerY, 1, 0, dir ) ) & WALL_MASK ) != WALL )
     {
-      case NORTH:
-        playerY--;
-        break;
-      case EAST:
-        playerX++;
-        break;
-      case SOUTH:
-        playerY++;
-        break;
-      case WEST:
-        playerX--;
-        break;
+      stepSound();
+      stepSound();
+      
+      switch( dir )
+      {
+        case NORTH:
+          playerY--;
+          break;
+        case EAST:
+          playerX++;
+          break;
+        case SOUTH:
+          playerY++;
+          break;
+        case WEST:
+          playerX--;
+          break;
+      }
+    }
+    else
+    {
+      wallSound();
     }
   }
   if ( isDownPressed() )
   {
-    stepSound();
-    stepSound();
-
-    switch( dir )
+    if ( ( *( getCell( playerX, playerY, -1, 0, dir ) ) & WALL_MASK ) != WALL )
     {
-      case NORTH:
-        playerY++;
-        break;
-      case EAST:
-        playerX--;
-        break;
-      case SOUTH:
-        playerY--;
-        break;
-      case WEST:
-        playerX++;
-        break;
+      stepSound();
+      stepSound();
+  
+      switch( dir )
+      {
+        case NORTH:
+          playerY++;
+          break;
+        case EAST:
+          playerX--;
+          break;
+        case SOUTH:
+          playerY--;
+          break;
+        case WEST:
+          playerX++;
+          break;
+      }
+    }
+    else
+    {
+      wallSound();
     }
   }
   
@@ -214,16 +243,29 @@ void checkPlayerMovement()
 // Limits the position in the dungeon, but enables wrap-around :)
 void limitDungeonPosition( int8_t &x, int8_t &y )
 {
-  if ( x < 0 ) { x += level_width; }
-  if ( x >= level_width ) { x -= level_width; }
-  if ( y < 0 ) { y += level_height; }
-  if ( y >= level_height ) { y -= level_height; }
+  if ( x < 0 ) { x += levelWidth; }
+  if ( x >= levelWidth ) { x -= levelWidth; }
+  if ( y < 0 ) { y += levelHeight; }
+  if ( y >= levelHeight ) { y -= levelHeight; }
 }
 
 /*--------------------------------------------------------*/
 void stepSound()
 {
-  Sound(100,1);
-  Sound(200,1);
+  Sound( 100,1 );
+  Sound( 200,1 );
   _delay_ms( 100 );
+}
+
+/*--------------------------------------------------------*/
+void wallSound()
+{
+  Sound( 50,1 );
+  _delay_ms( 100 );
+}
+
+/*--------------------------------------------------------*/
+void swordSound()
+{
+  Sound( 50,100 );
 }
