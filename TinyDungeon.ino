@@ -8,6 +8,7 @@
 
 #include <ssd1306xled.h>
 #include "Dungeon.h"
+#include "spritebank.h"
 #include "smallFont.h"
 #include "TinyJoystickControls.h"
 
@@ -57,8 +58,16 @@ void Tiny_Flip()
   {
     // initialize image transfer to segment 'y'
     SSD1306.ssd1306_send_command(0xb0 + y);
-    SSD1306.ssd1306_send_command(0x00); 
+  #ifdef _USE_SH1106_
+    // SH1106 internally uses 132 pixels/line,
+    // output is (mostly?) centered, so we need to start at position 2
+    SSD1306.ssd1306_send_command(0x02);
     SSD1306.ssd1306_send_command(0x10);  
+  #else
+    // classic SSD1306 supports only 128 pixels/line, so we start at 0
+    SSD1306.ssd1306_send_command(0x00);
+    SSD1306.ssd1306_send_command(0x10);  
+  #endif    
     SSD1306.ssd1306_send_data_start();
     
     for ( uint8_t x = 0; x < 96; x++ )
@@ -82,11 +91,14 @@ void Tiny_Flip()
 /*--------------------------------------------------------*/
 uint8_t getWallPixels( const int8_t x, const int8_t y )
 {
-  uint8_t pixel = 0;
+  uint8_t pixels = 0;
 
   SIMPLE_WALL_INFO wallInfo;
   
   SIMPLE_WALL_INFO *wallInfoPtr = arrayOfWallInfo;
+
+  // all objects are visible
+  int8_t maxObjectDistance = 4;
 
   // iterate through the whole list (at least as long as it's necessary)
   while( true )
@@ -104,12 +116,14 @@ uint8_t getWallPixels( const int8_t x, const int8_t y )
       {
         if ( ( playerX + playerY ) & 0x01 )
         {
-          pixel = pgm_read_byte( wallInfo.wallBitmap + y * 96 + x );
+          pixels = pgm_read_byte( wallInfo.wallBitmap + y * 96 + x );
         }
         else
         {
-          pixel = pgm_read_byte( wallInfo.wallBitmap + y * 96 + 95 - x );
+          pixels = pgm_read_byte( wallInfo.wallBitmap + y * 96 + 95 - x );
         }
+        // objects behind walls not invisible
+        maxObjectDistance = wallInfo.viewDistance - 1;
         // that's it!
         break;
       }
@@ -117,8 +131,28 @@ uint8_t getWallPixels( const int8_t x, const int8_t y )
     // move to next entry
     wallInfoPtr++;
   }
+
+  // display NWOs (Non Wall Objects)
+  for ( uint8_t d = maxObjectDistance; d > 0; d-- )
+  {
+    for ( uint8_t n = 0; n < sizeof( objectList ) / sizeof( objectList[0] ); n++ )
+    {
+      // center?
+      if ( ( x >= 32 ) && ( x < 64 ) )
+      {
+        NON_WALL_OBJECT object;
+        memcpy_P( &object, &objectList[n], sizeof( object ) );
+        
+        if ( ( *( getCell( playerX, playerY, d, 0, dir ) ) & OBJECT_MASK ) == object.itemType )
+        {
+          pixels &= pgm_read_byte( object.itemBitmap + y * object.nextLineOffset + ( x - 32 ) + object.maskOffset );
+          pixels |= pgm_read_byte( object.itemBitmap + y * object.nextLineOffset + ( x - 32 ) );
+        }
+      }
+    }
+  }
   
-  return( pixel );
+  return( pixels );
 }
 
 /*--------------------------------------------------------*/

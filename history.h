@@ -11,6 +11,8 @@ already achieved:
   thus enabling arbitrary level sizes
   add information about stairs up and down to the level structure, too
 * mirror walls between odd and even cells
+* added skeleton and beholder bitmap
+* very plain draw function (buggy!) for non-wall-objects
 
 
 next steps:
@@ -21,7 +23,7 @@ next steps:
 * add monster(s)
 * add treasure
 * ...
-
+* have fun!
 
 
 

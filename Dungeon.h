@@ -12,12 +12,14 @@ enum
 
   GOBLIN              = 0x10,
   SKELETON            = 0x20,
-  ITEM_KEY            = 0x30,
-  ITEM_GOLD           = 0x40,
-  ITEM_FOUNTAIN       = 0x50,
+  BEHOLDER            = 0x30,
+  ITEM_KEY            = 0x40,
+  ITEM_GOLD           = 0x50,
+  ITEM_FOUNTAIN       = 0x60,
 };
 
-#define WALL_MASK 0x0F
+#define WALL_MASK   0x0F
+#define OBJECT_MASK 0xF0
 
 
 // orientations
@@ -51,7 +53,7 @@ typedef struct
   
 } LEVEL_HEADER;
 
-// simple level - 1 byte per cell, level size is 8x8 (probably flexible later)
+// simple level - 1 byte per cell
 const uint8_t  Level_1[] PROGMEM = 
 {
   // width x height
@@ -64,15 +66,15 @@ const uint8_t  Level_1[] PROGMEM =
    1,
 
   // plain level data
-//  0      1      2      3      4      5      6      7
-  WALL , WALL , WALL , WALL , WALL , WALL , WALL , WALL , // 0
-    0  ,   0  ,   0  ,   0  , WALL , WALL ,   0  , WALL , // 1
-    0  ,   0  , WALL ,   0  , WALL ,   0  ,   0  , WALL , // 2
-    0  ,   0  , WALL , WALL , WALL ,   0  ,   0  , WALL , // 3
-    0  ,   0  ,   0  , WALL ,   0  ,   0  ,   0  , WALL , // 4
-  WALL , WALL ,   0  , WALL ,   0  ,   0  ,   0  , WALL , // 5
-    0  ,   0  ,   0  ,   0  ,   0  ,   0  ,   0  ,   0  , // 6
-  WALL , WALL , WALL , WALL , WALL ,   0  ,   0  , WALL , // 7
+//  0        1        2        3        4        5        6        7
+  WALL ,   WALL ,   WALL ,   WALL ,   WALL ,   WALL   , WALL   , WALL , // 0
+    0  ,     0  ,     0  ,     0  ,   WALL ,   WALL   , BEHOLDER,WALL , // 1
+    0  ,     0  ,   WALL ,     0  ,   WALL ,     0    ,   0    , WALL , // 2
+    0  ,     0  ,   WALL ,   WALL ,   WALL ,     0    ,   0    , WALL , // 3
+    0  ,     0  ,     0  ,   WALL ,     0  ,     0    ,   0    , WALL , // 4
+  WALL ,   WALL ,     0  ,   WALL ,     0  ,     0    ,   0    , WALL , // 5
+  SKELETON,  0  ,     0  ,     0  ,     0  ,     0    ,   0    ,   0  , // 6
+  WALL ,   WALL ,   WALL ,   WALL ,   WALL ,     0    ,   0    , WALL , // 7
 };
 
 
