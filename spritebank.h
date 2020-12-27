@@ -150,6 +150,7 @@ const unsigned char door [] PROGMEM = {
 typedef struct 
 {
   uint8_t itemType;
+  uint8_t bitmapWidth;
   uint8_t maskOffset;
   uint8_t nextLineOffset;
   uint8_t maxViewDistance;
@@ -159,10 +160,11 @@ typedef struct
 
 // list of possible monsters
 const NON_WALL_OBJECT objectList [] PROGMEM = {
-  { SKELETON, 32, 64, 3, { 1, 2, 4 }, skeleton },
-  { BEHOLDER, 32, 64, 3, { 1, 2, 4 }, beholder },
-  { BARS    , 32, 64, 3, { 1, 2, 4 }, bars     },
-  { DOOR    , 32, 64, 3, { 1, 2, 4 }, door     },
+  { SKELETON, 32, 32, 64, 3, { 1, 2, 4 }, skeleton },
+  { BEHOLDER, 32, 32, 64, 3, { 1, 2, 4 }, beholder },
+  { BARS    , 32, 32, 64, 3, { 1, 2, 4 }, bars     },
+  { DOOR    , 32, 32, 64, 3, { 1, 2, 4 }, door     },
+  //{ 0 },
 };
 
 #endif

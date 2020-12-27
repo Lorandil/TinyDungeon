@@ -6,6 +6,6 @@ bool isRightPressed();
 bool isUpPressed();
 bool isDownPressed();
 bool isFirePressed();
-void Sound(uint8_t freq,uint8_t dur);
+void Sound( uint8_t freq, uint8_t dur );
 
 #endif

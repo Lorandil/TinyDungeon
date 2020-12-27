@@ -133,15 +133,18 @@ uint8_t getWallPixels( const int8_t x, const int8_t y )
     wallInfoPtr++;
   }
 
+  NON_WALL_OBJECT object;
+
   // display NWOs (Non Wall Objects)
   for ( uint8_t d = maxObjectDistance; d > 0; d-- )
   {
+    uint8_t objectSize = 32 >> d;
+   
     for ( uint8_t n = 0; n < sizeof( objectList ) / sizeof( objectList[0] ); n++ )
     {
-      // center?
-      if ( ( x >= 32 ) && ( x < 64 ) )
+      // centered?
+      if ( ( x >= 48 - objectSize ) && ( x < 48 + objectSize ) )
       {
-        NON_WALL_OBJECT object;
         memcpy_P( &object, &objectList[n], sizeof( object ) );
         
         if ( ( *( getCell( playerX, playerY, d, 0, dir ) ) & OBJECT_MASK ) == object.itemType )
@@ -150,8 +153,9 @@ uint8_t getWallPixels( const int8_t x, const int8_t y )
           {
             d++;
           }
-          pixels &= getDownScaledBitmapData( x - 32, y, d, object.itemBitmap + object.maskOffset, object.nextLineOffset );
-          pixels |= getDownScaledBitmapData( x - 32, y, d, object.itemBitmap, object.nextLineOffset );
+          objectSize = 48 - objectSize;
+          pixels &= getDownScaledBitmapData( x - objectSize, y, d, object.itemBitmap + object.maskOffset, object.nextLineOffset );
+          pixels |= getDownScaledBitmapData( x - objectSize, y, d, object.itemBitmap, object.nextLineOffset );
         }
       }
     }
@@ -227,17 +231,13 @@ void checkPlayerMovement()
       switch( dir )
       {
         case NORTH:
-          playerY--;
-          break;
+          playerY--; break;
         case EAST:
-          playerX++;
-          break;
+          playerX++; break;
         case SOUTH:
-          playerY++;
-          break;
+          playerY++; break;
         case WEST:
-          playerX--;
-          break;
+          playerX--; break;
       }
     }
     else
@@ -255,17 +255,13 @@ void checkPlayerMovement()
       switch( dir )
       {
         case NORTH:
-          playerY++;
-          break;
+          playerY++; break;
         case EAST:
-          playerX--;
-          break;
+          playerX--; break;
         case SOUTH:
-          playerY--;
-          break;
+          playerY--; break;
         case WEST:
-          playerX++;
-          break;
+          playerX++; break;
       }
     }
     else
@@ -321,6 +317,11 @@ uint8_t getDownScaledBitmapData( uint8_t x, uint8_t y, const uint8_t scaleFactor
   x = x * scaleFactor;
   y = y * scaleFactor;
 
+  //uint8_t offsetX = bitmapWidth >> scaleFactor;
+  //x -= offsetX;
+  //if ( ( x > offsetX ) && ( x >= bitmapWidth - offsetX ) )
+  {
+
   // create appropriate bit mask
   uint8_t bitMask = ( scaleFactor << 1 ) - 1;
 
@@ -364,6 +365,8 @@ uint8_t getDownScaledBitmapData( uint8_t x, uint8_t y, const uint8_t scaleFactor
     {
       pixels |= ( 1 << n );
     }
+  }
+
   }
 
   return( pixels );  
