@@ -150,7 +150,7 @@ uint8_t getWallPixels( const int8_t x, const int8_t y )
           {
             d++;
           }
-          pixels &= down( x - 32, y, d, object.itemBitmap + object.maskOffset, object.nextLineOffset );
+          pixels &= getDownScaledBitmapData( x - 32, y, d, object.itemBitmap + object.maskOffset, object.nextLineOffset );
           pixels |= getDownScaledBitmapData( x - 32, y, d, object.itemBitmap, object.nextLineOffset );
         }
       }
