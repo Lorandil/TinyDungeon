@@ -9,6 +9,7 @@
 #include <ssd1306xled.h>
 #include "Dungeon.h"
 #include "spritebank.h"
+#include "bitTables.h"
 #include "smallFont.h"
 #include "TinyJoystickControls.h"
 
@@ -145,8 +146,15 @@ uint8_t getWallPixels( const int8_t x, const int8_t y )
         
         if ( ( *( getCell( playerX, playerY, d, 0, dir ) ) & OBJECT_MASK ) == object.itemType )
         {
-          pixels &= pgm_read_byte( object.itemBitmap + y * object.nextLineOffset + ( x - 32 ) + object.maskOffset );
-          pixels |= pgm_read_byte( object.itemBitmap + y * object.nextLineOffset + ( x - 32 ) );
+          if ( d == 3 )
+          {
+            d++;
+          }
+          pixels &= getDownScaledBitmapData( x - 32, y, d, object.itemBitmap + object.maskOffset, object.nextLineOffset );
+          pixels |= getDownScaledBitmapData( x - 32, y, d, object.itemBitmap, object.nextLineOffset );
+          
+          //pixels &= pgm_read_byte( object.itemBitmap + y * object.nextLineOffset + ( x - 32 ) + object.maskOffset );
+          //pixels |= pgm_read_byte( object.itemBitmap + y * object.nextLineOffset + ( x - 32 ) );
         }
       }
     }
@@ -214,7 +222,7 @@ void checkPlayerMovement()
 
   if ( isUpPressed() )
   {
-    if ( ( *( getCell( playerX, playerY, 1, 0, dir ) ) & WALL_MASK ) != WALL )
+    if ( ( *( getCell( playerX, playerY, 1, 0, dir ) ) & FLAG_SOLID ) != FLAG_SOLID )
     {
       stepSound();
       stepSound();
@@ -242,7 +250,7 @@ void checkPlayerMovement()
   }
   if ( isDownPressed() )
   {
-    if ( ( *( getCell( playerX, playerY, -1, 0, dir ) ) & WALL_MASK ) != WALL )
+    if ( ( *( getCell( playerX, playerY, -1, 0, dir ) ) & FLAG_SOLID ) != FLAG_SOLID )
     {
       stepSound();
       stepSound();
@@ -302,4 +310,69 @@ void wallSound()
 void swordSound()
 {
   Sound( 50,100 );
+}
+
+/*--------------------------------------------------------*/
+// Returns the downscaled bitmap data at position x,y.
+// Supported scaling values are 1, 2, 4
+uint8_t getDownScaledBitmapData( uint8_t x, uint8_t y, const uint8_t scaleFactor, 
+                                 const uint8_t *bitmapData, const uint8_t bitmapWidth )
+{
+  uint8_t pixels = 0;
+
+  // correct x position
+  x = x * scaleFactor;
+  y = y * scaleFactor;
+
+  // calculate start address
+  uint8_t *data = bitmapData + y * bitmapWidth + x;
+  
+  uint8_t bitNo = 0;
+
+  switch( scaleFactor )
+  {
+    case 2:
+
+      for ( uint8_t n = 0; n < 8; n++ )
+      {
+        uint8_t bitSum = 0;
+        
+        for ( uint8_t row = 0; row < scaleFactor; row++ )
+        {
+          for ( uint8_t col = 0; col < scaleFactor; col++ )
+          {
+            bitSum += pgm_read_byte( nibbleBitCount + ( ( pgm_read_byte( data++ ) >> ( bitNo << 1 ) ) & 0x03 ) );
+          }
+          data -= scaleFactor;
+        }
+
+        if ( bitSum >= 2 )
+        {
+          pixels |= ( 1 << n );
+        }
+
+        // next output bit
+        bitNo++;
+        
+        if ( bitNo == 4 )
+        {
+          // a new byte will begin...
+          bitNo = 0;
+          // address next 8-pixel row
+          data += bitmapWidth;
+        }
+      }
+      break;
+      
+    case 4:
+      break;  
+      
+    // simple... no down scaling
+    case 1:
+    default:
+      pixels = pgm_read_byte( data );
+      break;
+  }
+
+  return( pixels );  
 }

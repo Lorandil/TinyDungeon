@@ -4,11 +4,21 @@
 // possible item types
 enum
 {
+  // bit 3 is reserved for "SOLID" objects, making them unpassable
+  FLAG_SOLID          = 0x08,
+
+  WALL_MASK           = 0x07,
+  OBJECT_MASK         = 0xF0 | FLAG_SOLID,
+
   EMPTY               = 0x00,
-  WALL                = 0x01,
-  DOOR                = 0x02,
-  STAIRS_UP           = 0x03,
-  STAIRS_DOWN         = 0x04,
+  // fake wall
+  FAKE_WALL           = 0x01,
+  // solid wall
+  WALL                = 0x01 | FLAG_SOLID,
+  //DOOR                = 0x02,// | FLAG_SOLID,
+  //BARS                = 0x03,// | FLAG_SOLID,
+  STAIRS_UP           = 0x04 | FLAG_SOLID,
+  STAIRS_DOWN         = 0x05 | FLAG_SOLID,
 
   GOBLIN              = 0x10,
   SKELETON            = 0x20,
@@ -16,10 +26,9 @@ enum
   ITEM_KEY            = 0x40,
   ITEM_GOLD           = 0x50,
   ITEM_FOUNTAIN       = 0x60,
+  DOOR                = 0x70 | FLAG_SOLID,
+  BARS                = 0x80 | FLAG_SOLID,
 };
-
-#define WALL_MASK   0x0F
-#define OBJECT_MASK 0xF0
 
 
 // orientations
@@ -67,13 +76,13 @@ const uint8_t  Level_1[] PROGMEM =
 
   // plain level data
 //  0        1        2        3        4        5        6        7
-  WALL ,   WALL ,   WALL ,   WALL ,   WALL ,   WALL   , WALL   , WALL , // 0
-    0  ,     0  ,     0  ,     0  ,   WALL ,   WALL   , BEHOLDER,WALL , // 1
-    0  ,     0  ,   WALL ,     0  ,   WALL ,     0    ,   0    , WALL , // 2
+  WALL ,   WALL ,   WALL ,   WALL ,   WALL ,   WALL   , FAKE_WALL   , WALL , // 0
+    0  ,     0  ,   BARS ,     0  ,   WALL ,   WALL   ,   0    , WALL , // 1
+    0  ,     0  ,   WALL ,     0  ,   WALL | DOOR,     0    ,   0    , WALL , // 2
     0  ,     0  ,   WALL ,   WALL ,   WALL ,     0    ,   0    , WALL , // 3
     0  ,     0  ,     0  ,   WALL ,     0  ,     0    ,   0    , WALL , // 4
-  WALL ,   WALL ,     0  ,   WALL ,     0  ,     0    ,   0    , WALL , // 5
-  SKELETON,  0  ,     0  ,     0  ,     0  ,     0    ,   0    ,   0  , // 6
+  WALL ,   WALL ,     0  ,   WALL ,   WALL ,     0    ,   0    , WALL , // 5
+  SKELETON,   0 ,     0  ,     0  ,     0  ,     0    ,   0    ,   0  , // 6
   WALL ,   WALL ,   WALL ,   WALL ,   WALL ,     0    ,   0    , WALL , // 7
 };
 
@@ -305,28 +314,28 @@ typedef struct
 // array of conditions for wall display
 const SIMPLE_WALL_INFO arrayOfWallInfo[] PROGMEM = {
   // distance 0
-  { leftRightWalls,  0,  4, 0, -1, WALL },
-  { leftRightWalls, 91, 95, 0, +1, WALL },
+  { leftRightWalls,  0,  4, 0, -1, WALL & ~FLAG_SOLID },
+  { leftRightWalls, 91, 95, 0, +1, WALL & ~FLAG_SOLID },
   // distance 1
-  { frontWalls_D1,   0,  4, 1, -1, WALL },
-  { frontWalls_D1,   5, 90, 1,  0, WALL },
-  { frontWalls_D1,  91, 95, 1, +1, WALL },
-  { leftRightWalls,  5, 24, 1, -1, WALL },
-  { leftRightWalls, 71, 90, 1, +1, WALL },
+  { frontWalls_D1,   0,  4, 1, -1, WALL & ~FLAG_SOLID },
+  { frontWalls_D1,   5, 90, 1,  0, WALL & ~FLAG_SOLID },
+  { frontWalls_D1,  91, 95, 1, +1, WALL & ~FLAG_SOLID },
+  { leftRightWalls,  5, 24, 1, -1, WALL & ~FLAG_SOLID },
+  { leftRightWalls, 71, 90, 1, +1, WALL & ~FLAG_SOLID },
   // distance 2
-  { frontWalls_D2,   0, 24, 2, -1, WALL },
-  { frontWalls_D2,  25, 70, 2,  0, WALL },
-  { frontWalls_D2,  71, 95, 2, +1, WALL },
-  { leftRightWalls, 25, 34, 2, -1, WALL },
-  { leftRightWalls, 61, 70, 2, +1, WALL },
+  { frontWalls_D2,   0, 24, 2, -1, WALL & ~FLAG_SOLID },
+  { frontWalls_D2,  25, 70, 2,  0, WALL & ~FLAG_SOLID },
+  { frontWalls_D2,  71, 95, 2, +1, WALL & ~FLAG_SOLID },
+  { leftRightWalls, 25, 34, 2, -1, WALL & ~FLAG_SOLID },
+  { leftRightWalls, 61, 70, 2, +1, WALL & ~FLAG_SOLID },
   // distance 3
-  { frontWalls_D3,   0, 11, 3, -2, WALL },
-  { frontWalls_D3,  12, 35, 3, -1, WALL },
-  { frontWalls_D3,  36, 58, 3,  0, WALL },
-  { frontWalls_D3,  59, 83, 3, +1, WALL },
-  { frontWalls_D3,  84, 95, 3, +2, WALL },
-  { leftRightWalls, 35, 47, 3, -1, WALL },
-  { leftRightWalls, 48, 60, 3, +1, WALL },
+  { frontWalls_D3,   0, 11, 3, -2, WALL & ~FLAG_SOLID },
+  { frontWalls_D3,  12, 35, 3, -1, WALL & ~FLAG_SOLID },
+  { frontWalls_D3,  36, 58, 3,  0, WALL & ~FLAG_SOLID },
+  { frontWalls_D3,  59, 83, 3, +1, WALL & ~FLAG_SOLID },
+  { frontWalls_D3,  84, 95, 3, +2, WALL & ~FLAG_SOLID },
+  { leftRightWalls, 35, 47, 3, -1, WALL & ~FLAG_SOLID },
+  { leftRightWalls, 48, 60, 3, +1, WALL & ~FLAG_SOLID },
   
   { NULL,            0,  0, 0,  0,    0 },
 };

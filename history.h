@@ -22,6 +22,8 @@ next steps:
 * add scaling?
 * add monster(s)
 * add treasure
+* use solid bit
+
 * ...
 * have fun!
 
