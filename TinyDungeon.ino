@@ -150,11 +150,8 @@ uint8_t getWallPixels( const int8_t x, const int8_t y )
           {
             d++;
           }
-          pixels &= getDownScaledBitmapData( x - 32, y, d, object.itemBitmap + object.maskOffset, object.nextLineOffset );
+          pixels &= down( x - 32, y, d, object.itemBitmap + object.maskOffset, object.nextLineOffset );
           pixels |= getDownScaledBitmapData( x - 32, y, d, object.itemBitmap, object.nextLineOffset );
-          
-          //pixels &= pgm_read_byte( object.itemBitmap + y * object.nextLineOffset + ( x - 32 ) + object.maskOffset );
-          //pixels |= pgm_read_byte( object.itemBitmap + y * object.nextLineOffset + ( x - 32 ) );
         }
       }
     }
@@ -324,54 +321,49 @@ uint8_t getDownScaledBitmapData( uint8_t x, uint8_t y, const uint8_t scaleFactor
   x = x * scaleFactor;
   y = y * scaleFactor;
 
+  // create appropriate bit mask
+  uint8_t bitMask = ( scaleFactor << 1 ) - 1;
+
   // calculate start address
   uint8_t *data = bitmapData + y * bitmapWidth + x;
-  
+
+  // first bit to be processed
   uint8_t bitNo = 0;
 
-  switch( scaleFactor )
+  // we need 8 vertical output bits
+  for ( uint8_t n = 0; n < 8; n++ )
   {
-    case 2:
+    uint8_t bitSum = 0;
 
-      for ( uint8_t n = 0; n < 8; n++ )
+    // go over the rows...
+    for ( uint8_t row = 0; row < scaleFactor; row++ )
+    {
+      // but first the columns
+      for ( uint8_t col = 0; col < scaleFactor; col++ )
       {
-        uint8_t bitSum = 0;
-        
-        for ( uint8_t row = 0; row < scaleFactor; row++ )
-        {
-          for ( uint8_t col = 0; col < scaleFactor; col++ )
-          {
-            bitSum += pgm_read_byte( nibbleBitCount + ( ( pgm_read_byte( data++ ) >> ( bitNo << 1 ) ) & 0x03 ) );
-          }
-          data -= scaleFactor;
-        }
-
-        if ( bitSum >= 2 )
-        {
-          pixels |= ( 1 << n );
-        }
-
-        // next output bit
-        bitNo++;
-        
-        if ( bitNo == 4 )
-        {
-          // a new byte will begin...
-          bitNo = 0;
-          // address next 8-pixel row
-          data += bitmapWidth;
-        }
+        // to get the output value, we will sum all the bits up (using a lookup table saves time and flash space)
+        bitSum += pgm_read_byte( nibbleBitCount + ( ( pgm_read_byte( data++ ) >>  bitNo ) & bitMask ) );
       }
-      break;
-      
-    case 4:
-      break;  
-      
-    // simple... no down scaling
-    case 1:
-    default:
-      pixels = pgm_read_byte( data );
-      break;
+      // correct the post increments from before
+      data -= scaleFactor;
+    }
+
+    // next bit position
+    bitNo += scaleFactor;
+
+    if ( bitNo >= 8 )
+    {
+      // a new byte will begin...
+      bitNo = 0;
+      // address next 8-pixel row
+      data += bitmapWidth;
+    }
+
+    // calculate output pixel
+    if ( bitSum >= bitMask )
+    {
+      pixels |= ( 1 << n );
+    }
   }
 
   return( pixels );  

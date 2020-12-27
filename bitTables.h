@@ -26,7 +26,4 @@ const uint8_t nibbleBitCount[16] PROGMEM =
   4, // 0b1111
 };
 
-// distance to scale factor table
-const uint8_t distanceToScaleFactor[] PROGMEM = { 0, 1, 2, 4 };
-
 #endif

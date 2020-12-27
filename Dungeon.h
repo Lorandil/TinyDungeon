@@ -76,9 +76,9 @@ const uint8_t  Level_1[] PROGMEM =
 
   // plain level data
 //  0        1        2        3        4        5        6        7
-  WALL ,   WALL ,   WALL ,   WALL ,   WALL ,   WALL   , FAKE_WALL   , WALL , // 0
+  WALL ,   WALL ,   WALL ,   WALL ,   WALL ,   WALL   ,FAKE_WALL, WALL , // 0
     0  ,     0  ,   BARS ,     0  ,   WALL ,   WALL   ,   0    , WALL , // 1
-    0  ,     0  ,   WALL ,     0  ,   WALL | DOOR,     0    ,   0    , WALL , // 2
+    0  ,     0  ,   WALL ,     0  ,   WALL ,     0    ,BEHOLDER, WALL , // 2
     0  ,     0  ,   WALL ,   WALL ,   WALL ,     0    ,   0    , WALL , // 3
     0  ,     0  ,     0  ,   WALL ,     0  ,     0    ,   0    , WALL , // 4
   WALL ,   WALL ,     0  ,   WALL ,   WALL ,     0    ,   0    , WALL , // 5

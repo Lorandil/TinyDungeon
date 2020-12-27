@@ -153,15 +153,16 @@ typedef struct
   uint8_t maskOffset;
   uint8_t nextLineOffset;
   uint8_t maxViewDistance;
+  uint8_t scalingThreshold[3];
   uint8_t* itemBitmap;
 } NON_WALL_OBJECT;
 
 // list of possible monsters
 const NON_WALL_OBJECT objectList [] PROGMEM = {
-  { SKELETON, 32, 64, 2, skeleton },
-  { BEHOLDER, 32, 64, 2, beholder },
-  { BARS    , 32, 64, 2, bars     },
-  { DOOR    , 32, 64, 3, door     },
+  { SKELETON, 32, 64, 3, { 1, 2, 4 }, skeleton },
+  { BEHOLDER, 32, 64, 3, { 1, 2, 4 }, beholder },
+  { BARS    , 32, 64, 3, { 1, 2, 4 }, bars     },
+  { DOOR    , 32, 64, 3, { 1, 2, 4 }, door     },
 };
 
 #endif
