@@ -20,7 +20,7 @@ uint8_t dir  = NORTH;
 uint8_t levelHeight;
 uint8_t levelWidth;
 const uint8_t MAX_LEVEL_BYTES = 128;
-const uint8_t currentLevel[MAX_LEVEL_BYTES];
+uint8_t currentLevel[MAX_LEVEL_BYTES];
 
 /*--------------------------------------------------------*/
 void setup()
@@ -96,7 +96,7 @@ uint8_t getWallPixels( const int8_t x, const int8_t y )
 
   SIMPLE_WALL_INFO wallInfo;
   
-  SIMPLE_WALL_INFO *wallInfoPtr = arrayOfWallInfo;
+  const SIMPLE_WALL_INFO *wallInfoPtr = arrayOfWallInfo;
 
   // all objects are visible
   int8_t maxObjectDistance = 4;
@@ -326,7 +326,7 @@ uint8_t getDownScaledBitmapData( uint8_t x, uint8_t y, const uint8_t scaleFactor
   uint8_t bitMask = ( scaleFactor << 1 ) - 1;
 
   // calculate start address
-  uint8_t *data = bitmapData + y * bitmapWidth + x;
+  const uint8_t *data = bitmapData + y * bitmapWidth + x;
 
   // first bit to be processed
   uint8_t bitNo = 0;

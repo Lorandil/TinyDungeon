@@ -155,7 +155,7 @@ typedef struct
   uint8_t nextLineOffset;
   uint8_t maxViewDistance;
   uint8_t scalingThreshold[3];
-  uint8_t* itemBitmap;
+  const uint8_t* itemBitmap;
 } NON_WALL_OBJECT;
 
 // list of possible monsters

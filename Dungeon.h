@@ -298,7 +298,7 @@ const unsigned char leftRightWalls [] PROGMEM = {
 typedef struct
 {
   // wall bitmap to use
-  uint8_t *wallBitmap;
+  const uint8_t *wallBitmap;
   // screen start position for this bitmap
   int8_t   startPosX;
   // screen end position for this bitmap
