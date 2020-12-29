@@ -11,7 +11,7 @@
 #include "spritebank.h"
 #include "bitTables.h"
 #include "smallFont.h"
-#include "TinyJoystickControls.h"
+#include "TinyJoypadUtils.h"
 
 int8_t playerX = 6;
 int8_t playerY = 2;
@@ -313,14 +313,9 @@ uint8_t getDownScaledBitmapData( uint8_t x, uint8_t y, const uint8_t scaleFactor
 {
   uint8_t pixels = 0;
 
-  // correct x position
+  // modify positions in source bitmap by scaling factor
   x = x * scaleFactor;
   y = y * scaleFactor;
-
-  //uint8_t offsetX = bitmapWidth >> scaleFactor;
-  //x -= offsetX;
-  //if ( ( x > offsetX ) && ( x >= bitmapWidth - offsetX ) )
-  {
 
   // create appropriate bit mask
   uint8_t bitMask = ( scaleFactor << 1 ) - 1;
@@ -331,8 +326,11 @@ uint8_t getDownScaledBitmapData( uint8_t x, uint8_t y, const uint8_t scaleFactor
   // first bit to be processed
   uint8_t bitNo = 0;
 
-  // we need 8 vertical output bits
-  for ( uint8_t n = 0; n < 8; n++ )
+  // We need to calculate 8 vertical output bits...
+  // NOTE: Because the Tiny85 only supports shifting by 1 bit, it is
+  //       more efficient to do the shifting in the 'for' loop instead
+  //       of using a ( 1 << n ) construct.
+  for ( uint8_t bitValue = 1; bitValue != 0; bitValue <<= 1 )
   {
     uint8_t bitSum = 0;
 
@@ -343,7 +341,7 @@ uint8_t getDownScaledBitmapData( uint8_t x, uint8_t y, const uint8_t scaleFactor
       for ( uint8_t col = 0; col < scaleFactor; col++ )
       {
         // to get the output value, we will sum all the bits up (using a lookup table saves time and flash space)
-        bitSum += pgm_read_byte( nibbleBitCount + ( ( pgm_read_byte( data++ ) >>  bitNo ) & bitMask ) );
+        bitSum += pgm_read_byte( nibbleBitCount + ( ( pgm_read_byte( data++ ) >> bitNo ) & bitMask ) );
       }
       // correct the post increments from before
       data -= scaleFactor;
@@ -363,10 +361,8 @@ uint8_t getDownScaledBitmapData( uint8_t x, uint8_t y, const uint8_t scaleFactor
     // calculate output pixel
     if ( bitSum >= bitMask )
     {
-      pixels |= ( 1 << n );
+      pixels |= bitValue;
     }
-  }
-
   }
 
   return( pixels );  
