@@ -26,4 +26,11 @@ const uint8_t nibbleBitCount[16] PROGMEM =
   4, // 0b1111
 };
 
+// Conversion table from view distance to scaling factor.
+// A distance of '0' is undefined but simplies adressing.
+const uint8_t scalingFactorFromDistance[4] PROGMEM =
+{
+  0, 1, 2, 4,
+};
+
 #endif

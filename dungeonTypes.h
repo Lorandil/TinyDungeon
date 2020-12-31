@@ -2,7 +2,12 @@
 #define _DUNGEON_TYPES_H_
 
 const uint8_t MAX_LEVEL_BYTES = 128;
+const uint8_t WINDOW_SIZE_X   = 96;
+const uint8_t WINDOW_CENTER_X = WINDOW_SIZE_X / 2;
+const uint8_t WINDOW_SIZE_Y   = 64;
+const uint8_t WINDOW_CENTER_Y = WINDOW_SIZE_Y / 2;
 
+// DUNGEON
 typedef struct 
 {
   int8_t playerX;
@@ -15,6 +20,8 @@ typedef struct
   
 } DUNGEON;
 
+
+// LEVEL_HEADER
 typedef struct
 {
   // width x height
@@ -31,10 +38,13 @@ typedef struct
   
 } LEVEL_HEADER;
 
+
+// NON_WALL_OBJECT
 typedef struct 
 {
   uint8_t itemType;
   uint8_t bitmapWidth;
+  uint8_t bitmapHeightInBytes;
   uint8_t maskOffset;
   uint8_t nextLineOffset;
   uint8_t maxViewDistance;
@@ -43,7 +53,10 @@ typedef struct
   
 } NON_WALL_OBJECT;
 
+
+
 // information for single wall display
+// SIMPLE_WALL_INFO
 typedef struct
 {
   // wall bitmap to use
@@ -58,7 +71,9 @@ typedef struct
   int8_t   leftRightOffset;
   // object selector, e.g. WALL
   uint8_t  objectMask;
+  
 } SIMPLE_WALL_INFO;
+
 
 // orientations
 enum 
@@ -73,6 +88,7 @@ enum
   LEFT  = WEST,
   MAX_ORIENTATION = 4,
 };
+
 
 // possible item types
 enum

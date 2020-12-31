@@ -1,5 +1,5 @@
 #include <Arduino.h>
-#include "Dungeon.h"
+#include "dungeon.h"
 #include "dungeonTypes.h"
 #include "spritebank.h"
 #include "bitmapDrawing.h"
@@ -51,24 +51,27 @@ uint8_t getWallPixels( DUNGEON *dungeon, const int8_t x, const int8_t y )
   // draw NWOs (Non Wall Objects) over the wall pixls (with mask!)
   for ( uint8_t d = maxObjectDistance; d > 0; d-- )
   {
-    uint8_t objectSize = 32 >> d;
-   
     for ( uint8_t n = 0; n < sizeof( objectList ) / sizeof( objectList[0] ); n++ )
     {
+      memcpy_P( &object, &objectList[n], sizeof( object ) );
+      uint8_t objectWidth = object.bitmapWidth >> d;
+      uint8_t objectHeightInBytes = object.bitmapHeightInBytes >> d;
+      
       // centered?
-      if ( ( x >= 48 - objectSize ) && ( x < 48 + objectSize ) )
+      if ( ( y >= ( WINDOW_CENTER_Y / 8 ) - objectHeightInBytes ) && ( y < ( WINDOW_CENTER_Y / 8 ) + objectHeightInBytes ) )
       {
-        memcpy_P( &object, &objectList[n], sizeof( object ) );
-        
-        if ( ( *( getCell( dungeon, dungeon->playerX, dungeon->playerY, d, 0, dungeon->dir ) ) & OBJECT_MASK ) == object.itemType )
+        if ( ( x >= WINDOW_CENTER_X - objectWidth ) && ( x < WINDOW_CENTER_X + objectWidth ) )
         {
-          if ( d == 3 )
+          if ( ( *( getCell( dungeon, dungeon->playerX, dungeon->playerY, d, 0, dungeon->dir ) ) & OBJECT_MASK ) == object.itemType )
           {
-            d++;
+            objectWidth = WINDOW_CENTER_X - objectWidth;
+            objectHeightInBytes = ( WINDOW_CENTER_Y / 8 ) - objectHeightInBytes;
+            uint8_t posX = x - objectWidth;
+            uint8_t posY = y - objectHeightInBytes;
+            uint8_t scalingFactor = pgm_read_byte( scalingFactorFromDistance + d );
+            pixels &= getDownScaledBitmapData( posX, posY, scalingFactor, object.itemBitmap + object.maskOffset, object.nextLineOffset );
+            pixels |= getDownScaledBitmapData( posX, posY, scalingFactor, object.itemBitmap, object.nextLineOffset );
           }
-          objectSize = 48 - objectSize;
-          pixels &= getDownScaledBitmapData( x - objectSize, y, d, object.itemBitmap + object.maskOffset, object.nextLineOffset );
-          pixels |= getDownScaledBitmapData( x - objectSize, y, d, object.itemBitmap, object.nextLineOffset );
         }
       }
     }
