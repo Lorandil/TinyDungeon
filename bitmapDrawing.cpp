@@ -69,8 +69,8 @@ uint8_t getWallPixels( DUNGEON *dungeon, const int8_t x, const int8_t y )
             uint8_t posX = x - objectWidth;
             uint8_t posY = y - objectHeightInBytes;
             uint8_t scalingFactor = pgm_read_byte( scalingFactorFromDistance + d );
-            pixels &= getDownScaledBitmapData( posX, posY, scalingFactor, object.itemBitmap + object.maskOffset, object.nextLineOffset );
-            pixels |= getDownScaledBitmapData( posX, posY, scalingFactor, object.itemBitmap, object.nextLineOffset );
+            pixels &= getDownScaledBitmapData( posX, posY, scalingFactor, 1, object.itemBitmap + object.maskOffset, object.nextLineOffset );
+            pixels |= getDownScaledBitmapData( posX, posY, scalingFactor, object.scalingThreshold[d], object.itemBitmap, object.nextLineOffset );
           }
         }
       }
@@ -82,8 +82,11 @@ uint8_t getWallPixels( DUNGEON *dungeon, const int8_t x, const int8_t y )
 
 /*--------------------------------------------------------*/
 // Returns the downscaled bitmap data at position x,y.
-// Supported scaling values are 1, 2, 4
-uint8_t getDownScaledBitmapData( uint8_t x, uint8_t y, const uint8_t scaleFactor, 
+// Supported scaling values are 1, 2, 4.
+// The 'theshold' value allows per object control of the
+// scaled objects appearance.
+uint8_t getDownScaledBitmapData( uint8_t x, uint8_t y, 
+                                 const uint8_t scaleFactor, const uint8_t threshold,
                                  const uint8_t *bitmapData, const uint8_t bitmapWidth )
 {
   uint8_t pixels = 0;
@@ -93,7 +96,7 @@ uint8_t getDownScaledBitmapData( uint8_t x, uint8_t y, const uint8_t scaleFactor
   y = y * scaleFactor;
 
   // create appropriate bit mask
-  uint8_t bitMask = ( scaleFactor << 1 ) - 1;
+  uint8_t bitMask = pgm_read_byte( bitMaskFromScalingFactor + scaleFactor );
 
   // calculate start address
   const uint8_t *data = bitmapData + y * bitmapWidth + x;
@@ -109,18 +112,14 @@ uint8_t getDownScaledBitmapData( uint8_t x, uint8_t y, const uint8_t scaleFactor
   {
     uint8_t bitSum = 0;
 
-    // go over the rows...
-    for ( uint8_t row = 0; row < scaleFactor; row++ )
+    // go over the columns - all required bits always are in one row
+    for ( uint8_t col = 0; col < scaleFactor; col++ )
     {
-      // but first the columns
-      for ( uint8_t col = 0; col < scaleFactor; col++ )
-      {
-        // to get the output value, we will sum all the bits up (using a lookup table saves time and flash space)
-        bitSum += pgm_read_byte( nibbleBitCount + ( ( pgm_read_byte( data++ ) >> bitNo ) & bitMask ) );
-      }
-      // correct the post increments from before
-      data -= scaleFactor;
+      // to get the output value, we will sum all the bits up (using a lookup table saves time and flash space)
+      bitSum += pgm_read_byte( nibbleBitCount + ( ( pgm_read_byte( data++ ) >> bitNo ) & bitMask ) );
     }
+    // correct the post increments from before
+    data -= scaleFactor;
 
     // next bit position
     bitNo += scaleFactor;
@@ -134,7 +133,7 @@ uint8_t getDownScaledBitmapData( uint8_t x, uint8_t y, const uint8_t scaleFactor
     }
 
     // calculate output pixel
-    if ( bitSum >= bitMask )
+    if ( bitSum >= threshold )
     {
       pixels |= bitValue;
     }

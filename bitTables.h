@@ -28,9 +28,17 @@ const uint8_t nibbleBitCount[16] PROGMEM =
 
 // Conversion table from view distance to scaling factor.
 // A distance of '0' is undefined but simplies adressing.
-const uint8_t scalingFactorFromDistance[4] PROGMEM =
+const uint8_t scalingFactorFromDistance[] PROGMEM =
 {
   0, 1, 2, 4,
+};
+
+// Conversion table from scaling factor to bit mask.
+// A factor of '0' is undefined but simplies adressing.
+const uint8_t bitMaskFromScalingFactor[] PROGMEM =
+{
+//    -     1     2     -       4 
+    0x00, 0x01, 0x03, 0x00  , 0x0F,
 };
 
 #endif

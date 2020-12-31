@@ -13,16 +13,17 @@ already achieved:
 * mirror walls between odd and even cells
 * added skeleton and beholder bitmap
 * very plain draw function (buggy!) for non-wall-objects
+* use solid bit
+* add scaling
 
 
 next steps:
+* extend object drawing to full field of view
 * add floor graphics
 * add compass
 * add stairs up/down
-* add scaling?
 * add monster(s)
 * add treasure
-* use solid bit
 
 * ...
 * have fun!
