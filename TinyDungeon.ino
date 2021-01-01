@@ -90,6 +90,9 @@ void Tiny_Flip( DUNGEON *dungeon)
 /*--------------------------------------------------------*/
 void checkPlayerMovement( DUNGEON *dungeon )
 {
+  // get pointer to cell in front of player
+  uint8_t *cell = getCell( dungeon, dungeon->playerX, dungeon->playerY, +1, 0, dungeon->dir );
+
   if ( isLeftPressed() ) 
   {
     // turn left
@@ -105,7 +108,7 @@ void checkPlayerMovement( DUNGEON *dungeon )
 
   if ( isUpPressed() )
   {
-    if ( ( *( getCell( dungeon, dungeon->playerX, dungeon->playerY, 1, 0, dungeon->dir ) ) & FLAG_SOLID ) != FLAG_SOLID )
+    if ( ( ( *cell ) & FLAG_SOLID ) != FLAG_SOLID )
     {
       stepSound();
       stepSound();
@@ -127,6 +130,7 @@ void checkPlayerMovement( DUNGEON *dungeon )
       wallSound();
     }
   }
+  
   if ( isDownPressed() )
   {
     if ( ( *( getCell( dungeon, dungeon->playerX, dungeon->playerY, -1, 0, dungeon->dir ) ) & FLAG_SOLID ) != FLAG_SOLID )
@@ -149,6 +153,23 @@ void checkPlayerMovement( DUNGEON *dungeon )
     else
     {
       wallSound();
+    }
+  }
+
+  // ... and ACTION!
+  if ( isFirePressed() )
+  {
+    if ( ( ( *cell ) & LVR_UP ) == LVR_UP )
+    {
+      *cell &= ~LVR_UP;
+      *cell |= LVR_DWN;
+      swordSound();
+    }
+    if ( ( ( *cell ) & LVR_DWN ) == LVR_DWN )
+    {
+      *cell &= ~LVR_DWN;
+      *cell |= LVR_UP;
+      swordSound();
     }
   }
   

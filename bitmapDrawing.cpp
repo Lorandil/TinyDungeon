@@ -49,28 +49,28 @@ uint8_t getWallPixels( DUNGEON *dungeon, const int8_t x, const int8_t y )
   NON_WALL_OBJECT object;
 
   // draw NWOs (Non Wall Objects) over the wall pixls (with mask!)
-  for ( uint8_t d = maxObjectDistance; d > 0; d-- )
+  for ( uint8_t distance = maxObjectDistance; distance > 0; distance-- )
   {
     for ( uint8_t n = 0; n < sizeof( objectList ) / sizeof( objectList[0] ); n++ )
     {
       memcpy_P( &object, &objectList[n], sizeof( object ) );
-      uint8_t objectWidth = object.bitmapWidth >> d;
-      uint8_t objectHeightInBytes = object.bitmapHeightInBytes >> d;
+      uint8_t objectWidth = object.bitmapWidth >> distance;
+      uint8_t objectHeightInBytes = object.bitmapHeightInBytes >> distance;
       
       // centered?
       if ( ( y >= ( WINDOW_CENTER_Y / 8 ) - objectHeightInBytes ) && ( y < ( WINDOW_CENTER_Y / 8 ) + objectHeightInBytes ) )
       {
         if ( ( x >= WINDOW_CENTER_X - objectWidth ) && ( x < WINDOW_CENTER_X + objectWidth ) )
         {
-          if ( ( *( getCell( dungeon, dungeon->playerX, dungeon->playerY, d, 0, dungeon->dir ) ) & OBJECT_MASK ) == object.itemType )
+          if ( ( *( getCell( dungeon, dungeon->playerX, dungeon->playerY, distance, 0, dungeon->dir ) ) & OBJECT_MASK ) == object.itemType )
           {
             objectWidth = WINDOW_CENTER_X - objectWidth;
             objectHeightInBytes = ( WINDOW_CENTER_Y / 8 ) - objectHeightInBytes;
             uint8_t posX = x - objectWidth;
             uint8_t posY = y - objectHeightInBytes;
-            uint8_t scalingFactor = pgm_read_byte( scalingFactorFromDistance + d );
+            uint8_t scalingFactor = pgm_read_byte( scalingFactorFromDistance + distance );
             pixels &= getDownScaledBitmapData( posX, posY, scalingFactor, 1, object.itemBitmap + object.maskOffset, object.nextLineOffset );
-            pixels |= getDownScaledBitmapData( posX, posY, scalingFactor, object.scalingThreshold[d], object.itemBitmap, object.nextLineOffset );
+            pixels |= getDownScaledBitmapData( posX, posY, scalingFactor, object.scalingThreshold[distance], object.itemBitmap, object.nextLineOffset );
           }
         }
       }

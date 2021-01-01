@@ -107,7 +107,7 @@ enum
   //DOOR                = 0x02,// | FLAG_SOLID,
   //BARS                = 0x03,// | FLAG_SOLID,
   STAIRS_UP           = 0x04 | FLAG_SOLID,
-  STAIRS_DOWN         = 0x05 | FLAG_SOLID,
+  STAIRS_DWN          = 0x05 | FLAG_SOLID,
 
   GOBLIN              = 0x10,
   SKELETON            = 0x20,
@@ -117,6 +117,8 @@ enum
   ITEM_FOUNTAIN       = 0x60,
   DOOR                = 0x70 | FLAG_SOLID,
   BARS                = 0x80 | FLAG_SOLID,
+  LVR_UP              = 0x90 | FLAG_SOLID,
+  LVR_DWN             = 0xA0 | FLAG_SOLID,
 };
 
 #endif

@@ -21,7 +21,7 @@ const uint8_t Level_1[] PROGMEM =
 
   // plain level data
 //  0        1        2        3        4        5        6        7
-  WALL ,   WALL ,   WALL ,   WALL ,   WALL ,   WALL   ,FAKE_WALL, WALL , // 0
+  WALL ,WALL|LVR_DWN,WALL ,   WALL ,   WALL ,   WALL   ,FAKE_WALL, WALL , // 0
     0  ,     0  ,   BARS ,     0  ,   WALL ,   WALL   ,   0    , WALL , // 1
     0  ,     0  ,   WALL ,     0  ,   WALL ,  SKELETON,BEHOLDER, WALL , // 2
     0  ,     0  ,   WALL ,   WALL ,   WALL ,     0    ,   0    , WALL , // 3
@@ -68,6 +68,8 @@ const NON_WALL_OBJECT objectList [] PROGMEM = {
   { BEHOLDER,  32,        8,          32,         64,         3,  { 0, 1, 2,  5 },  beholder },
   { BARS    ,  32,        8,          32,         64,         3,  { 0, 1, 2,  5 },  bars     },
   { DOOR    ,  32,        8,          32,         64,         3,  { 0, 1, 3, 13 },  door     },
+  { LVR_UP  ,  16,        4,          16,         32,         3,  { 0, 1, 2,  8 },  leverUp  },
+  { LVR_DWN ,  16,        4,          16,         32,         3,  { 0, 1, 2,  8 },  leverDown},
 };
 
 #endif
