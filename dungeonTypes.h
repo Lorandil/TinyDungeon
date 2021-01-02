@@ -104,8 +104,6 @@ enum
   FAKE_WALL           = 0x01,
   // solid wall
   WALL                = 0x01 | FLAG_SOLID,
-  //DOOR                = 0x02,// | FLAG_SOLID,
-  //BARS                = 0x03,// | FLAG_SOLID,
   STAIRS_UP           = 0x04 | FLAG_SOLID,
   STAIRS_DWN          = 0x05 | FLAG_SOLID,
 
