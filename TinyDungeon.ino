@@ -1,6 +1,6 @@
 //   >>>>>  T-I-N-Y  D-U-N-G-E-O-N v0.1 for ATTINY85  GPLv3 <<<<
 //						Tinyjoypad rev2 compatible
-//                   Programmer: Sven B 2020
+//                   Programmer: Sven B 2021
 //              Contact EMAIL: 
 
 //the code works at 16MHZ internal
@@ -19,12 +19,17 @@ DUNGEON _dungeon;
 /*--------------------------------------------------------*/
 void setup()
 {
+#if defined(__AVR_ATtiny85__)
   SSD1306.ssd1306_init();
   // not using 'pinMode()' here saves ~100 bytes of flash!
   // configure A0, A3 and D1 as input
   DDRB &= ~( ( 1 << PB5) | ( 1 << PB3 ) | ( 1 << PB1 ) );
   // configure A2 as output
   DDRB |= ( 1 << PB4 );
+#else
+  // DEBUG version on Controller with serial ports
+  Serial.begin( 115200 );
+#endif
 }
 
 /*--------------------------------------------------------*/
@@ -43,7 +48,11 @@ void loop()
 
   while( 1 )
   {
+  #if defined(__AVR_ATtiny85__)
     Tiny_Flip( &_dungeon );
+  #else
+    HexDumpDungeon( &_dungeon );
+  #endif
   
     // update player's position and orientation
     checkPlayerMovement( &_dungeon );
@@ -159,15 +168,15 @@ void checkPlayerMovement( DUNGEON *dungeon )
   // ... and ACTION!
   if ( isFirePressed() )
   {
-    if ( ( ( *cell ) & LVR_UP ) == LVR_UP )
+    if ( ( ( *cell ) & OBJECT_MASK ) == LVR_UP )
     {
-      *cell &= ~LVR_UP;
+      *cell &= ~( LVR_UP );
       *cell |= LVR_DWN;
       swordSound();
-    }
-    if ( ( ( *cell ) & LVR_DWN ) == LVR_DWN )
+    } 
+    else if ( ( ( *cell ) & OBJECT_MASK ) == LVR_DWN )
     {
-      *cell &= ~LVR_DWN;
+      *cell &= ~( LVR_DWN );
       *cell |= LVR_UP;
       swordSound();
     }
@@ -195,5 +204,31 @@ void wallSound()
 /*--------------------------------------------------------*/
 void swordSound()
 {
-  Sound( 50,100 );
+  Sound( 50,10 );
 }
+
+#if !defined(__AVR_ATtiny85__)
+/*--------------------------------------------------------*/
+void HexDumpDungeon( DUNGEON *dungeon )
+{
+  for ( uint8_t y = 0; y < dungeon->levelHeight; y++ )
+  {
+    for( uint8_t x = 0; x < dungeon->levelWidth; x++ )
+    {
+      uint8_t cellValue = dungeon->currentLevel[y * dungeon->levelWidth + x];
+      Serial.print( ( cellValue & FLAG_SOLID )                              ? F("s")  : F("-") );
+      Serial.print( ( cellValue & WALL_MASK ) == FAKE_WALL                  ? F("W")  : F("-") );
+      Serial.print( ( cellValue & ( SKELETON | FLAG_SOLID ) ) == SKELETON   ? F("S")  : F("-") );
+      Serial.print( ( cellValue & ( BEHOLDER | FLAG_SOLID ) ) == BEHOLDER   ? F("B")  : F("-") );
+      Serial.print( ( cellValue & OBJECT_MASK ) == DOOR                     ? F("D")  : F("-") );
+      Serial.print( ( cellValue & OBJECT_MASK ) == BARS                     ? F("#")  : F("-") );
+      Serial.print( ( cellValue & OBJECT_MASK ) == LVR_UP                   ? F("u")
+                                                                            : ( cellValue & OBJECT_MASK ) == LVR_DWN ? F("d")
+                                                                                                                     : F("-") );
+      Serial.print( F("   ") );
+    }
+  Serial.println();
+  }
+  Serial.println( F("\n-----------------------------\n") );
+}
+#endif
