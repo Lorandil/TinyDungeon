@@ -1,38 +1,50 @@
+//
+// This file works for TinyJoypad compatible devices.
+//
+// If not compiled for ATTiny85 (meaning __AVR_ATtiny85__ is not defined),
+// generic functions are used instead of direct port access, which 
+// makes it possible to use an Arduino or Mega2560 (or many others)
+// for debugging with serial output or even hardware breakpoints.
+//
+
 #include <Arduino.h>
+#include "tinyJoypadUtils.h"
+
+// required for _delay_us()
 #include <ssd1306xled.h>
 
 /*-------------------------------------------------------*/
 bool isLeftPressed()
 {
-  uint16_t inputX = analogRead( A0 );
+  uint16_t inputX = analogRead( LEFT_RIGHT_BUTTON );
   return( ( inputX >= 750 ) && ( inputX < 950 ) );
 }
 
 /*-------------------------------------------------------*/
 bool isRightPressed()
 {
-  uint16_t inputX = analogRead( A0 );
+  uint16_t inputX = analogRead( LEFT_RIGHT_BUTTON );
   return( ( inputX > 500 ) && ( inputX < 750 ) );
 }
 
 /*-------------------------------------------------------*/
 bool isUpPressed()
 {
-  uint16_t inputY = analogRead( A3 );
+  uint16_t inputY = analogRead( UP_DOWN_BUTTON );
   return( ( inputY > 500 ) && ( inputY < 750 ) );
 }
 
 /*-------------------------------------------------------*/
 bool isDownPressed()
 {
-  uint16_t inputY = analogRead( A3 );
+  uint16_t inputY = analogRead( UP_DOWN_BUTTON );
   return( ( inputY >= 750 ) && ( inputY < 950 ) );
 }
 
 /*-------------------------------------------------------*/
 bool isFirePressed()
 {
-  return( digitalRead( 1 ) == 0 );
+  return( digitalRead( FIRE_BUTTON ) == 0 );
 }
 
 /*-------------------------------------------------------*/

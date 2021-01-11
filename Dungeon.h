@@ -31,6 +31,14 @@ const uint8_t Level_1[] PROGMEM =
   WALL ,   WALL ,   WALL ,   WALL ,   WALL ,     0    ,   0    , WALL , // 7
 };
 
+// interaction data for level 1
+const INTERACTION_INFO interactionData[] PROGMEM =
+{
+  { 2 + 8 * 0, LVR_DWN, OBJECT_MASK, LVR_UP,  0,  0, 2 + 1 * 8, SKELETON },
+  { 2 + 8 * 0, LVR_UP, OBJECT_MASK, LVR_DWN,  0,  0, 2 + 1 * 8, BARS     },
+};
+
+
 // array of conditions for wall display
 const SIMPLE_WALL_INFO arrayOfWallInfo[] PROGMEM = {
   // distance 0

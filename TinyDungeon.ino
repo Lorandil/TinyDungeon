@@ -6,7 +6,12 @@
 //the code works at 16MHZ internal
 //and use ssd1306xled Library for SSD1306 oled display 128x64
 
-#include <ssd1306xled.h>
+#if defined(__AVR_ATtiny85__)
+  #include <ssd1306xled.h>
+#else
+  #include <Adafruit_SSD1306.h>
+  Adafruit_SSD1306 display( 128, 64, &Wire, -1 );
+#endif
 #include "Dungeon.h"
 #include "spritebank.h"
 #include "bitmapDrawing.h"
@@ -29,6 +34,19 @@ void setup()
 #else
   // DEBUG version on Controller with serial ports
   Serial.begin( 115200 );
+  // SSD1306_SWITCHCAPVCC = generate display voltage from 3.3V internally
+  if(!display.begin(SSD1306_SWITCHCAPVCC, 0x3C)) { // Address 0x3D for 128x64
+    Serial.println(F("SSD1306 allocation failed"));
+    for(;;); // Don't proceed, loop forever
+  }
+  // Show initial display buffer contents on the screen --
+  // the library initializes this with an Adafruit splash screen.
+  display.display();
+  delay(2000); // Pause for 2 seconds
+  // use 'pinMode()' for simplicity's sake... any other micro controller has enough flash :)
+  pinMode( LEFT_RIGHT_BUTTON, INPUT );
+  pinMode( UP_DOWN_BUTTON, INPUT );
+  pinMode( FIRE_BUTTON, INPUT );
 #endif
 }
 
@@ -48,9 +66,8 @@ void loop()
 
   while( 1 )
   {
-  #if defined(__AVR_ATtiny85__)
     Tiny_Flip( &_dungeon );
-  #else
+  #if !defined(__AVR_ATtiny85__)
     HexDumpDungeon( &_dungeon );
   #endif
   
@@ -64,6 +81,7 @@ void Tiny_Flip( DUNGEON *dungeon)
 {
   for ( uint8_t y = 0; y < 8; y++)
   {
+#if defined(__AVR_ATtiny85__)
     // initialize image transfer to segment 'y'
     SSD1306.ssd1306_send_command(0xb0 + y);
   #ifdef _USE_SH1106_
@@ -77,23 +95,40 @@ void Tiny_Flip( DUNGEON *dungeon)
     SSD1306.ssd1306_send_command(0x10);  
   #endif    
     SSD1306.ssd1306_send_data_start();
+#else
+  uint8_t *buffer = display.getBuffer() + y * 128;
+#endif
     
     for ( uint8_t x = 0; x < 96; x++ )
     {
       uint8_t pixels = getWallPixels( dungeon, x, y );
-      SSD1306.ssd1306_send_byte( pixels );
+      #if defined(__AVR_ATtiny85__)
+        SSD1306.ssd1306_send_byte( pixels );
+      #else
+        *buffer++ = pixels;
+      #endif
     } // for x
 
     // display the dashboard here (later)
     for ( uint8_t x = 96; x < 128; x++)
     {
-      SSD1306.ssd1306_send_byte( 0 );
+      #if defined(__AVR_ATtiny85__)
+        SSD1306.ssd1306_send_byte( 0 );
+      #else
+        *buffer++ = 0;
+      #endif
     }
     
+#if defined(__AVR_ATtiny85__)
     // this line appears to be optional, as it was never called during the intro screen...
     // but hey, we still have some bytes left ;)
     SSD1306.ssd1306_send_data_stop();
+#endif
   } // for y
+
+#if !defined(__AVR_ATtiny85__)
+  display.display();
+#endif
 }
 
 /*--------------------------------------------------------*/
@@ -168,6 +203,7 @@ void checkPlayerMovement( DUNGEON *dungeon )
   // ... and ACTION!
   if ( isFirePressed() )
   {
+    #if 0
     if ( ( ( *cell ) & OBJECT_MASK ) == LVR_UP )
     {
       *cell &= ~( LVR_UP );
@@ -180,6 +216,53 @@ void checkPlayerMovement( DUNGEON *dungeon )
       *cell |= LVR_UP;
       swordSound();
     }
+    #else
+
+    INTERACTION_INFO interactionInfo;
+    for ( uint8_t n = 0; n < sizeof( interactionData ) / sizeof( INTERACTION_INFO ); n++ )
+    {
+      // get data from progmem
+      memcpy_P( &interactionInfo, interactionData + n, sizeof( INTERACTION_INFO ) );
+      
+      // does this info cover the current position?
+      if ( cell == dungeon->currentLevel + interactionInfo.currentPosition )
+      {
+        // is the status correct?
+        if ( ( *cell & interactionInfo.currentStatusMask ) == interactionInfo.currentStatus )
+        {
+          // yay!
+          *cell = interactionInfo.nextStatus;
+          dungeon->currentLevel[interactionInfo.modifiedPosition] = interactionInfo.modifiedPositionCellValue;
+          swordSound();
+        }
+      }
+
+
+#if 0
+// interaction information
+typedef struct 
+{
+  // position in which the dungeon is interacted with
+  uint8_t currentPosition;
+  // required status of this position
+  uint8_t currentStatus;
+  // required mask
+  uint8_t currentStatusMask;
+  // new status if true
+  uint8_t nextStatus;
+  // bit coded item number for gained items, i.e. keys
+  uint8_t newItem;
+  // an amount (of coins or healing)
+  uint8_t itemValue;
+  // position in which the dungeon will be modified
+  uint8_t modifiedPosition;
+  // new status on modified position
+  uint8_t modifiedPositionCellValue;
+ 
+} INTERACTION_INFO;
+#endif
+    }
+    #endif
   }
   
   // limit the positions

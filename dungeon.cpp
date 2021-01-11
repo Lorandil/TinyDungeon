@@ -42,6 +42,7 @@ uint8_t *getCell( DUNGEON *dungeon, int8_t x, int8_t y, const int8_t distance, c
   return( dungeon->currentLevel + y * dungeon->levelWidth + x );
 }
 
+
 /*--------------------------------------------------------*/
 // Limits the position in the dungeon, but enables wrap-around :)
 void limitDungeonPosition( DUNGEON *dungeon, int8_t &x, int8_t &y )

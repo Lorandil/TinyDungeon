@@ -75,6 +75,28 @@ typedef struct
 } SIMPLE_WALL_INFO;
 
 
+// interaction information
+typedef struct 
+{
+  // position in which the dungeon is interacted with
+  uint8_t currentPosition;
+  // required status of this position
+  uint8_t currentStatus;
+  // required mask
+  uint8_t currentStatusMask;
+  // new status if true
+  uint8_t nextStatus;
+  // bit coded item number for gained items, i.e. keys
+  uint8_t newItem;
+  // an amount (of coins or healing)
+  uint8_t itemValue;
+  // position in which the dungeon will be modified
+  uint8_t modifiedPosition;
+  // new status on modified position
+  uint8_t modifiedPositionCellValue;
+  
+} INTERACTION_INFO;
+
 // orientations
 enum 
 {
