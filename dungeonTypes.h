@@ -1,15 +1,49 @@
 #ifndef _DUNGEON_TYPES_H_
 #define _DUNGEON_TYPES_H_
 
+#if !defined(__AVR_ATtiny85__)
+  #include "SerialHexTools.h"
+#endif
+
 const uint8_t MAX_LEVEL_BYTES = 128;
 const uint8_t WINDOW_SIZE_X   = 96;
 const uint8_t WINDOW_CENTER_X = WINDOW_SIZE_X / 2;
 const uint8_t WINDOW_SIZE_Y   = 64;
 const uint8_t WINDOW_CENTER_Y = WINDOW_SIZE_Y / 2;
 
-// DUNGEON
-typedef struct 
+// possible item types
+enum
 {
+  // bit 3 is reserved for "SOLID" objects, making them unpassable
+  FLAG_SOLID          = 0x08,
+
+  WALL_MASK           = 0x07,
+  OBJECT_MASK         = 0xF0 | FLAG_SOLID,
+
+  EMPTY               = 0x00,
+  // fake wall
+  FAKE_WALL           = 0x01,
+  // solid wall
+  WALL                = 0x01 | FLAG_SOLID,
+  //STAIRS_UP           = 0x04 | FLAG_SOLID,
+  //STAIRS_DWN          = 0x05 | FLAG_SOLID,
+
+  //GOBLIN              = 0x10,
+  SKELETON            = 0x20,
+  BEHOLDER            = 0x30,
+  //ITEM_KEY            = 0x40,
+  //ITEM_GOLD           = 0x50,
+  //ITEM_FOUNTAIN       = 0x60,
+  DOOR                = 0x70 | FLAG_SOLID,
+  BARS                = 0x80 | FLAG_SOLID,
+  LVR_UP              = 0x90 | FLAG_SOLID,
+  LVR_DWN             = 0xA0 | FLAG_SOLID,
+};
+
+// DUNGEON
+class DUNGEON
+{
+public:
   int8_t playerX;
   int8_t playerY;
   uint8_t dir;
@@ -17,8 +51,42 @@ typedef struct
   uint8_t levelHeight;
   uint8_t levelWidth;
   uint8_t currentLevel[MAX_LEVEL_BYTES];
-  
-} DUNGEON;
+
+#if !defined(__AVR_ATtiny85__)
+  void serialPrint()
+  {
+    Serial.println(F("DUNGEON") );
+    Serial.print(F("  playerX = ") );Serial.print( playerX );
+    Serial.print(F(", playerY = ") );Serial.print( playerY );
+    Serial.print(F(", dir = ") );Serial.print( dir );
+    Serial.print(F("   ( levelHeight = ") );Serial.print( levelHeight );
+    Serial.print(F(", levelWidth  = ") );Serial.print( levelWidth );
+    Serial.println(F(" )") );
+
+    for ( uint8_t y = 0; y < levelHeight; y++ )
+    {
+      for( uint8_t x = 0; x < levelWidth; x++ )
+      {
+        uint8_t cellValue = currentLevel[y * levelWidth + x];
+        Serial.print( ( cellValue & FLAG_SOLID )                              ? F("s")  : F("-") );
+        Serial.print( ( cellValue & WALL_MASK ) == FAKE_WALL                  ? F("W")  : F("-") );
+        Serial.print( ( cellValue & ( SKELETON | FLAG_SOLID ) ) == SKELETON   ? F("S")  : F("-") );
+        Serial.print( ( cellValue & ( BEHOLDER | FLAG_SOLID ) ) == BEHOLDER   ? F("B")  : F("-") );
+        Serial.print( ( cellValue & OBJECT_MASK ) == DOOR                     ? F("D")  : F("-") );
+        Serial.print( ( cellValue & OBJECT_MASK ) == BARS                     ? F("#")  : F("-") );
+        Serial.print( ( cellValue & OBJECT_MASK ) == LVR_UP                   ? F("u")
+                                                                              : ( cellValue & OBJECT_MASK ) == LVR_DWN ? F("d")
+                                                                                                                       : F("-") );
+        Serial.print( F("   ") );
+      }
+    Serial.println();
+    }
+    Serial.println();
+    hexdumpResetPositionCount();
+    hexdumpToSerial( currentLevel, levelWidth * levelHeight );
+  }
+#endif
+};
 
 
 // LEVEL_HEADER
@@ -76,8 +144,9 @@ typedef struct
 
 
 // interaction information
-typedef struct 
+class INTERACTION_INFO
 {
+public:
   // position in which the dungeon is interacted with
   uint8_t currentPosition;
   // required status of this position
@@ -94,8 +163,23 @@ typedef struct
   uint8_t modifiedPosition;
   // new status on modified position
   uint8_t modifiedPositionCellValue;
-  
-} INTERACTION_INFO;
+
+#if !defined(__AVR_ATtiny85__)
+  void serialPrint() 
+  {
+    Serial.println( F("INTERACTION_INFO") );
+    Serial.print( F("  currentPosition    = ") );Serial.println( currentPosition );
+    Serial.print( F("  currentStatus      = ") );printHexToSerial( currentStatus );Serial.println();
+    Serial.print( F("  currentStatusMask  = ") );printHexToSerial( currentStatusMask );Serial.println();
+    Serial.print( F("  nextStatus         = ") );printHexToSerial( nextStatus );Serial.println();
+    Serial.print( F("  newItem            = ") );printHexToSerial( newItem );Serial.println();
+    Serial.print( F("  itemValue          = ") );Serial.println( itemValue );
+    Serial.print( F("  modifiedPosition   = ") );Serial.println( modifiedPosition );
+    Serial.print( F("  modifiedPosValue   = ") );printHexToSerial( modifiedPositionCellValue );Serial.println();
+    Serial.println();
+  }
+#endif
+};
 
 // orientations
 enum 
@@ -109,36 +193,6 @@ enum
   WEST  = 3,
   LEFT  = WEST,
   MAX_ORIENTATION = 4,
-};
-
-
-// possible item types
-enum
-{
-  // bit 3 is reserved for "SOLID" objects, making them unpassable
-  FLAG_SOLID          = 0x08,
-
-  WALL_MASK           = 0x07,
-  OBJECT_MASK         = 0xF0 | FLAG_SOLID,
-
-  EMPTY               = 0x00,
-  // fake wall
-  FAKE_WALL           = 0x01,
-  // solid wall
-  WALL                = 0x01 | FLAG_SOLID,
-  //STAIRS_UP           = 0x04 | FLAG_SOLID,
-  //STAIRS_DWN          = 0x05 | FLAG_SOLID,
-
-  //GOBLIN              = 0x10,
-  SKELETON            = 0x20,
-  BEHOLDER            = 0x30,
-  //ITEM_KEY            = 0x40,
-  //ITEM_GOLD           = 0x50,
-  //ITEM_FOUNTAIN       = 0x60,
-  DOOR                = 0x70 | FLAG_SOLID,
-  BARS                = 0x80 | FLAG_SOLID,
-  LVR_UP              = 0x90 | FLAG_SOLID,
-  LVR_DWN             = 0xA0 | FLAG_SOLID,
 };
 
 #endif

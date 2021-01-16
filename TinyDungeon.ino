@@ -9,6 +9,7 @@
 #if defined(__AVR_ATtiny85__)
   #include <ssd1306xled.h>
 #else
+  #include "SerialHexTools.h"
   #include <Adafruit_SSD1306.h>
   Adafruit_SSD1306 display( 128, 64, &Wire, -1 );
 #endif
@@ -39,10 +40,6 @@ void setup()
     Serial.println(F("SSD1306 allocation failed"));
     for(;;); // Don't proceed, loop forever
   }
-  // Show initial display buffer contents on the screen --
-  // the library initializes this with an Adafruit splash screen.
-  display.display();
-  delay(2000); // Pause for 2 seconds
   // use 'pinMode()' for simplicity's sake... any other micro controller has enough flash :)
   pinMode( LEFT_RIGHT_BUTTON, INPUT );
   pinMode( UP_DOWN_BUTTON, INPUT );
@@ -54,8 +51,8 @@ void setup()
 void loop()
 {
   // Prepare the dungeon
-  _dungeon.playerX = 6;
-  _dungeon.playerY = 2;
+  _dungeon.playerX = 1;
+  _dungeon.playerY = 1;
   _dungeon.dir  = NORTH;
   // Prepare first level
   LEVEL_HEADER *header = (LEVEL_HEADER *)Level_1;
@@ -68,7 +65,7 @@ void loop()
   {
     Tiny_Flip( &_dungeon );
   #if !defined(__AVR_ATtiny85__)
-    HexDumpDungeon( &_dungeon );
+    //HexDumpDungeon( &_dungeon );
   #endif
   
     // update player's position and orientation
@@ -143,6 +140,7 @@ void checkPlayerMovement( DUNGEON *dungeon )
     dungeon->dir = ( dungeon->dir - 1 ) & 0x03;
     stepSound();
   }
+  
   if ( isRightPressed() )
   {
     // turn right
@@ -203,66 +201,43 @@ void checkPlayerMovement( DUNGEON *dungeon )
   // ... and ACTION!
   if ( isFirePressed() )
   {
-    #if 0
-    if ( ( ( *cell ) & OBJECT_MASK ) == LVR_UP )
-    {
-      *cell &= ~( LVR_UP );
-      *cell |= LVR_DWN;
-      swordSound();
-    } 
-    else if ( ( ( *cell ) & OBJECT_MASK ) == LVR_DWN )
-    {
-      *cell &= ~( LVR_DWN );
-      *cell |= LVR_UP;
-      swordSound();
-    }
-    #else
+    uint8_t cellValue = *cell;
+
+    #if !defined(__AVR_ATtiny85__)
+      dungeon->serialPrint();
+      Serial.print( F("dungeon = ") );Serial.print( uint16_t( dungeon ) );
+      Serial.print( F(", cell = ") );Serial.println( uint16_t( cell ) );
+      Serial.println();
+      Serial.print(F("*cell = "));printHexToSerial( cellValue );Serial.println();
+    #endif
 
     INTERACTION_INFO interactionInfo;
     for ( uint8_t n = 0; n < sizeof( interactionData ) / sizeof( INTERACTION_INFO ); n++ )
     {
       // get data from progmem
       memcpy_P( &interactionInfo, interactionData + n, sizeof( INTERACTION_INFO ) );
-      
+
       // does this info cover the current position?
       if ( cell == dungeon->currentLevel + interactionInfo.currentPosition )
       {
         // is the status correct?
-        if ( ( *cell & interactionInfo.currentStatusMask ) == interactionInfo.currentStatus )
+        if ( ( cellValue & interactionInfo.currentStatusMask ) == interactionInfo.currentStatus )
         {
+        #if !defined(__AVR_ATtiny85__)
+          Serial.print(F("+ Matching entry found <"));Serial.print( n );Serial.println(F(">"));
+          // print entry information
+          interactionInfo.serialPrint();
+        #endif
           // yay!
-          *cell = interactionInfo.nextStatus;
+          *cell = ( cellValue - interactionInfo.currentStatus ) | interactionInfo.nextStatus;
           dungeon->currentLevel[interactionInfo.modifiedPosition] = interactionInfo.modifiedPositionCellValue;
           swordSound();
+          
+          // perform only the first action, otherwise on/off actions might be immediately revoked ;)
+          break;
         }
       }
-
-
-#if 0
-// interaction information
-typedef struct 
-{
-  // position in which the dungeon is interacted with
-  uint8_t currentPosition;
-  // required status of this position
-  uint8_t currentStatus;
-  // required mask
-  uint8_t currentStatusMask;
-  // new status if true
-  uint8_t nextStatus;
-  // bit coded item number for gained items, i.e. keys
-  uint8_t newItem;
-  // an amount (of coins or healing)
-  uint8_t itemValue;
-  // position in which the dungeon will be modified
-  uint8_t modifiedPosition;
-  // new status on modified position
-  uint8_t modifiedPositionCellValue;
- 
-} INTERACTION_INFO;
-#endif
     }
-    #endif
   }
   
   // limit the positions
@@ -289,29 +264,3 @@ void swordSound()
 {
   Sound( 50,10 );
 }
-
-#if !defined(__AVR_ATtiny85__)
-/*--------------------------------------------------------*/
-void HexDumpDungeon( DUNGEON *dungeon )
-{
-  for ( uint8_t y = 0; y < dungeon->levelHeight; y++ )
-  {
-    for( uint8_t x = 0; x < dungeon->levelWidth; x++ )
-    {
-      uint8_t cellValue = dungeon->currentLevel[y * dungeon->levelWidth + x];
-      Serial.print( ( cellValue & FLAG_SOLID )                              ? F("s")  : F("-") );
-      Serial.print( ( cellValue & WALL_MASK ) == FAKE_WALL                  ? F("W")  : F("-") );
-      Serial.print( ( cellValue & ( SKELETON | FLAG_SOLID ) ) == SKELETON   ? F("S")  : F("-") );
-      Serial.print( ( cellValue & ( BEHOLDER | FLAG_SOLID ) ) == BEHOLDER   ? F("B")  : F("-") );
-      Serial.print( ( cellValue & OBJECT_MASK ) == DOOR                     ? F("D")  : F("-") );
-      Serial.print( ( cellValue & OBJECT_MASK ) == BARS                     ? F("#")  : F("-") );
-      Serial.print( ( cellValue & OBJECT_MASK ) == LVR_UP                   ? F("u")
-                                                                            : ( cellValue & OBJECT_MASK ) == LVR_DWN ? F("d")
-                                                                                                                     : F("-") );
-      Serial.print( F("   ") );
-    }
-  Serial.println();
-  }
-  Serial.println( F("\n-----------------------------\n") );
-}
-#endif

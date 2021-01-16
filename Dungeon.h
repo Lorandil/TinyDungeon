@@ -20,22 +20,22 @@ const uint8_t Level_1[] PROGMEM =
    1,
 
   // plain level data
-//  0        1        2        3        4        5        6        7
-  WALL ,WALL|LVR_DWN,WALL ,   WALL ,   WALL ,   WALL   ,FAKE_WALL, WALL , // 0
-    0  ,     0  ,   BARS ,     0  ,   WALL ,   WALL   ,   0    , WALL , // 1
-    0  ,     0  ,   WALL ,     0  ,   WALL ,  SKELETON,BEHOLDER, WALL , // 2
-    0  ,     0  ,   WALL ,   WALL ,   WALL ,     0    ,   0    , WALL , // 3
-    0  ,     0  ,     0  ,WALL|DOOR ,   0  ,     0    ,   0    , WALL , // 4
-  WALL ,   WALL ,     0  ,   WALL ,   WALL ,     0    ,   0    , WALL , // 5
-  SKELETON,   0 ,     0  ,     0  ,     0  ,     0    ,   0    ,   0  , // 6
-  WALL ,   WALL ,   WALL ,   WALL ,   WALL ,     0    ,   0    , WALL , // 7
+//    0       1          2       3        4        5         6         7
+  WALL  ,WALL|LVR_DWN, WALL,   WALL ,   WALL ,   WALL    ,FAKE_WALL, WALL  , // 0
+    0   ,     0  ,     BARS ,     0  ,   WALL ,   WALL    ,   0     , WALL  , // 1
+    0   ,     0  ,     WALL ,     0  ,   WALL ,  SKELETON ,BEHOLDER , WALL  , // 2
+    0   ,     0  ,     WALL ,   WALL ,   WALL ,     0     ,   0     , WALL  , // 3
+    0   ,     0  ,       0  ,WALL|DOOR ,   0  ,     0     ,   0     , WALL  , // 4
+  WALL  ,   WALL ,       0  ,   WALL ,   WALL ,     0     ,   0     , WALL  , // 5
+  SKELETON,   0  ,       0  ,     0  ,     0  ,     0     ,   0     ,   0   , // 6
+  WALL  ,   WALL ,     WALL ,   WALL ,   WALL ,     0     ,   0     , WALL  , // 7
 };
 
 // interaction data for level 1
 const INTERACTION_INFO interactionData[] PROGMEM =
 {
-  { 2 + 8 * 0, LVR_DWN, OBJECT_MASK, LVR_UP,  0,  0, 2 + 1 * 8, SKELETON },
-  { 2 + 8 * 0, LVR_UP, OBJECT_MASK, LVR_DWN,  0,  0, 2 + 1 * 8, BARS     },
+  { 1 + 8 * 0, LVR_DWN, OBJECT_MASK, LVR_UP ,  0,  0, 2 + 1 * 8, SKELETON },
+  { 1 + 8 * 0, LVR_UP , OBJECT_MASK, LVR_DWN,  0,  0, 2 + 1 * 8, BARS     },
 };
 
 
