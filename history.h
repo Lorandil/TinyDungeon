@@ -14,20 +14,27 @@ already achieved:
 * added skeleton and beholder bitmap
 * very plain draw function (buggy!) for non-wall-objects
 * use solid bit
-* add scaling
+* add bitmap scaling
+* add scripted events (levers switching doors, ...)
+* code works on Arduino UNO and MEGA2560 (without sound) too
 
 
 next steps:
+* enhance bitmap scaling to work with bitmap heights (in bytes) which are not a power of 2
 * extend object drawing to full field of view
-* add floor graphics
 * add compass
 * add stairs up/down
 * add monster(s)
 * add treasure
+* add floor graphics
 
 * ...
 * have fun!
 
-
+goal
+* 4 levels(?)
+* combat system
+* fun
+* save to EEPROM?
 
 #endif

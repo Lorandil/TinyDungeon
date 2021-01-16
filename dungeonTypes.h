@@ -41,7 +41,11 @@ enum
 };
 
 // DUNGEON
-class DUNGEON
+#if !defined(__AVR_ATtiny85__)
+  class DUNGEON
+#else
+  typedef struct
+#endif
 {
 public:
   int8_t playerX;
@@ -86,7 +90,11 @@ public:
     hexdumpToSerial( currentLevel, levelWidth * levelHeight );
   }
 #endif
+#if !defined(__AVR_ATtiny85__)
 };
+#else
+} DUNGEON;
+#endif
 
 
 // LEVEL_HEADER
@@ -142,9 +150,12 @@ typedef struct
   
 } SIMPLE_WALL_INFO;
 
-
 // interaction information
-class INTERACTION_INFO
+#if !defined(__AVR_ATtiny85__)
+  class INTERACTION_INFO
+#else
+  typedef struct
+#endif
 {
 public:
   // position in which the dungeon is interacted with
@@ -179,7 +190,11 @@ public:
     Serial.println();
   }
 #endif
+#if defined(__AVR_ATtiny85__)
+} INTERACTION_INFO;
+#else
 };
+#endif
 
 // orientations
 enum 

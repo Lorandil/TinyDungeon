@@ -56,7 +56,7 @@ uint8_t getWallPixels( DUNGEON *dungeon, const int8_t x, const int8_t y )
       memcpy_P( &object, &objectList[n], sizeof( object ) );
       uint8_t objectWidth = object.bitmapWidth >> distance;
       uint8_t objectHeightInBytes = object.bitmapHeightInBytes >> distance;
-      
+
       // centered?
       if ( ( y >= ( WINDOW_CENTER_Y / 8 ) - objectHeightInBytes ) && ( y < ( WINDOW_CENTER_Y / 8 ) + objectHeightInBytes ) )
       {

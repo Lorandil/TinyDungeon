@@ -33,7 +33,7 @@ void setup()
   // configure A2 as output
   DDRB |= ( 1 << PB4 );
 #else
-  // DEBUG version on Controller with serial ports
+  // DEBUG version on controller with serial ports
   Serial.begin( 115200 );
   // SSD1306_SWITCHCAPVCC = generate display voltage from 3.3V internally
   if(!display.begin(SSD1306_SWITCHCAPVCC, 0x3C)) { // Address 0x3D for 128x64
@@ -64,9 +64,6 @@ void loop()
   while( 1 )
   {
     Tiny_Flip( &_dungeon );
-  #if !defined(__AVR_ATtiny85__)
-    //HexDumpDungeon( &_dungeon );
-  #endif
   
     // update player's position and orientation
     checkPlayerMovement( &_dungeon );
