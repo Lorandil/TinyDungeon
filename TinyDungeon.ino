@@ -3,8 +3,15 @@
 //                   Programmer: Sven B 2021
 //              Contact EMAIL: 
 
-//the code works at 16MHZ internal
-//and use ssd1306xled Library for SSD1306 oled display 128x64
+// The code works at 16MHZ internal
+// and uses ssd1306xled Library for SSD1306 oled display 128x64.
+//
+// To stuff all code and data into the 8192 bytes of the ATtiny85
+// the ATTinyCore (v1.4.1) by Spence Konde is recommended.
+// The core is available at github: [https://github.com/SpenceKonde/ATTinyCore], just add the
+// following board manager to the Arduino IDE: [http://drazzy.com/package_drazzy.com_index.json]
+// Please enable LTO (link time optimization) and disable 'millis()' and
+// 'micros()'.
 
 #if defined(__AVR_ATtiny85__)
   #include <ssd1306xled.h>
@@ -90,6 +97,7 @@ void Tiny_Flip( DUNGEON *dungeon)
   #endif    
     SSD1306.ssd1306_send_data_start();
 #else
+  // allocate a buffer in RAM
   uint8_t *buffer = display.getBuffer() + y * 128;
 #endif
     
