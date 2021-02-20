@@ -116,8 +116,15 @@ typedef struct
 
 
 // NON_WALL_OBJECT
-typedef struct 
+
+#if !defined(__AVR_ATtiny85__)
+  class NON_WALL_OBJECT
+#else
+  typedef struct
+#endif
 {
+  public:
+  
   uint8_t itemType;
   uint8_t bitmapWidth;
   uint8_t bitmapVerticalOffsetInBytes;
@@ -126,10 +133,31 @@ typedef struct
   uint8_t nextLineOffset;
   uint8_t maxViewDistance;
   uint8_t scalingThreshold[4];
-  const uint8_t* itemBitmap;
-  
-} NON_WALL_OBJECT;
+  const uint8_t *bitmapData;
 
+#if !defined(__AVR_ATtiny85__)
+  void serialPrint() 
+  {
+    Serial.println( F("NON_WALL_OBJECT") );
+    Serial.print( F("  itemType                     = ") );Serial.println( itemType );
+    Serial.print( F("  bitmapWidth                  = ") );Serial.print( bitmapWidth );Serial.println();
+    Serial.print( F("  bitmapVerticalOffsetInBytes  = ") );Serial.print( bitmapVerticalOffsetInBytes );Serial.println();
+    Serial.print( F("  bitmapHeightInBytes          = ") );Serial.print( bitmapHeightInBytes );Serial.println();
+    Serial.print( F("  maskOffset                   = ") );Serial.print( maskOffset );Serial.println();
+    Serial.print( F("  nextLineOffset               = ") );Serial.println( nextLineOffset );
+    Serial.print( F("  maxViewDistance              = ") );Serial.println( maxViewDistance );
+    Serial.print( F("  scalingThreshold[1]          = ") );Serial.print( scalingThreshold[1] );Serial.println();
+    Serial.print( F("  scalingThreshold[2]          = ") );Serial.print( scalingThreshold[2] );Serial.println();
+    Serial.print( F("  scalingThreshold[3]          = ") );Serial.print( scalingThreshold[3] );Serial.println();
+    Serial.println();
+  }
+#endif  
+
+#if defined(__AVR_ATtiny85__)
+} NON_WALL_OBJECT;
+#else
+};
+#endif
 
 
 // information for single wall display
