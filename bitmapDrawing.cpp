@@ -114,12 +114,14 @@ uint8_t getDownScaledBitmapData( int8_t x,                      // already downs
   
     // modify positions in source bitmap by scaling factor
     x = x * scaleFactor;
+    // correct y position by start offset
+    y -= startOffsetY;
     
     // get appropriate bit mask
     uint8_t bitMask = pgm_read_byte( bitMaskFromScalingFactor + scaleFactor );
   
     // calculate start address
-    const uint8_t *data = bitmapData + y * object->nextLineOffset + x;
+    const uint8_t *data = bitmapData + y * scaleFactor * object->nextLineOffset + x;
   
     // first bit to be processed
     uint8_t bitNo = 0;
@@ -170,7 +172,10 @@ uint8_t getDownScaledBitmapData( int8_t x,                      // already downs
     }
   }
   // no bits here, set mask to 0xff
-  else if ( useMask ) { pixels--; }
+  else if ( useMask )
+  { 
+    pixels--;
+  }
                                      
   return( pixels );  
 }
