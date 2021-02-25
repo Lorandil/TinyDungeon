@@ -111,7 +111,10 @@ uint8_t getDownScaledBitmapData( int8_t x,                      // already downs
     //Serial.print(F(", startOffsetY = "));Serial.print( startOffsetY );
     //Serial.print(F(", endOffsetY = "));Serial.print( endOffsetY );
     //Serial.println();
-  
+
+    // number of byte being processed next      
+    uint8_t byteNo = y;
+ 
     // modify positions in source bitmap by scaling factor
     x = x * scaleFactor;
     // correct y position by start offset
@@ -125,7 +128,6 @@ uint8_t getDownScaledBitmapData( int8_t x,                      // already downs
   
     // first bit to be processed
     uint8_t bitNo = 0;
-    uint8_t byteNo = 0;
   
     // We need to calculate 8 vertical output bits...
     // NOTE: Because the Tiny85 only supports shifting by 1 bit, it is
