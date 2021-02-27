@@ -15,7 +15,7 @@ uint8_t getWallPixels( DUNGEON *dungeon, const int8_t x, const int8_t y )
   const SIMPLE_WALL_INFO *wallInfoPtr = arrayOfWallInfo;
 
   // all objects are visible
-  int8_t maxObjectDistance = 4;
+  int8_t maxObjectDistance = 3;
 
   // iterate through the whole list (at least as long as it's necessary)
   while( true )
@@ -62,7 +62,6 @@ uint8_t getWallPixels( DUNGEON *dungeon, const int8_t x, const int8_t y )
         {
           objectWidth = WINDOW_CENTER_X - objectWidth;
           uint8_t posX = x - objectWidth;
-          uint8_t scalingFactor = pgm_read_byte( scalingFactorFromDistance + distance );
           // free background
           pixels &= getDownScaledBitmapData( posX, y, distance, &object, true );
           // and overlay scaled bitmap
@@ -104,27 +103,31 @@ uint8_t getDownScaledBitmapData( int8_t x,                      // already downs
 
   if ( ( y >= startOffsetY ) && ( y <= endOffsetY ) )
   {
-    //Serial.print(F("x = "));Serial.print( x );Serial.print(F(", y = "));Serial.print( y );
-    //Serial.print(F(", distance = "));Serial.print( distance );
-    //Serial.print(F(", scaleFactor = "));Serial.print( scaleFactor );
-    //Serial.print(F(", threshold = "));Serial.print( threshold );
-    //Serial.print(F(", startOffsetY = "));Serial.print( startOffsetY );
-    //Serial.print(F(", endOffsetY = "));Serial.print( endOffsetY );
-    //Serial.println();
-
-    // number of byte being processed next      
-    uint8_t byteNo = y;
- 
     // modify positions in source bitmap by scaling factor
     x = x * scaleFactor;
     // correct y position by start offset
     y -= startOffsetY;
     
+    // number of byte being processed next      
+    uint8_t byteNo = y;
+
+  #if 0
+    if ( ( x == 0 ) && !useMask )
+    {
+      Serial.print(F("x = "));Serial.print( x );Serial.print(F(", y = "));Serial.print( y );
+      Serial.print(F(", distance = "));Serial.print( distance );
+      //Serial.print(F(", scaleFactor = "));Serial.print( scaleFactor ); Serial.print(F(", threshold = "));Serial.print( threshold );
+      //Serial.print(F(", startOffsetY = "));Serial.print( startOffsetY ); Serial.print(F(", endOffsetY = "));Serial.print( endOffsetY );
+      Serial.print(F(", bitmapVerticalOffsetInBytes = "));Serial.print( object->bitmapVerticalOffsetInBytes );
+      Serial.println();
+    }
+  #endif
+
     // get appropriate bit mask
     uint8_t bitMask = pgm_read_byte( bitMaskFromScalingFactor + scaleFactor );
   
     // calculate start address
-    const uint8_t *data = bitmapData + y * scaleFactor * object->nextLineOffset + x;
+    const uint8_t *data = bitmapData + ( y - object->bitmapVerticalOffsetInBytes ) * scaleFactor * object->nextLineOffset + x;
   
     // first bit to be processed
     uint8_t bitNo = 0;
@@ -137,7 +140,8 @@ uint8_t getDownScaledBitmapData( int8_t x,                      // already downs
     {
       uint8_t bitSum = 0;
   
-      if ( byteNo >= object->bitmapVerticalOffsetInBytes )
+      if (    ( byteNo >= object->bitmapVerticalOffsetInBytes )
+           && ( byteNo <  object->bitmapVerticalOffsetInBytes + object->bitmapHeightInBytes ) )
       {
         // go over the columns - all required bits always are in one row
         for ( uint8_t col = 0; col < scaleFactor; col++ )
@@ -148,9 +152,22 @@ uint8_t getDownScaledBitmapData( int8_t x,                      // already downs
         // correct the post increments from before
         data -= scaleFactor;
       }
+      else if ( useMask )
+      {
+        // make bitsum count - otherwise we will erase the backgound
+        bitSum--;
+      }
   
       // next bit position
       bitNo += scaleFactor;
+
+    #if 0
+      if ( ( x == 0 ) && !useMask )
+      {
+        Serial.print(F("bitNo = "));Serial.print( bitNo ); Serial.print(F(", byteNo = "));Serial.print( byteNo );
+        Serial.println();
+      }
+    #endif
   
       if ( bitNo >= 8 )
       {
@@ -171,7 +188,7 @@ uint8_t getDownScaledBitmapData( int8_t x,                      // already downs
       {
         pixels |= bitValue;
       }
-    }
+    } // for
   }
   // no bits here, set mask to 0xff
   else if ( useMask )

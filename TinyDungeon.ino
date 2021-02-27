@@ -59,7 +59,7 @@ void loop()
 {
   // Prepare the dungeon
   _dungeon.playerX = 1;
-  _dungeon.playerY = 1;
+  _dungeon.playerY = 2;
   _dungeon.dir  = NORTH;
   // Prepare first level
   LEVEL_HEADER *header = (LEVEL_HEADER *)Level_1;
