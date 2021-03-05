@@ -108,9 +108,6 @@ uint8_t getDownScaledBitmapData( int8_t x,                      // already downs
     // correct y position by start offset
     y -= startOffsetY;
     
-    // number of byte being processed next      
-    uint8_t byteNo = y;
-
   #if 0
     if ( ( x == 0 ) && !useMask )
     {
@@ -125,12 +122,19 @@ uint8_t getDownScaledBitmapData( int8_t x,                      // already downs
 
     // get appropriate bit mask
     uint8_t bitMask = pgm_read_byte( bitMaskFromScalingFactor + scaleFactor );
+
+    // empty bytes above the bitmap
+    uint8_t verticalOffsetInBytes = object->bitmapVerticalOffsetInBytes;
   
     // calculate start address
-    const uint8_t *data = bitmapData + ( y - object->bitmapVerticalOffsetInBytes ) * scaleFactor * object->nextLineOffset + x;
+    const uint8_t *data = bitmapData + y * scaleFactor * object->nextLineOffset + x;
   
-    // first bit to be processed
-    uint8_t bitNo = 0;
+    // calculate the first and last bit to be processed
+    uint8_t startBitNo = verticalOffsetInBytes * 8;
+    uint8_t endBitNo = startBitNo + object->bitmapHeightInBytes * 8;
+    
+    // but we are starting with bit 0 (and its friends)
+    uint8_t bitNo = y * 8 * scaleFactor;
   
     // We need to calculate 8 vertical output bits...
     // NOTE: Because the Tiny85 only supports shifting by 1 bit, it is
@@ -140,14 +144,13 @@ uint8_t getDownScaledBitmapData( int8_t x,                      // already downs
     {
       uint8_t bitSum = 0;
   
-      if (    ( byteNo >= object->bitmapVerticalOffsetInBytes )
-           && ( byteNo <  object->bitmapVerticalOffsetInBytes + object->bitmapHeightInBytes ) )
+      if ( ( bitNo >= startBitNo ) && ( bitNo <  endBitNo ) )
       {
         // go over the columns - all required bits always are in one row
         for ( uint8_t col = 0; col < scaleFactor; col++ )
         {
           // to get the output value, we will sum all the bits up (using a lookup table saves time and flash space)
-          bitSum += pgm_read_byte( nibbleBitCount + ( ( pgm_read_byte( data++ ) >> bitNo ) & bitMask ) );
+          bitSum += pgm_read_byte( nibbleBitCount + ( ( pgm_read_byte( data++ ) >> ( bitNo & 0x07 ) ) & bitMask ) );
         }
         // correct the post increments from before
         data -= scaleFactor;
@@ -155,31 +158,32 @@ uint8_t getDownScaledBitmapData( int8_t x,                      // already downs
       else if ( useMask )
       {
         // make bitsum count - otherwise we will erase the backgound
-        bitSum--;
+        bitSum += scaleFactor * scaleFactor;
       }
   
       // next bit position
       bitNo += scaleFactor;
 
-    #if 0
+    #if 1
       if ( ( x == 0 ) && !useMask )
       {
-        Serial.print(F("bitNo = "));Serial.print( bitNo ); Serial.print(F(", byteNo = "));Serial.print( byteNo );
+        Serial.print(F("y = "));Serial.print( y ); Serial.print(F(", bitNo = "));Serial.print( bitNo );
+        Serial.print(F(", startBitNo = "));Serial.print( startBitNo ); Serial.print(F(", endBitNo = "));Serial.print( endBitNo );
         Serial.println();
       }
     #endif
   
-      if ( bitNo >= 8 )
+      if ( ( bitNo & 0x07 ) == 0 )
       {
-        // a new byte will begin...
-        byteNo++;
-        // with bit 0
-        bitNo = 0;
         // did we already use some image data?
-        if ( byteNo > object->bitmapVerticalOffsetInBytes )
+        if ( bitNo > startBitNo )
         {
           // address next 8-pixel row
           data += object->nextLineOffset;
+          if ( ( x == 0 ) && !useMask )
+          {
+            Serial.println(F("data += object->nextLineOffset"));
+          }
         }
       }
   

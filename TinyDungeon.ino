@@ -13,6 +13,9 @@
 // Please enable LTO (link time optimization) and disable 'millis()' and
 // 'micros()'.
 
+// show an 8x8 grid overlay
+#define _SHOW_GRID_OVERLAY
+
 #if defined(__AVR_ATtiny85__)
   #include <ssd1306xled.h>
 #else
@@ -104,6 +107,10 @@ void Tiny_Flip( DUNGEON *dungeon)
     for ( uint8_t x = 0; x < 96; x++ )
     {
       uint8_t pixels = getWallPixels( dungeon, x, y );
+    #ifdef _SHOW_GRID_OVERLAY
+      if ( ( x & 0x01 ) && ( y < 7 ) ) { pixels |= 0x80; }
+      //if ( ( x & 0x07 ) == 0x07 ) { pixels |= 0x55; }
+    #endif      
       #if defined(__AVR_ATtiny85__)
         SSD1306.ssd1306_send_byte( pixels );
       #else
