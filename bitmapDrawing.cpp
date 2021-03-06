@@ -162,8 +162,6 @@ uint8_t getDownScaledBitmapData( int8_t x,                      // already downs
           // to get the output value, we will sum all the bits up (using a lookup table saves time and flash space)
           bitSum += pgm_read_byte( nibbleBitCount + ( ( pgm_read_byte( data++ ) >> ( bitNo & 0x07 ) ) & bitMask ) );
         }
-        // correct the post increments from before
-        //data -= scaleFactor;
       }
       else if ( useMask )
       {
@@ -174,23 +172,6 @@ uint8_t getDownScaledBitmapData( int8_t x,                      // already downs
       // next bit position
       bitNo += scaleFactor;
 
-      /*
-      // processed another full byte?
-      if ( ( bitNo & 0x07 ) == 0 )
-      {
-        // did we already use some image data?
-        if ( bitNo > startBitNo )
-        {
-          // address next 8-pixel row
-          data += object->nextLineOffset;
-          if ( ( x == 0 ) && !useMask )
-          {
-            Serial.println(F("data += object->nextLineOffset"));
-          }
-        }
-      }
-      */
-  
       // calculate output pixel
       if ( bitSum >= threshold )
       {
