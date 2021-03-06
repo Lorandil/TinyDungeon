@@ -14,7 +14,7 @@
 // 'micros()'.
 
 // show an 8x8 grid overlay
-#define _SHOW_GRID_OVERLAY
+//#define _SHOW_GRID_OVERLAY
 
 #if defined(__AVR_ATtiny85__)
   #include <ssd1306xled.h>

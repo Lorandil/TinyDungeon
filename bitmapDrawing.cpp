@@ -133,12 +133,6 @@ uint8_t getDownScaledBitmapData( int8_t x,                      // already downs
     // but we are starting with bit 0 (and its friends)
     uint8_t bitNo = y * 8 * scaleFactor;
   
-    // correct y offset, otherwise we will skip the top of the bitmap
-    y -= verticalOffsetInBytes;
-  
-    // calculate start address
-    const uint8_t *data = bitmapData + y * scaleFactor * object->nextLineOffset + x;
-  
     // We need to calculate 8 vertical output bits...
     // NOTE: Because the Tiny85 only supports shifting by 1 bit, it is
     //       more efficient to do the shifting in the 'for' loop instead
@@ -149,6 +143,19 @@ uint8_t getDownScaledBitmapData( int8_t x,                      // already downs
   
       if ( ( bitNo >= startBitNo ) && ( bitNo <  endBitNo ) )
       {
+        // calculate start address
+        uint8_t row = ( bitNo - startBitNo ) / 8;
+        const uint8_t *data = bitmapData + row * object->nextLineOffset + x;
+    #if 0
+      if ( ( x == 0 ) && !useMask )
+      {
+        Serial.print(F("y = "));Serial.print( y ); Serial.print(F(", bitNo = "));Serial.print( bitNo );
+        Serial.print(F(", startBitNo = "));Serial.print( startBitNo ); Serial.print(F(", endBitNo = "));Serial.print( endBitNo );
+        Serial.print(F(", row = "));Serial.print( row );
+        Serial.println();
+      }
+    #endif
+        
         // go over the columns - all required bits always are in one row
         for ( uint8_t col = 0; col < scaleFactor; col++ )
         {
@@ -156,7 +163,7 @@ uint8_t getDownScaledBitmapData( int8_t x,                      // already downs
           bitSum += pgm_read_byte( nibbleBitCount + ( ( pgm_read_byte( data++ ) >> ( bitNo & 0x07 ) ) & bitMask ) );
         }
         // correct the post increments from before
-        data -= scaleFactor;
+        //data -= scaleFactor;
       }
       else if ( useMask )
       {
@@ -167,15 +174,7 @@ uint8_t getDownScaledBitmapData( int8_t x,                      // already downs
       // next bit position
       bitNo += scaleFactor;
 
-    #if 1
-      if ( ( x == 0 ) && !useMask )
-      {
-        Serial.print(F("y = "));Serial.print( y ); Serial.print(F(", bitNo = "));Serial.print( bitNo );
-        Serial.print(F(", startBitNo = "));Serial.print( startBitNo ); Serial.print(F(", endBitNo = "));Serial.print( endBitNo );
-        Serial.println();
-      }
-    #endif
-
+      /*
       // processed another full byte?
       if ( ( bitNo & 0x07 ) == 0 )
       {
@@ -190,6 +189,7 @@ uint8_t getDownScaledBitmapData( int8_t x,                      // already downs
           }
         }
       }
+      */
   
       // calculate output pixel
       if ( bitSum >= threshold )
