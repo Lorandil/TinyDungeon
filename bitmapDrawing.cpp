@@ -125,16 +125,19 @@ uint8_t getDownScaledBitmapData( int8_t x,                      // already downs
 
     // empty bytes above the bitmap
     uint8_t verticalOffsetInBytes = object->bitmapVerticalOffsetInBytes;
-  
-    // calculate start address
-    const uint8_t *data = bitmapData + y * scaleFactor * object->nextLineOffset + x;
-  
+
     // calculate the first and last bit to be processed
     uint8_t startBitNo = verticalOffsetInBytes * 8;
     uint8_t endBitNo = startBitNo + object->bitmapHeightInBytes * 8;
     
     // but we are starting with bit 0 (and its friends)
     uint8_t bitNo = y * 8 * scaleFactor;
+  
+    // correct y offset, otherwise we will skip the top of the bitmap
+    y -= verticalOffsetInBytes;
+  
+    // calculate start address
+    const uint8_t *data = bitmapData + y * scaleFactor * object->nextLineOffset + x;
   
     // We need to calculate 8 vertical output bits...
     // NOTE: Because the Tiny85 only supports shifting by 1 bit, it is
@@ -172,7 +175,8 @@ uint8_t getDownScaledBitmapData( int8_t x,                      // already downs
         Serial.println();
       }
     #endif
-  
+
+      // processed another full byte?
       if ( ( bitNo & 0x07 ) == 0 )
       {
         // did we already use some image data?
