@@ -83,6 +83,8 @@ void loop()
 /*--------------------------------------------------------*/
 void Tiny_Flip( DUNGEON *dungeon)
 {
+  uint8_t statusPaneOffset = 0; 
+  
   for ( uint8_t y = 0; y < 8; y++)
   {
 #if defined(__AVR_ATtiny85__)
@@ -122,10 +124,11 @@ void Tiny_Flip( DUNGEON *dungeon)
     for ( uint8_t x = 96; x < 128; x++)
     {
       #if defined(__AVR_ATtiny85__)
-        SSD1306.ssd1306_send_byte( 0 );
+        SSD1306.ssd1306_send_byte( pgm_read_byte( statusPane + statusPaneOffset ) );
       #else
-        *buffer++ = 0;
+        *buffer++ = pgm_read_byte( statusPane + statusPaneOffset );
       #endif
+      statusPaneOffset++;
     }
     
 #if defined(__AVR_ATtiny85__)
