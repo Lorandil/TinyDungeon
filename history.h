@@ -2,6 +2,8 @@
 
 #ifdef _HISTORY_
 
+Current size 6634 bytes - 1558 bytes remaining
+
 History and open points list of TinyDungeon
 
 already achieved:
@@ -17,19 +19,21 @@ already achieved:
 * add bitmap scaling
 * add scripted events (levers switching doors, ...)
 * code works on Arduino UNO and MEGA2560 (without sound) too
-
+* enhanced bitmap scaling to work with bitmap heights (in bytes) which are not a power of 2
+* cropped the wall bitmaps to the required size saving 960 bytes
 
 next steps:
-* enhance bitmap scaling to work with bitmap heights (in bytes) which are not a power of 2
 * extend object drawing to full field of view
 * add compass
 * add stairs up/down
 * add monster(s)
 * add treasure
-* add floor graphics
+
+? add floor graphics
+? use only one bitmap for all front walls using downscaling <- is this really still necessary, it's just 576 bytes?! 
 
 * ...
-* have fun!
+* add fun!
 
 goal
 * 4 levels(?)

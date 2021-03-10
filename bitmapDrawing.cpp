@@ -32,11 +32,20 @@ uint8_t getWallPixels( DUNGEON *dungeon, const int8_t x, const int8_t y )
       // is there a wall object?
       if ( ( *( getCell( dungeon, dungeon->playerX, dungeon->playerY, wallInfo.viewDistance, wallInfo.leftRightOffset, dungeon->dir ) ) & WALL_MASK ) == wallInfo.objectMask )
       {
-        // mirror walls on odd fields
-        uint8_t offsetX = ( ( dungeon->playerX + dungeon->playerY ) & 0x01 ) ? 95 - x : x;
-        // get wall pixels
-        pixels = pgm_read_byte( wallInfo.wallBitmap + y * 96 + offsetX );
-        // objects behind walls not invisible, but doors or switched might be placed *on* walls
+        // is there wall information for this vertical position
+        if ( ( y >= wallInfo.startPosY ) && ( y <= wallInfo.endPosY ) )
+        {
+          // mirror walls on odd fields
+          uint8_t offsetX = ( ( dungeon->playerX + dungeon->playerY ) & 0x01 ) ? 95 - x : x;
+          // get wall pixels (shave off the empty rows)
+          pixels = pgm_read_byte( wallInfo.wallBitmap + ( y - wallInfo.startPosY ) * 96 + offsetX );
+        }
+        else
+        {
+          // nope, just nothing
+          pixels = 0;
+        }
+        // objects behind walls are not invisible, but doors or switches might be placed *on* walls
         maxObjectDistance = wallInfo.viewDistance;
         // that's it!
         break;

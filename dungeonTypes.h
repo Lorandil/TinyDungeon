@@ -170,6 +170,10 @@ typedef struct
   int8_t   startPosX;
   // screen end position for this bitmap
   int8_t   endPosX;
+  // vertical start position in bytes
+  int8_t   startPosY;
+  // vertical end position in bytes
+  int8_t   endPosY;
   // view distance of this object
   int8_t   viewDistance;
   // offset to left or right
