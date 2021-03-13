@@ -31,6 +31,7 @@ enum
   //GOBLIN              = 0x10,
   SKELETON            = 0x20,
   BEHOLDER            = 0x30,
+  CHEST               = 0x40,
   //ITEM_KEY            = 0x40,
   //ITEM_GOLD           = 0x50,
   //ITEM_FOUNTAIN       = 0x60,

@@ -23,12 +23,12 @@ const uint8_t Level_1[] PROGMEM =
 //    0       1          2       3        4        5         6         7
   WALL  ,WALL|LVR_DWN, WALL,   WALL ,   WALL ,   WALL    ,FAKE_WALL, WALL  , // 0
     0   ,     0  ,     BARS ,     0  ,   WALL ,   WALL    ,   0     , WALL  , // 1
-    0   ,     0  ,     WALL ,     0  ,   WALL ,  SKELETON ,BEHOLDER , WALL  , // 2
+    0   ,     0  ,     WALL ,  CHEST ,   WALL ,  SKELETON ,BEHOLDER , WALL  , // 2
     0   ,     0  ,     WALL ,   WALL ,   WALL ,     0     ,   0     , WALL  , // 3
     0   ,     0  ,       0  ,WALL|DOOR ,   0  ,     0     ,   0     , WALL  , // 4
   WALL  ,   WALL ,       0  ,   WALL ,   WALL ,     0     ,   0     , WALL  , // 5
   SKELETON,   0  ,       0  ,     0  ,     0  ,     0     ,   0     ,   0   , // 6
-  WALL  ,   WALL ,     WALL ,   WALL ,   WALL ,     0     ,   0     , WALL  , // 7
+  WALL  ,   WALL ,     WALL ,   WALL ,   WALL ,   CHEST   ,   0     , WALL  , // 7
 };
 
 // interaction data for level 1
@@ -78,6 +78,7 @@ const NON_WALL_OBJECT objectList [] PROGMEM = {
   { DOOR    ,  32,         0,             8,          32,         64,         3,  { 0, 1, 3, 13 },  door     },
   { LVR_UP  ,  16,         2,             3,          16,         32,         3,  { 0, 1, 2,  8 },  leverUp  },
   { LVR_DWN ,  16,         3,             3,          16,         32,         3,  { 0, 1, 2,  8 },  leverDown},
+  { CHEST   ,  24,         4,             3,          24,         48,         3,  { 0, 1, 3,  7 },  chest    },
 };
 
 #endif
