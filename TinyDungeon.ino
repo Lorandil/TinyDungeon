@@ -7,7 +7,7 @@
 // and uses ssd1306xled Library for SSD1306 oled display 128x64.
 //
 // To stuff all code and data into the 8192 bytes of the ATtiny85
-// the ATTinyCore (v1.4.1) by Spence Konde is recommended.
+// the ATTinyCore (v1.5.2) by Spence Konde is recommended.
 // The core is available at github: [https://github.com/SpenceKonde/ATTinyCore], just add the
 // following board manager to the Arduino IDE: [http://drazzy.com/package_drazzy.com_index.json]
 // Please enable LTO (link time optimization) and disable 'millis()' and
@@ -23,12 +23,13 @@
   #include <Adafruit_SSD1306.h>
   Adafruit_SSD1306 display( 128, 64, &Wire, -1 );
 #endif
-#include "Dungeon.h"
+#include "dungeon.h"
 #include "spritebank.h"
 #include "bitmapDrawing.h"
 #include "bitTables.h"
 #include "smallFont.h"
-#include "TinyJoypadUtils.h"
+#include "tinyJoypadUtils.h"
+#include "textUtils.h"
 
 DUNGEON _dungeon;
 
@@ -61,8 +62,8 @@ void setup()
 void loop()
 {
   // Prepare the dungeon
-  _dungeon.playerX = 1;
-  _dungeon.playerY = 2;
+  _dungeon.playerX = 6;
+  _dungeon.playerY = 3;
   _dungeon.dir  = NORTH;
   // Prepare first level
   LEVEL_HEADER *header = (LEVEL_HEADER *)Level_1;
@@ -70,6 +71,9 @@ void loop()
   _dungeon.levelHeight = header->height;
   // copy the level data to RAM
   memcpy_P( _dungeon.currentLevel, Level_1 + sizeof( LEVEL_HEADER ), _dungeon.levelWidth * _dungeon.levelHeight );
+
+  // clear text buffer
+  clearTextBuffer();
 
   while( 1 )
   {
@@ -120,13 +124,14 @@ void Tiny_Flip( DUNGEON *dungeon)
       #endif
     } // for x
 
-    // display the dashboard here (later)
-    for ( uint8_t x = 96; x < 128; x++)
+    // display the dashboard here
+    for ( uint8_t x = 0; x < 32; x++)
     {
+      uint8_t pixels = pgm_read_byte( statusPane + statusPaneOffset ) | displayText( x, y );
       #if defined(__AVR_ATtiny85__)
-        SSD1306.ssd1306_send_byte( pgm_read_byte( statusPane + statusPaneOffset ) );
+        SSD1306.ssd1306_send_byte( pixels );
       #else
-        *buffer++ = pgm_read_byte( statusPane + statusPaneOffset );
+        *buffer++ = pixels;
       #endif
       statusPaneOffset++;
     }
@@ -257,6 +262,10 @@ void checkPlayerMovement( DUNGEON *dungeon )
   
   // limit the positions
   limitDungeonPosition( dungeon, dungeon->playerX, dungeon->playerY );
+
+  // display viewing direction
+  uint8_t *compass = getTextBuffer() + POS_COMPASS;
+  *compass = pgm_read_byte( directionLetter + dungeon->dir );
 }
 
 /*--------------------------------------------------------*/

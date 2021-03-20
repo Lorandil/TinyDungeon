@@ -81,4 +81,7 @@ const NON_WALL_OBJECT objectList [] PROGMEM = {
   { CHEST   ,  24,         4,             3,          24,         48,         3,  { 0, 1, 3,  7 },  chest    },
 };
 
+// direction letters for the compass
+const char directionLetter[] PROGMEM = {'N','E','S','W'};
+
 #endif

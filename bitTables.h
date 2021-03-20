@@ -1,5 +1,4 @@
-#ifndef _BIT_TABLES_H_
-#define _BIT_TABLES_H_
+#pragma once
 
 // some simple tables to save time and code
 
@@ -24,6 +23,26 @@ const uint8_t nibbleBitCount[16] PROGMEM =
   3, // 0b1101
   3, // 0b1110
   4, // 0b1111
+};
+
+// a 4 bit zoom table (e.g. for charachter enlargement)
+const uint8_t  nibbleZoom[] PROGMEM = {
+  0b00000000, // 0b0000
+  0b00000011, // 0b0001
+  0b00001100, // 0b0010
+  0b00001111, // 0b0011
+  0b00110000, // 0b0100
+  0b00110011, // 0b0101
+  0b00111100, // 0b0110
+  0b00111111, // 0b0111
+  0b11000000, // 0b1000
+  0b11000011, // 0b1001
+  0b11001100, // 0b1010
+  0b11001111, // 0b1011
+  0b11110000, // 0b1100
+  0b11110011, // 0b1101
+  0b11111100, // 0b1110
+  0b11111111, // 0b1111
 };
 
 // Conversion table from view distance to scaling factor.
@@ -51,5 +70,3 @@ const uint8_t bitMaskFromScalingFactor[] PROGMEM =
 //    -     1     2     -       4 
     0x00, 0x01, 0x03, 0x00  , 0x0F,
 };
-
-#endif

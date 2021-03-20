@@ -11,6 +11,12 @@ const uint8_t WINDOW_CENTER_X = WINDOW_SIZE_X / 2;
 const uint8_t WINDOW_SIZE_Y   = 64;
 const uint8_t WINDOW_CENTER_Y = WINDOW_SIZE_Y / 2;
 
+// text positions
+const uint8_t POS_COMPASS     = 0 * 8 + 4;
+const uint8_t POS_HITPOINTS   = 4 * 8 + 5;
+const uint8_t POS_DAMAGE      = 5 * 8 + 5;
+const uint8_t POS_KEYS        = 6 * 8 + 5;
+
 // possible item types
 enum
 {
