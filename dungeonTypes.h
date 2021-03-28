@@ -1,5 +1,4 @@
-#ifndef _DUNGEON_TYPES_H_
-#define _DUNGEON_TYPES_H_
+#pragma once
 
 #if !defined(__AVR_ATtiny85__)
   #include "SerialHexTools.h"
@@ -37,7 +36,8 @@ enum
   //GOBLIN              = 0x10,
   SKELETON            = 0x20,
   BEHOLDER            = 0x30,
-  CHEST               = 0x40,
+  CHEST_CLOSED        = 0x40,
+  CHEST_OPEN          = 0x50,
   //ITEM_KEY            = 0x40,
   //ITEM_GOLD           = 0x50,
   //ITEM_FOUNTAIN       = 0x60,
@@ -58,6 +58,9 @@ public:
   int8_t playerX;
   int8_t playerY;
   uint8_t dir;
+  int8_t playerHP;
+  int8_t playerDAM;
+  int8_t playerKeys;
   
   uint8_t levelHeight;
   uint8_t levelWidth;
@@ -70,6 +73,9 @@ public:
     Serial.print(F("  playerX = ") );Serial.print( playerX );
     Serial.print(F(", playerY = ") );Serial.print( playerY );
     Serial.print(F(", dir = ") );Serial.print( dir );
+    Serial.print(F(", HP = ") );Serial.print( playerHP );
+    Serial.print(F(", DAM = ") );Serial.print( playerDAM );
+    Serial.print(F(", Keys = ") );Serial.print( playerKeys );
     Serial.print(F("   ( levelHeight = ") );Serial.print( levelHeight );
     Serial.print(F(", levelWidth  = ") );Serial.print( levelWidth );
     Serial.println(F(" )") );
@@ -249,5 +255,3 @@ enum
   LEFT  = WEST,
   MAX_ORIENTATION = 4,
 };
-
-#endif

@@ -65,6 +65,11 @@ void loop()
   _dungeon.playerX = 6;
   _dungeon.playerY = 3;
   _dungeon.dir  = NORTH;
+  // prepare player stats
+  _dungeon.playerHP = 30;
+  _dungeon.playerDAM = 10;
+  _dungeon.playerKeys = 2;  
+
   // Prepare first level
   LEVEL_HEADER *header = (LEVEL_HEADER *)Level_1;
   _dungeon.levelWidth = header->width;
@@ -77,8 +82,12 @@ void loop()
 
   while( 1 )
   {
+    // update the status pane
+    updateStatusPane( &_dungeon );
+
+    // display the dungeon
     Tiny_Flip( &_dungeon );
-  
+
     // update player's position and orientation
     checkPlayerMovement( &_dungeon );
   }
@@ -96,7 +105,7 @@ void Tiny_Flip( DUNGEON *dungeon)
     SSD1306.ssd1306_send_command(0xb0 + y);
   #ifdef _USE_SH1106_
     // SH1106 internally uses 132 pixels/line,
-    // output is (mostly?) centered, so we need to start at position 2
+    // output is (always?) centered, so we need to start at position 2
     SSD1306.ssd1306_send_command(0x02);
     SSD1306.ssd1306_send_command(0x10);  
   #else
@@ -262,10 +271,6 @@ void checkPlayerMovement( DUNGEON *dungeon )
   
   // limit the positions
   limitDungeonPosition( dungeon, dungeon->playerX, dungeon->playerY );
-
-  // display viewing direction
-  uint8_t *compass = getTextBuffer() + POS_COMPASS;
-  *compass = pgm_read_byte( directionLetter + dungeon->dir );
 }
 
 /*--------------------------------------------------------*/

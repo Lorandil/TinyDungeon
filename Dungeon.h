@@ -1,11 +1,11 @@
-#ifndef _DUNGEON_H_
-#define _DUNGEON_H_
+#pragma once
 
 #include "dungeonTypes.h"
 #include "spritebank.h"
 
 uint8_t *getCell( DUNGEON *dungeon, int8_t x, int8_t y, const int8_t distance, const int8_t offsetLR, const uint8_t orientation );
 void limitDungeonPosition( DUNGEON *dungeon, int8_t &x, int8_t &y );
+void updateStatusPane( DUNGEON *dungeon );
 
 // simple level - 1 byte per cell
 const uint8_t Level_1[] PROGMEM = 
@@ -21,14 +21,14 @@ const uint8_t Level_1[] PROGMEM =
 
   // plain level data
 //    0       1          2       3        4        5         6         7
-  WALL  ,WALL|LVR_DWN, WALL,   WALL ,   WALL ,   WALL    ,FAKE_WALL, WALL  , // 0
-    0   ,     0  ,     BARS ,     0  ,   WALL ,   WALL    ,   0     , WALL  , // 1
-    0   ,     0  ,     WALL ,  CHEST ,   WALL ,  SKELETON ,BEHOLDER , WALL  , // 2
-    0   ,     0  ,     WALL ,   WALL ,   WALL ,     0     ,   0     , WALL  , // 3
-    0   ,     0  ,       0  ,WALL|DOOR ,   0  ,     0     ,   0     , WALL  , // 4
-  WALL  ,   WALL ,       0  ,   WALL ,   WALL ,     0     ,   0     , WALL  , // 5
-  SKELETON,   0  ,       0  ,     0  ,     0  ,     0     ,   0     ,   0   , // 6
-  WALL  ,   WALL ,     WALL ,   WALL ,   WALL ,   CHEST   ,   0     , WALL  , // 7
+  WALL  ,WALL|LVR_DWN, WALL,   WALL      ,   WALL ,   WALL    ,FAKE_WALL, WALL  , // 0
+    0   ,     0  ,     BARS ,     0      ,   WALL ,   WALL    ,   0     , WALL  , // 1
+    0   ,     0  ,     WALL ,CHEST_CLOSED,   WALL ,  SKELETON ,BEHOLDER , WALL  , // 2
+    0   ,     0  ,     WALL ,   WALL     ,   WALL ,     0     ,   0     , WALL  , // 3
+    0   ,     0  ,       0  ,WALL|DOOR   ,   0    ,     0     ,   0     , WALL  , // 4
+  WALL  ,   WALL ,       0  ,   WALL     ,   WALL ,     0     ,   0     , WALL  , // 5
+  SKELETON,   0  ,       0  ,     0      ,     0  ,     0     ,   0     ,   0   , // 6
+  WALL  ,   WALL ,     WALL ,   WALL     ,   WALL ,CHEST_OPEN ,   0     , WALL  , // 7
 };
 
 // interaction data for level 1
@@ -72,16 +72,15 @@ const SIMPLE_WALL_INFO arrayOfWallInfo[] PROGMEM = {
 // list of possible non wall objects (i.e. monsters, doors, ...)
 const NON_WALL_OBJECT objectList [] PROGMEM = {
 //  itemType, width, verticalOffset, heightBytes, maskOffset, lineOffset, maxView, scalingThreshold, bitmap
-  { SKELETON,  32,         2,             5,          32,         64,         3,  { 0, 1, 2,  5 },  joey     },
-  { BEHOLDER,  32,         0,             8,          32,         64,         3,  { 0, 1, 2,  5 },  beholder },
-  { BARS    ,  32,         1,             6,          32,         64,         3,  { 0, 1, 2,  5 },  newBars  },
-  { DOOR    ,  32,         0,             8,          32,         64,         3,  { 0, 1, 3, 13 },  door     },
-  { LVR_UP  ,  16,         2,             3,          16,         32,         3,  { 0, 1, 2,  8 },  leverUp  },
-  { LVR_DWN ,  16,         3,             3,          16,         32,         3,  { 0, 1, 2,  8 },  leverDown},
-  { CHEST   ,  24,         4,             3,          24,         48,         3,  { 0, 1, 3,  7 },  chest    },
+  { SKELETON    ,  32,         2,             5,          32,         64,         3,  { 0, 1, 2,  5 },  joey        },
+  { BEHOLDER    ,  32,         0,             8,          32,         64,         3,  { 0, 1, 2,  5 },  beholder    },
+  { BARS        ,  32,         1,             6,          32,         64,         3,  { 0, 1, 2,  5 },  newBars     },
+  { DOOR        ,  32,         0,             8,          32,         64,         3,  { 0, 1, 3, 13 },  door        },
+  { LVR_UP      ,  16,         2,             3,          16,         32,         3,  { 0, 1, 2,  8 },  leverUp     },
+  { LVR_DWN     ,  16,         3,             3,          16,         32,         3,  { 0, 1, 2,  8 },  leverDown   },
+  { CHEST_CLOSED,  24,         4,             3,          24,         48,         3,  { 0, 1, 3,  7 },  chestClosed },
+  { CHEST_OPEN  ,  24,         4,             3,          24,         48,         3,  { 0, 1, 3,  7 },  chestOpen   },
 };
 
 // direction letters for the compass
 const char directionLetter[] PROGMEM = {'N','E','S','W'};
-
-#endif

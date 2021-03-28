@@ -96,6 +96,14 @@ uint8_t displayZoomedText( uint8_t x, uint8_t y )
 void clearTextBuffer()
 {
   memset( textBuffer, 0x00, sizeof( textBuffer ) );
+#if !defined(__AVR_ATtiny85__)
+  for ( auto n = 0; n < sizeof( textBuffer ); n++ )
+  {
+    auto value = textBuffer[n];
+    Serial.write( value == 0 ? '_' : value );
+  }
+  Serial.println();
+#endif
 }
 
 /*--------------------------------------------------------------*/
