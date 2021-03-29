@@ -1,5 +1,6 @@
-#ifndef _TINY_JOYSTICK_
-#define _TINY_JOYSTICK_
+#pragma once
+
+#include <Arduino.h>
 
 #if defined(__AVR_ATtiny85__)
   #define LEFT_RIGHT_BUTTON A0
@@ -18,5 +19,3 @@ bool isDownPressed();
 bool isFirePressed();
 void _variableDelay_us( uint8_t delayValue );
 void Sound( const uint8_t freq, const uint8_t dur );
-
-#endif

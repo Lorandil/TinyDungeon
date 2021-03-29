@@ -1,5 +1,6 @@
-#ifndef _SMALLFONT_H_
-#define _SMALLFONT_H_
+#pragma once
+
+#include <Arduino.h>
 
 // Small 3x5 charachter font - ok, it's 4x8 ;)
 // Modified ASCII-like code page: '0'-'9','!?','A'-'Z' and some alien/UFO parts :)
@@ -250,5 +251,3 @@ const uint8_t  characterFont3x5[] PROGMEM = {
   0b10011110, // 0x9E
   0b10011100, // 0x9C
 };
-
-#endif

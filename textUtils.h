@@ -1,5 +1,6 @@
-#ifndef _TEXT_UTILS
-#define _TEXT_UTILS
+#pragma once
+
+#include <Arduino.h>
 
 // Video text memory:
 // - one line (of 32 characters) in standard mode,
@@ -15,5 +16,3 @@ void __attribute__ ((noinline)) clearTextBuffer();
 void printText( uint8_t x, uint8_t *text, uint8_t textLength );
 void __attribute__ ((noinline)) pgm_printText( uint8_t x, uint8_t *text, uint8_t textLength );
 uint8_t *getTextBuffer();
-
-#endif

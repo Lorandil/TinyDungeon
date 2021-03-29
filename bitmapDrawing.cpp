@@ -98,7 +98,7 @@ uint8_t getDownScaledBitmapData( int8_t x,                      // already downs
   uint8_t pixels = 0;
 
   // get start address (and add optional offset for mask)
-  uint8_t *bitmapData = object->bitmapData;
+  const uint8_t *bitmapData = object->bitmapData;
   if ( useMask ) { bitmapData += object->maskOffset; }
 
   // get scaling factor from LUT (efficient and still flexible)

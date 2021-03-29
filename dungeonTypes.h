@@ -1,5 +1,7 @@
 #pragma once
 
+#include <Arduino.h>
+
 #if !defined(__AVR_ATtiny85__)
   #include "SerialHexTools.h"
 #endif
@@ -36,8 +38,8 @@ enum
   //GOBLIN              = 0x10,
   SKELETON            = 0x20,
   BEHOLDER            = 0x30,
-  CHEST_CLOSED        = 0x40,
-  CHEST_OPEN          = 0x50,
+  CLOSED_CHEST        = 0x40,
+  OPEN_CHEST          = 0x50,
   //ITEM_KEY            = 0x40,
   //ITEM_GOLD           = 0x50,
   //ITEM_FOUNTAIN       = 0x60,

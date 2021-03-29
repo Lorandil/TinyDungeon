@@ -22,6 +22,7 @@ already achieved:
 * enhanced bitmap scaling to work with bitmap heights (in bytes) which are not a power of 2
 * cropped the wall bitmaps to the required size saving 960 bytes
 * added compass
+* added open chest image
 
 next steps:
 * extend object drawing to full field of view

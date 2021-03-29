@@ -1,5 +1,6 @@
 #pragma once
 
+#include <Arduino.h>
 #include "dungeonTypes.h"
 #include "spritebank.h"
 
@@ -20,22 +21,25 @@ const uint8_t Level_1[] PROGMEM =
    1,
 
   // plain level data
-//    0       1          2       3        4        5         6         7
-  WALL  ,WALL|LVR_DWN, WALL,   WALL      ,   WALL ,   WALL    ,FAKE_WALL, WALL  , // 0
-    0   ,     0  ,     BARS ,     0      ,   WALL ,   WALL    ,   0     , WALL  , // 1
-    0   ,     0  ,     WALL ,CHEST_CLOSED,   WALL ,  SKELETON ,BEHOLDER , WALL  , // 2
-    0   ,     0  ,     WALL ,   WALL     ,   WALL ,     0     ,   0     , WALL  , // 3
-    0   ,     0  ,       0  ,WALL|DOOR   ,   0    ,     0     ,   0     , WALL  , // 4
-  WALL  ,   WALL ,       0  ,   WALL     ,   WALL ,     0     ,   0     , WALL  , // 5
-  SKELETON,   0  ,       0  ,     0      ,     0  ,     0     ,   0     ,   0   , // 6
-  WALL  ,   WALL ,     WALL ,   WALL     ,   WALL ,CHEST_OPEN ,   0     , WALL  , // 7
+//    0       1          2        3           4        5           6        7
+  WALL  ,WALL|LVR_DWN, WALL,   WALL      ,   WALL ,   WALL     ,FAKE_WALL, WALL  , // 0
+    0   ,     0  ,     BARS ,     0      ,   WALL ,   WALL     ,   0     , WALL  , // 1
+    0   ,     0  ,     WALL ,CLOSED_CHEST,   WALL ,  SKELETON  ,BEHOLDER , WALL  , // 2
+    0   ,     0  ,     WALL ,   WALL     ,   WALL ,     0      ,   0     , WALL  , // 3
+    0   ,     0  ,       0  ,WALL|DOOR   ,   0    ,     0      ,   0     , WALL  , // 4
+  WALL  ,   WALL ,       0  ,   WALL     ,   WALL ,     0      ,   0     , WALL  , // 5
+  SKELETON,   0  ,       0  ,     0      ,     0  ,     0      ,   0     ,   0   , // 6
+  WALL  ,   WALL ,     WALL ,   WALL     ,   WALL , OPEN_CHEST ,   0     , WALL  , // 7
 };
 
 // interaction data for level 1
 const INTERACTION_INFO interactionData[] PROGMEM =
 {
-  { 1 + 8 * 0, LVR_DWN, OBJECT_MASK, LVR_UP ,  0,  0, 2 + 1 * 8, SKELETON },
-  { 1 + 8 * 0, LVR_UP , OBJECT_MASK, LVR_DWN,  0,  0, 2 + 1 * 8, BARS     },
+  // currentPos currentStatus currentStatusMask nextStatus    newItem itemValue modifiedPos  modifiedPosCellValue;
+  { 1 + 8 * 0,    LVR_DWN      , OBJECT_MASK    , LVR_UP      ,  0    ,  0      , 2 + 1 * 8  , SKELETON     },
+  { 1 + 8 * 0,    LVR_UP       , OBJECT_MASK    , LVR_DWN     ,  0    ,  0      , 2 + 1 * 8  , BARS         },
+  { 3 + 8 * 2,    CLOSED_CHEST , OBJECT_MASK    , OPEN_CHEST  ,  0    ,  0      , 3 + 2 * 8  , OPEN_CHEST   },
+  { 3 + 8 * 2,    OPEN_CHEST   , OBJECT_MASK    , CLOSED_CHEST,  0    ,  0      , 3 + 2 * 8  , CLOSED_CHEST },
 };
 
 
@@ -78,8 +82,8 @@ const NON_WALL_OBJECT objectList [] PROGMEM = {
   { DOOR        ,  32,         0,             8,          32,         64,         3,  { 0, 1, 3, 13 },  door        },
   { LVR_UP      ,  16,         2,             3,          16,         32,         3,  { 0, 1, 2,  8 },  leverUp     },
   { LVR_DWN     ,  16,         3,             3,          16,         32,         3,  { 0, 1, 2,  8 },  leverDown   },
-  { CHEST_CLOSED,  24,         4,             3,          24,         48,         3,  { 0, 1, 3,  7 },  chestClosed },
-  { CHEST_OPEN  ,  24,         4,             3,          24,         48,         3,  { 0, 1, 3,  7 },  chestOpen   },
+  { CLOSED_CHEST,  24,         4,             3,          24,         48,         3,  { 0, 1, 3,  7 },  chestClosed },
+  { OPEN_CHEST  ,  24,         4,             3,          24,         48,         3,  { 0, 1, 3,  7 },  chestOpen   },
 };
 
 // direction letters for the compass
