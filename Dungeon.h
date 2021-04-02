@@ -30,16 +30,22 @@ const uint8_t Level_1[] PROGMEM =
   WALL  ,   WALL ,       0  ,   WALL     ,   WALL ,     0      ,   0     , WALL  , // 5
   SKELETON,   0  ,       0  ,     0      ,     0  ,     0      ,   0     ,   0   , // 6
   WALL  ,   WALL ,     WALL ,   WALL     ,   WALL , OPEN_CHEST ,   0     , WALL  , // 7
+//    0       1          2        3           4        5           6        7
 };
 
 // interaction data for level 1
 const INTERACTION_INFO interactionData[] PROGMEM =
 {
-  // currentPos currentStatus currentStatusMask nextStatus    newItem itemValue modifiedPos  modifiedPosCellValue;
-  { 1 + 8 * 0,    LVR_DWN      , OBJECT_MASK    , LVR_UP      ,  0    ,  0      , 2 + 1 * 8  , SKELETON     },
-  { 1 + 8 * 0,    LVR_UP       , OBJECT_MASK    , LVR_DWN     ,  0    ,  0      , 2 + 1 * 8  , BARS         },
-  { 3 + 8 * 2,    CLOSED_CHEST , OBJECT_MASK    , OPEN_CHEST  ,  0    ,  0      , 3 + 2 * 8  , OPEN_CHEST   },
-  { 3 + 8 * 2,    OPEN_CHEST   , OBJECT_MASK    , CLOSED_CHEST,  0    ,  0      , 3 + 2 * 8  , CLOSED_CHEST },
+  // currentPos currentStatus  currentStatusMask nextStatus   newItem itemValue modifiedPos   modifiedPosCellValue;
+  { 1 + 0 * 8,    LVR_DWN      , OBJECT_MASK    , LVR_UP      ,  0    ,  0      , 2 + 1 * 8   , SKELETON     },
+  { 1 + 0 * 8,    LVR_UP       , OBJECT_MASK    , LVR_DWN     ,  0    ,  0      , 2 + 1 * 8   , BARS         },
+  { ANY_POSITION, CLOSED_CHEST , OBJECT_MASK    , OPEN_CHEST  ,  0    ,  0      , ANY_POSITION, OPEN_CHEST   },
+  { ANY_POSITION, OPEN_CHEST   , OBJECT_MASK    , CLOSED_CHEST,  0    ,  0      , ANY_POSITION, CLOSED_CHEST },
+  { 3 + 4 * 8,    DOOR         , OBJECT_MASK    ,    0        ,  0    ,  0      , 3 + 4 * 8   ,       0      },
+  //{ 3 + 2 * 8,    CLOSED_CHEST , OBJECT_MASK    , OPEN_CHEST  ,  0    ,  0      , 3 + 2 * 8  , OPEN_CHEST   },
+  //{ 3 + 2 * 8,    OPEN_CHEST   , OBJECT_MASK    , CLOSED_CHEST,  0    ,  0      , 3 + 2 * 8  , CLOSED_CHEST },
+  //{ 5 + 7 * 8,    CLOSED_CHEST , OBJECT_MASK    , OPEN_CHEST  ,  0    ,  0      , 5 + 7 * 8  , OPEN_CHEST   },
+  //{ 5 + 7 * 8,    OPEN_CHEST   , OBJECT_MASK    , CLOSED_CHEST,  0    ,  0      , 5 + 7 * 8  , CLOSED_CHEST },
 };
 
 
@@ -76,14 +82,14 @@ const SIMPLE_WALL_INFO arrayOfWallInfo[] PROGMEM = {
 // list of possible non wall objects (i.e. monsters, doors, ...)
 const NON_WALL_OBJECT objectList [] PROGMEM = {
 //  itemType, width, verticalOffset, heightBytes, maskOffset, lineOffset, maxView, scalingThreshold, bitmap
-  { SKELETON    ,  32,         2,             5,          32,         64,         3,  { 0, 1, 2,  5 },  joey        },
+  { SKELETON    ,  32,         2,             5,          32,         64,         3,  { 0, 1, 2, 99 },  joey        },
   { BEHOLDER    ,  32,         0,             8,          32,         64,         3,  { 0, 1, 2,  5 },  beholder    },
   { BARS        ,  32,         1,             6,          32,         64,         3,  { 0, 1, 2,  5 },  newBars     },
   { DOOR        ,  32,         0,             8,          32,         64,         3,  { 0, 1, 3, 13 },  door        },
   { LVR_UP      ,  16,         2,             3,          16,         32,         3,  { 0, 1, 2,  8 },  leverUp     },
   { LVR_DWN     ,  16,         3,             3,          16,         32,         3,  { 0, 1, 2,  8 },  leverDown   },
-  { CLOSED_CHEST,  24,         4,             3,          24,         48,         3,  { 0, 1, 3,  7 },  chestClosed },
-  { OPEN_CHEST  ,  24,         4,             3,          24,         48,         3,  { 0, 1, 3,  7 },  chestOpen   },
+  { CLOSED_CHEST,  24,         4,             3,          24,         48,         3,  { 0, 1, 3, 99 },  chestClosed },
+  { OPEN_CHEST  ,  24,         4,             3,          24,         48,         3,  { 0, 1, 3, 99 },  chestOpen   },
 };
 
 // direction letters for the compass

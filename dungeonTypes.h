@@ -12,6 +12,9 @@ const uint8_t WINDOW_CENTER_X = WINDOW_SIZE_X / 2;
 const uint8_t WINDOW_SIZE_Y   = 64;
 const uint8_t WINDOW_CENTER_Y = WINDOW_SIZE_Y / 2;
 
+// this position is true for every cell
+const uint8_t ANY_POSITION = 0xff;
+
 // text positions
 const uint8_t POS_COMPASS     = 0 * 8 + 4;
 const uint8_t POS_HITPOINTS   = 4 * 8 + 5;
@@ -227,13 +230,13 @@ public:
   void serialPrint() 
   {
     Serial.println( F("INTERACTION_INFO") );
-    Serial.print( F("  currentPosition    = ") );Serial.println( currentPosition );
+    Serial.print( F("  currentPosition    = ") );if ( currentPosition == ANY_POSITION ) { Serial.println( F("ANY_POSITION") ); } else { Serial.println( currentPosition ); }
     Serial.print( F("  currentStatus      = ") );printHexToSerial( currentStatus );Serial.println();
     Serial.print( F("  currentStatusMask  = ") );printHexToSerial( currentStatusMask );Serial.println();
     Serial.print( F("  nextStatus         = ") );printHexToSerial( nextStatus );Serial.println();
     Serial.print( F("  newItem            = ") );printHexToSerial( newItem );Serial.println();
     Serial.print( F("  itemValue          = ") );Serial.println( itemValue );
-    Serial.print( F("  modifiedPosition   = ") );Serial.println( modifiedPosition );
+    Serial.print( F("  modifiedPosition   = ") );if ( modifiedPosition == ANY_POSITION ) { Serial.println( F("ANY_POSITION") ); } else { Serial.println( modifiedPosition ); }
     Serial.print( F("  modifiedPosValue   = ") );printHexToSerial( modifiedPositionCellValue );Serial.println();
     Serial.println();
   }

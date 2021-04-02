@@ -25,6 +25,7 @@ already achieved:
 * added open chest image
 
 next steps:
+* add a fountain to restore health
 * extend object drawing to full field of view
 * add stairs up/down
 * add monster(s)

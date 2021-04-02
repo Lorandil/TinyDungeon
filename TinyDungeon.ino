@@ -247,7 +247,9 @@ void checkPlayerMovement( DUNGEON *dungeon )
       memcpy_P( &interactionInfo, interactionData + n, sizeof( INTERACTION_INFO ) );
 
       // does this info cover the current position?
-      if ( cell == dungeon->currentLevel + interactionInfo.currentPosition )
+      if (    ( cell == dungeon->currentLevel + interactionInfo.currentPosition )
+           || ( interactionInfo.currentPosition == ANY_POSITION )
+         )
       {
         // is the status correct?
         if ( ( cellValue & interactionInfo.currentStatusMask ) == interactionInfo.currentStatus )
@@ -259,7 +261,17 @@ void checkPlayerMovement( DUNGEON *dungeon )
         #endif
           // yay!
           *cell = ( cellValue - interactionInfo.currentStatus ) | interactionInfo.nextStatus;
-          dungeon->currentLevel[interactionInfo.modifiedPosition] = interactionInfo.modifiedPositionCellValue;
+          // check target position
+          if ( interactionInfo.modifiedPosition == ANY_POSITION )
+          {
+            // modify current position
+            *cell = interactionInfo.modifiedPositionCellValue;
+          }
+          else
+          {
+            // modify target position
+            dungeon->currentLevel[interactionInfo.modifiedPosition] = interactionInfo.modifiedPositionCellValue;
+          }
           swordSound();
           
           // perform only the first action, otherwise on/off actions might be immediately revoked ;)
