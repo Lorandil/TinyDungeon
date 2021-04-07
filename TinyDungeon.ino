@@ -62,8 +62,8 @@ void setup()
 void loop()
 {
   // Prepare the dungeon
-  _dungeon.playerX = 6;
-  _dungeon.playerY = 3;
+  _dungeon.playerX = 1;
+  _dungeon.playerY = 2;
   _dungeon.dir  = NORTH;
   // prepare player stats
   _dungeon.playerHP = 30;
@@ -136,7 +136,15 @@ void Tiny_Flip( DUNGEON *dungeon)
     // display the dashboard here
     for ( uint8_t x = 0; x < 32; x++)
     {
-      uint8_t pixels = pgm_read_byte( statusPane + statusPaneOffset ) | displayText( x, y );
+      uint8_t pixels;
+      if ( y | dungeon->playerHasCompass )
+      {
+        pixels = pgm_read_byte( statusPane + statusPaneOffset ) | displayText( x, y );
+      }
+      else
+      {
+        pixels = 0;
+      }
       #if defined(__AVR_ATtiny85__)
         SSD1306.ssd1306_send_byte( pixels );
       #else
@@ -248,7 +256,7 @@ void checkPlayerMovement( DUNGEON *dungeon )
 
       // does this info cover the current position?
       if (    ( cell == dungeon->currentLevel + interactionInfo.currentPosition )
-           || ( interactionInfo.currentPosition == ANY_POSITION )
+           //|| ( interactionInfo.currentPosition == ANY_POSITION )
          )
       {
         // is the status correct?
@@ -259,15 +267,23 @@ void checkPlayerMovement( DUNGEON *dungeon )
           // print entry information
           interactionInfo.serialPrint();
         #endif
+
+          // special handling for special types
+          if ( cellValue == CLOSED_CHEST )
+          {
+            // plunder the chest!
+            openChest( dungeon, interactionInfo );
+          }
+
           // yay!
           *cell = ( cellValue - interactionInfo.currentStatus ) | interactionInfo.nextStatus;
           // check target position
-          if ( interactionInfo.modifiedPosition == ANY_POSITION )
-          {
-            // modify current position
-            *cell = interactionInfo.modifiedPositionCellValue;
-          }
-          else
+          //if ( interactionInfo.modifiedPosition == ANY_POSITION )
+          //{
+          //  // modify current position
+          //  *cell = interactionInfo.modifiedPositionCellValue;
+          //}
+          //else
           {
             // modify target position
             dungeon->currentLevel[interactionInfo.modifiedPosition] = interactionInfo.modifiedPositionCellValue;

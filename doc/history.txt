@@ -1,8 +1,8 @@
 // Just a text file, but Ardiono IDE doesn't like "txt" to be added to the project
 
-#ifdef _HISTORY_
+//#ifdef _HISTORY_
 
-Current size 7104 bytes - 1088 bytes remaining
+Current size 7326 bytes - 866 bytes remaining
 
 History and open points list of TinyDungeon
 
@@ -23,13 +23,19 @@ already achieved:
 * cropped the wall bitmaps to the required size saving 960 bytes
 * added compass
 * added open chest image
+* add special treatment for item groups like chests and monsters
+* remove alphabet except NESW for compass
 
 next steps:
+* add a spinner
+* add teleporter
+* place compass in a chest
 * add a fountain to restore health
 * extend object drawing to full field of view
 * add stairs up/down
 * add monster(s)
 * add treasure
+* add a "combat system"
 
 ? add floor graphics
 ? use only one bitmap for all front walls using downscaling <- is this really still necessary, it's just 576 bytes?! 
@@ -38,9 +44,8 @@ next steps:
 * add fun!
 
 goal
-* 4 levels(?)
-* combat system
+* 4 levels(?) or one larger level (save space for stairs graphics)
 * fun
 * save to EEPROM?
 
-#endif
+//#endif

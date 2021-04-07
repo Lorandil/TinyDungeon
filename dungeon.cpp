@@ -63,7 +63,12 @@ void updateStatusPane( DUNGEON *dungeon )
 {
   // display viewing direction
   uint8_t *textBuffer = getTextBuffer();
-  textBuffer[POS_COMPASS] = pgm_read_byte( directionLetter + dungeon->dir );
+
+  // display compass
+  //if ( dungeon->playerHasCompass ) 
+  { textBuffer[POS_COMPASS] = pgm_read_byte( directionLetter + dungeon->dir ); }
+  //else // show '?'
+  //{ textBuffer[POS_COMPASS] = '>'; }
 
   // and the hitpoints
   convertValueToDigits( dungeon->playerHP, textBuffer + POS_HITPOINTS );
@@ -73,4 +78,24 @@ void updateStatusPane( DUNGEON *dungeon )
 
   // and the number of keys
   convertValueToDigits( dungeon->playerKeys, textBuffer + POS_KEYS );
+}
+
+/*--------------------------------------------------------*/
+// opens a chest
+void openChest( DUNGEON *dungeon, INTERACTION_INFO &info )
+{
+#if !defined(__AVR_ATtiny85__)
+  Serial.println(F("openChest()") );
+#endif
+
+  // is there a compass in this chest?
+  if ( info.newItem == ITEM_COMPASS )
+  {
+    dungeon->playerHasCompass = true;
+    // hooray!
+  #if !defined(__AVR_ATtiny85__)
+    Serial.println(F("+ Compass found!"));
+  #endif
+
+  }
 }

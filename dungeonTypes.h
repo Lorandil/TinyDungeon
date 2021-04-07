@@ -6,7 +6,7 @@
   #include "SerialHexTools.h"
 #endif
 
-const uint8_t MAX_LEVEL_BYTES = 128;
+const uint16_t MAX_LEVEL_BYTES = 256;
 const uint8_t WINDOW_SIZE_X   = 96;
 const uint8_t WINDOW_CENTER_X = WINDOW_SIZE_X / 2;
 const uint8_t WINDOW_SIZE_Y   = 64;
@@ -52,6 +52,13 @@ enum
   LVR_DWN             = 0xA0 | FLAG_SOLID,
 };
 
+// list of items in chests or monster treasure
+enum
+{
+  ITEM_NONE    = 0x00,
+  ITEM_COMPASS = 0x01
+};
+
 // DUNGEON
 #if !defined(__AVR_ATtiny85__)
   class DUNGEON
@@ -66,6 +73,7 @@ public:
   int8_t playerHP;
   int8_t playerDAM;
   int8_t playerKeys;
+  bool   playerHasCompass;
   
   uint8_t levelHeight;
   uint8_t levelWidth;
@@ -81,6 +89,7 @@ public:
     Serial.print(F(", HP = ") );Serial.print( playerHP );
     Serial.print(F(", DAM = ") );Serial.print( playerDAM );
     Serial.print(F(", Keys = ") );Serial.print( playerKeys );
+    Serial.print(F(", Compass = ") );Serial.print( playerHasCompass );
     Serial.print(F("   ( levelHeight = ") );Serial.print( levelHeight );
     Serial.print(F(", levelWidth  = ") );Serial.print( levelWidth );
     Serial.println(F(" )") );

@@ -7,6 +7,7 @@
 uint8_t *getCell( DUNGEON *dungeon, int8_t x, int8_t y, const int8_t distance, const int8_t offsetLR, const uint8_t orientation );
 void limitDungeonPosition( DUNGEON *dungeon, int8_t &x, int8_t &y );
 void updateStatusPane( DUNGEON *dungeon );
+void openChest( DUNGEON *dungeon, INTERACTION_INFO &info );
 
 // simple level - 1 byte per cell
 const uint8_t Level_1[] PROGMEM = 
@@ -22,14 +23,14 @@ const uint8_t Level_1[] PROGMEM =
 
   // plain level data
 //    0       1          2        3           4        5           6        7
-  WALL  ,WALL|LVR_DWN, WALL,   WALL      ,   WALL ,   WALL     ,FAKE_WALL, WALL  , // 0
+  WALL  , WALL|LVR_UP, WALL,   WALL      ,   WALL ,   WALL     ,FAKE_WALL, WALL  , // 0
     0   ,     0  ,     BARS ,     0      ,   WALL ,   WALL     ,   0     , WALL  , // 1
     0   ,     0  ,     WALL ,CLOSED_CHEST,   WALL ,  SKELETON  ,BEHOLDER , WALL  , // 2
     0   ,     0  ,     WALL ,   WALL     ,   WALL ,     0      ,   0     , WALL  , // 3
     0   ,     0  ,       0  ,WALL|DOOR   ,   0    ,     0      ,   0     , WALL  , // 4
   WALL  ,   WALL ,       0  ,   WALL     ,   WALL ,     0      ,   0     , WALL  , // 5
   SKELETON,   0  ,       0  ,     0      ,     0  ,     0      ,   0     ,   0   , // 6
-  WALL  ,   WALL ,     WALL ,   WALL     ,   WALL , OPEN_CHEST ,   0     , WALL  , // 7
+  WALL  ,   WALL ,     WALL ,   WALL     ,   WALL ,CLOSED_CHEST,   0     , WALL  , // 7
 //    0       1          2        3           4        5           6        7
 };
 
@@ -37,15 +38,15 @@ const uint8_t Level_1[] PROGMEM =
 const INTERACTION_INFO interactionData[] PROGMEM =
 {
   // currentPos currentStatus  currentStatusMask nextStatus   newItem itemValue modifiedPos   modifiedPosCellValue;
-  { 1 + 0 * 8,    LVR_DWN      , OBJECT_MASK    , LVR_UP      ,  0    ,  0      , 2 + 1 * 8   , SKELETON     },
-  { 1 + 0 * 8,    LVR_UP       , OBJECT_MASK    , LVR_DWN     ,  0    ,  0      , 2 + 1 * 8   , BARS         },
-  { ANY_POSITION, CLOSED_CHEST , OBJECT_MASK    , OPEN_CHEST  ,  0    ,  0      , ANY_POSITION, OPEN_CHEST   },
-  { ANY_POSITION, OPEN_CHEST   , OBJECT_MASK    , CLOSED_CHEST,  0    ,  0      , ANY_POSITION, CLOSED_CHEST },
-  { 3 + 4 * 8,    DOOR         , OBJECT_MASK    ,    0        ,  0    ,  0      , 3 + 4 * 8   ,       0      },
-  //{ 3 + 2 * 8,    CLOSED_CHEST , OBJECT_MASK    , OPEN_CHEST  ,  0    ,  0      , 3 + 2 * 8  , OPEN_CHEST   },
-  //{ 3 + 2 * 8,    OPEN_CHEST   , OBJECT_MASK    , CLOSED_CHEST,  0    ,  0      , 3 + 2 * 8  , CLOSED_CHEST },
-  //{ 5 + 7 * 8,    CLOSED_CHEST , OBJECT_MASK    , OPEN_CHEST  ,  0    ,  0      , 5 + 7 * 8  , OPEN_CHEST   },
-  //{ 5 + 7 * 8,    OPEN_CHEST   , OBJECT_MASK    , CLOSED_CHEST,  0    ,  0      , 5 + 7 * 8  , CLOSED_CHEST },
+  { 1 + 0 * 8,    LVR_UP       , OBJECT_MASK    , LVR_DWN     ,     0    ,  0      , 2 + 1 * 8   , SKELETON     },
+  { 1 + 0 * 8,    LVR_DWN      , OBJECT_MASK    , LVR_UP      ,     0    ,  0      , 2 + 1 * 8   , BARS         },
+  //{ ANY_POSITION, CLOSED_CHEST , OBJECT_MASK    , OPEN_CHEST  ,     0    ,  0      , ANY_POSITION, OPEN_CHEST   },
+  //{ ANY_POSITION, OPEN_CHEST   , OBJECT_MASK    , CLOSED_CHEST,     0    ,  0      , ANY_POSITION, CLOSED_CHEST },
+  { 3 + 4 * 8,    DOOR         , OBJECT_MASK    ,    0        ,     0    ,  0      , 3 + 4 * 8   ,       0      },
+  { 3 + 2 * 8,    CLOSED_CHEST , OBJECT_MASK    , OPEN_CHEST  , ITEM_COMPASS,  0      , 3 + 2 * 8  , OPEN_CHEST   },
+  //{ 3 + 2 * 8,    OPEN_CHEST   , OBJECT_MASK    , CLOSED_CHEST,     0    ,  0      , 3 + 2 * 8  , CLOSED_CHEST },
+  { 5 + 7 * 8,    CLOSED_CHEST , OBJECT_MASK    , OPEN_CHEST  ,     0    ,  0      , 5 + 7 * 8  , OPEN_CHEST   },
+  //{ 5 + 7 * 8,    OPEN_CHEST   , OBJECT_MASK    , CLOSED_CHEST,     0    ,  0      , 5 + 7 * 8  , CLOSED_CHEST },
 };
 
 
@@ -92,5 +93,6 @@ const NON_WALL_OBJECT objectList [] PROGMEM = {
   { OPEN_CHEST  ,  24,         4,             3,          24,         48,         3,  { 0, 1, 3, 99 },  chestOpen   },
 };
 
-// direction letters for the compass
-const char directionLetter[] PROGMEM = {'N','E','S','W'};
+// direction letters for the compass ('0' + dir [0..3])
+//                                       N   E   S   W
+const char directionLetter[] PROGMEM = {';',':','<','='};
