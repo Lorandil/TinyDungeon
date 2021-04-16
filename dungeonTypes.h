@@ -35,6 +35,8 @@ enum
   FAKE_WALL           = 0x01,
   // solid wall
   WALL                = 0x01 | FLAG_SOLID,
+  TELEPORTER          = 0x02,
+  SPINNER             = 0x03,
   //STAIRS_UP           = 0x04 | FLAG_SOLID,
   //STAIRS_DWN          = 0x05 | FLAG_SOLID,
 
@@ -45,7 +47,7 @@ enum
   OPEN_CHEST          = 0x50,
   //ITEM_KEY            = 0x40,
   //ITEM_GOLD           = 0x50,
-  //ITEM_FOUNTAIN       = 0x60,
+  FOUNTAIN            = 0x60,
   DOOR                = 0x70 | FLAG_SOLID,
   BARS                = 0x80 | FLAG_SOLID,
   LVR_UP              = 0x90 | FLAG_SOLID,
@@ -67,13 +69,14 @@ enum
 #endif
 {
 public:
-  int8_t playerX;
-  int8_t playerY;
+  int8_t  playerX;
+  int8_t  playerY;
   uint8_t dir;
-  int8_t playerHP;
-  int8_t playerDAM;
-  int8_t playerKeys;
-  bool   playerHasCompass;
+  int8_t  playerHP;
+  int8_t  playerDAM;
+  int8_t  playerKeys;
+  bool    playerHasCompass;
+  uint8_t displayXorEffect;
   
   uint8_t levelHeight;
   uint8_t levelWidth;
@@ -90,6 +93,7 @@ public:
     Serial.print(F(", DAM = ") );Serial.print( playerDAM );
     Serial.print(F(", Keys = ") );Serial.print( playerKeys );
     Serial.print(F(", Compass = ") );Serial.print( playerHasCompass );
+    Serial.print(F(", displayXorEffect = ") );Serial.print( displayXorEffect );
     Serial.print(F("   ( levelHeight = ") );Serial.print( levelHeight );
     Serial.print(F(", levelWidth  = ") );Serial.print( levelWidth );
     Serial.println(F(" )") );
@@ -252,6 +256,41 @@ public:
 #endif
 #if defined(__AVR_ATtiny85__)
 } INTERACTION_INFO;
+#else
+};
+#endif
+
+// interaction information
+#if !defined(__AVR_ATtiny85__)
+  class SPECIAL_CELL_INFO
+#else
+  typedef struct
+#endif
+{
+public:
+  // cell type
+  uint8_t specialFX;
+  // x-position of the effect
+  uint8_t positionX;
+  // y-position of the effect
+  uint8_t positionY;
+  // additional parameter 1 (target position x, ...)
+  uint8_t value_1;
+  // additional parameter 2 (target position y, ...)
+  uint8_t value_2;
+
+#if !defined(__AVR_ATtiny85__)
+  void serialPrint() 
+  {
+    Serial.println( F("SPECIAL_CELL_INFO") );
+    Serial.print( F("  specialFX    = ") );if ( specialFX == TELEPORTER ) { Serial.println( F("TELEPORTER") ); } else { Serial.println( F("SPINNER") ); }
+    Serial.print( F("  position     = (") );Serial.print( positionX ); Serial.print( F(", ") );Serial.print( positionY );Serial.println( F(")"));
+    Serial.print( F("  value        = (") );Serial.print( value_1 ); Serial.print( F(", ") );Serial.print( value_2 );Serial.println( F(")"));
+    Serial.println();
+  }
+#endif
+#if defined(__AVR_ATtiny85__)
+} SPECIAL_CELL_INFO;
 #else
 };
 #endif

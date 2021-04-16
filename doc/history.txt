@@ -1,8 +1,6 @@
 // Just a text file, but Ardiono IDE doesn't like "txt" to be added to the project
 
-//#ifdef _HISTORY_
-
-Current size 7326 bytes - 866 bytes remaining
+Current size 7542 bytes - 650 bytes remaining
 
 History and open points list of TinyDungeon
 
@@ -14,7 +12,7 @@ already achieved:
   add information about stairs up and down to the level structure, too
 * mirror walls between odd and even cells
 * added skeleton and beholder bitmap
-* very plain draw function (buggy!) for non-wall-objects
+* very plain draw function for non-wall-objects
 * use solid bit
 * add bitmap scaling
 * add scripted events (levers switching doors, ...)
@@ -25,27 +23,30 @@ already achieved:
 * added open chest image
 * add special treatment for item groups like chests and monsters
 * remove alphabet except NESW for compass
-
-next steps:
+* place compass in a chest
+* add flash effect for teleporters (and spinners?)
 * add a spinner
 * add teleporter
-* place compass in a chest
+
+
+next steps:
+* add events when player steps on a new field (-> teleporter, spinner)
+* require key to open chests/doors - use same key type for both?
 * add a fountain to restore health
 * extend object drawing to full field of view
 * add stairs up/down
 * add monster(s)
 * add treasure
 * add a "combat system"
+* ...
+* add fun!
 
+final steps:
 ? add floor graphics
 ? use only one bitmap for all front walls using downscaling <- is this really still necessary, it's just 576 bytes?! 
 
-* ...
-* add fun!
 
 goal
 * 4 levels(?) or one larger level (save space for stairs graphics)
 * fun
 * save to EEPROM?
-
-//#endif

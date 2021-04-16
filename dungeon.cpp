@@ -96,6 +96,5 @@ void openChest( DUNGEON *dungeon, INTERACTION_INFO &info )
   #if !defined(__AVR_ATtiny85__)
     Serial.println(F("+ Compass found!"));
   #endif
-
   }
 }

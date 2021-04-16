@@ -24,12 +24,12 @@ const uint8_t Level_1[] PROGMEM =
   // plain level data
 //    0       1          2        3           4        5           6        7
   WALL  , WALL|LVR_UP, WALL,   WALL      ,   WALL ,   WALL     ,FAKE_WALL, WALL  , // 0
-    0   ,     0  ,     BARS ,     0      ,   WALL ,   WALL     ,   0     , WALL  , // 1
-    0   ,     0  ,     WALL ,CLOSED_CHEST,   WALL ,  SKELETON  ,BEHOLDER , WALL  , // 2
+    0   ,     0  ,     BARS , SKELETON   ,   WALL ,   WALL     ,   0     , WALL  , // 1
+    0   ,     0  ,     WALL ,CLOSED_CHEST,   WALL ,  FOUNTAIN  ,BEHOLDER , WALL  , // 2
     0   ,     0  ,     WALL ,   WALL     ,   WALL ,     0      ,   0     , WALL  , // 3
-    0   ,     0  ,       0  ,WALL|DOOR   ,   0    ,     0      ,   0     , WALL  , // 4
+    0   ,     0  ,       0  ,WALL|DOOR   ,   0    , TELEPORTER ,   0     , WALL  , // 4
   WALL  ,   WALL ,       0  ,   WALL     ,   WALL ,     0      ,   0     , WALL  , // 5
-  SKELETON,   0  ,       0  ,     0      ,     0  ,     0      ,   0     ,   0   , // 6
+  SKELETON,   0  , SPINNER  ,     0      ,     0  ,     0      ,   0     ,   0   , // 6
   WALL  ,   WALL ,     WALL ,   WALL     ,   WALL ,CLOSED_CHEST,   0     , WALL  , // 7
 //    0       1          2        3           4        5           6        7
 };
@@ -38,7 +38,7 @@ const uint8_t Level_1[] PROGMEM =
 const INTERACTION_INFO interactionData[] PROGMEM =
 {
   // currentPos currentStatus  currentStatusMask nextStatus   newItem itemValue modifiedPos   modifiedPosCellValue;
-  { 1 + 0 * 8,    LVR_UP       , OBJECT_MASK    , LVR_DWN     ,     0    ,  0      , 2 + 1 * 8   , SKELETON     },
+  { 1 + 0 * 8,    LVR_UP       , OBJECT_MASK    , LVR_DWN     ,     0    ,  0      , 2 + 1 * 8   ,       0      },
   { 1 + 0 * 8,    LVR_DWN      , OBJECT_MASK    , LVR_UP      ,     0    ,  0      , 2 + 1 * 8   , BARS         },
   //{ ANY_POSITION, CLOSED_CHEST , OBJECT_MASK    , OPEN_CHEST  ,     0    ,  0      , ANY_POSITION, OPEN_CHEST   },
   //{ ANY_POSITION, OPEN_CHEST   , OBJECT_MASK    , CLOSED_CHEST,     0    ,  0      , ANY_POSITION, CLOSED_CHEST },
@@ -47,6 +47,14 @@ const INTERACTION_INFO interactionData[] PROGMEM =
   //{ 3 + 2 * 8,    OPEN_CHEST   , OBJECT_MASK    , CLOSED_CHEST,     0    ,  0      , 3 + 2 * 8  , CLOSED_CHEST },
   { 5 + 7 * 8,    CLOSED_CHEST , OBJECT_MASK    , OPEN_CHEST  ,     0    ,  0      , 5 + 7 * 8  , OPEN_CHEST   },
   //{ 5 + 7 * 8,    OPEN_CHEST   , OBJECT_MASK    , CLOSED_CHEST,     0    ,  0      , 5 + 7 * 8  , CLOSED_CHEST },
+};
+
+// special cell effects
+const SPECIAL_CELL_INFO specialCellFX[] PROGMEM =
+{
+  // cell type ,  posX , posY , value_1, value_2
+  { TELEPORTER ,   5   ,   4  ,     6  ,    4    },
+  { SPINNER    ,   2   ,   6  ,    +1  ,    0    },
 };
 
 
@@ -91,6 +99,7 @@ const NON_WALL_OBJECT objectList [] PROGMEM = {
   { LVR_DWN     ,  16,         3,             3,          16,         32,         3,  { 0, 1, 2,  8 },  leverDown   },
   { CLOSED_CHEST,  24,         4,             3,          24,         48,         3,  { 0, 1, 3, 99 },  chestClosed },
   { OPEN_CHEST  ,  24,         4,             3,          24,         48,         3,  { 0, 1, 3, 99 },  chestOpen   },
+  { FOUNTAIN    ,  12,         4,             3,          12,         24,         3,  { 0, 1, 2, 99 },  fountain    },
 };
 
 // direction letters for the compass ('0' + dir [0..3])
