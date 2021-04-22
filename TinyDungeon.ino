@@ -30,6 +30,7 @@
 #include "smallFont.h"
 #include "tinyJoypadUtils.h"
 #include "textUtils.h"
+#include "soundFX.h"
 
 DUNGEON _dungeon;
 
@@ -369,25 +370,4 @@ void checkPlayerMovement( DUNGEON *dungeon )
   
   // limit the positions
   limitDungeonPosition( dungeon, dungeon->playerX, dungeon->playerY );
-}
-
-/*--------------------------------------------------------*/
-void stepSound()
-{
-  Sound( 100,1 );
-  Sound( 200,1 );
-  _delay_ms( 100 );
-}
-
-/*--------------------------------------------------------*/
-void wallSound()
-{
-  Sound( 50,1 );
-  _delay_ms( 100 );
-}
-
-/*--------------------------------------------------------*/
-void swordSound()
-{
-  Sound( 50,10 );
 }

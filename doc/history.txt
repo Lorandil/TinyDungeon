@@ -1,45 +1,75 @@
 // Just a text file, but Ardiono IDE doesn't like "txt" to be added to the project
 
-Current size 7542 bytes - 650 bytes remaining
+Current size 7542 bytes - 650 bytes remaining (192 bytes thereof required for full 16x16 level)
 
 History and open points list of TinyDungeon
 
 already achieved:
-* make walls solid
+* made walls solid
 * copy level from flash to RAM
 * store level dimensions in level structure,
   thus enabling arbitrary level sizes
   add information about stairs up and down to the level structure, too
-* mirror walls between odd and even cells
+* mirror walls between odd and even cells to produce a "walking" effect
 * added skeleton and beholder bitmap
 * very plain draw function for non-wall-objects
-* use solid bit
-* add bitmap scaling
-* add scripted events (levers switching doors, ...)
+* always respect solid bit
+* added bitmap scaling
+* added scripted events (levers switching doors, ...)
 * code works on Arduino UNO and MEGA2560 (without sound) too
 * enhanced bitmap scaling to work with bitmap heights (in bytes) which are not a power of 2
 * cropped the wall bitmaps to the required size saving 960 bytes
 * added compass
 * added open chest image
-* add special treatment for item groups like chests and monsters
-* remove alphabet except NESW for compass
-* place compass in a chest
-* add flash effect for teleporters (and spinners?)
-* add a spinner
-* add teleporter
-
+* added special treatment for item groups like chests and monsters
+* removed alphabet except NESW for compass
+* placed a compass in a chest
+* added flash effect for teleporters (and spinners?)
+* added events when player steps on a new field (-> teleporter, spinner)
+* added a spinner
+* added teleporter
 
 next steps:
-* add events when player steps on a new field (-> teleporter, spinner)
+* Add game logic: 
+  - define a goal:
+  - when does the player lose? -> when the player (or the battery) dies
+  - can the player die? -> yes, HP <= 0
+  - what happens when the player dies?
+  - what happen when the player wins?
+  - are there walking monsters?
+* "Invent" a combat system:
+  - who attacks first?
+  - always the player?
+  - can the player upgrade his/her weapon?
+  - how to visualize the combat?
+  - how expensive (in flash bytes) is a random number generator?
+  - can the player flee?
+  - where to store the monster's stats?
+    - in the dungeon bits?
+    - in a table?
+    - by the type?
+* Should the player be healed by fountains?
+  - how?
+  - "using" from the distance
+  - walking over it?
+  - how often?
 * require key to open chests/doors - use same key type for both?
 * add a fountain to restore health
-* extend object drawing to full field of view
+* extend object drawing to full field of view?
 * add stairs up/down
 * add monster(s)
 * add treasure
 * add a "combat system"
 * ...
 * add fun!
+
+perhaps:
+? use just left walls and mirror them for right:
+  - saves 384 bytes + 24 empty bytes in the center
+  - and should be quite easy, but kills the "movement" effect
+  or
+  - or use mirror table (nibble based?)
+  - estimation: will save 300 bytes?
 
 final steps:
 ? add floor graphics

@@ -1,6 +1,5 @@
 #include <Arduino.h>
 #include "dungeon.h"
-#include "dungeonTypes.h"
 #include "spritebank.h"
 #include "bitmapDrawing.h"
 #include "bitTables.h"
