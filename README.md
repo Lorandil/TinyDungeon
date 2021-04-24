@@ -39,7 +39,12 @@ Why not something like a 3D dungeon crawler on the TinyJoypad platform?
 * all interactions are scripted (not hardcoded)
 * extensible design (levels, bitmaps, interactions, ...)
 * highly optimized code ;)
+* code compiles for ATtiny85 with xled1306 library
+* code compiles Arduino Uno R3, Arduino Mega 2560 and many boards more using
+  the Adafruit SSD1306 library (no sound support yet)
 
 # Current Size
-7542 bytes - 650 bytes remaining (192 bytes thereof required for full 16x16 level)
+Sketch uses 7596 bytes (92%) of program storage space. Maximum is 8192 bytes.
+Global variables use 342 bytes (66%) of dynamic memory, leaving 170 bytes for local variables.
+
 # License
