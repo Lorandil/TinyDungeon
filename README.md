@@ -42,9 +42,11 @@ Why not something like a 3D dungeon crawler on the TinyJoypad platform?
 * code compiles for ATtiny85 with xled1306 library
 * code compiles Arduino Uno R3, Arduino Mega 2560 and many boards more using
   the Adafruit SSD1306 library (no sound support yet)
+* Screenshot functionality: Dump screen content to serial port as a hexdump
+  [only on MCUs with serial port, so not on ATtiny85 ;)]
 
 # Current Size
-Sketch uses 7596 bytes (92%) of program storage space. Maximum is 8192 bytes.
-Global variables use 342 bytes (66%) of dynamic memory, leaving 170 bytes for local variables.
+Sketch uses 7478 bytes (91%) of program storage space. Maximum is 8192 bytes.
+Global variables use 342 bytes (66%) of dynamic memory, leaving 170 bytes for local variables. Maximum is 512 bytes.
 
 # License
