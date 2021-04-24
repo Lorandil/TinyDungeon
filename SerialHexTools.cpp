@@ -87,4 +87,26 @@ void pgm_hexdumpToSerial( uint8_t *pData, uint16_t byteCount, bool finalComma, b
   }
 }
 
+/*--------------------------------------------------------------*/
+// print rotated 1 bit image buffer to serial as an 8 bit hexdump
+void printScreenBufferToSerial( const uint8_t *buffer, const uint8_t widthInPixels, const uint8_t heightInBytes )
+{
+  for ( int x = 0; x < widthInPixels; x++ )
+  {
+    for ( int y = 0; y < heightInBytes; y++ )
+    {
+      uint8_t value = buffer[y * widthInPixels + x];
+      // now convert to 8bpp
+      for ( int n = 0; n < 8; n++ )
+      {
+        if ( value & ( 1 << n ) )
+          { Serial.print( F("0xFF,") ); }
+        else
+          { Serial.print( F("0x00,") ); }
+      }
+    }
+    Serial.println();
+  }
+}
+
 #endif

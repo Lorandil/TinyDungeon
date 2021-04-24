@@ -15,6 +15,10 @@
 
 // show an 8x8 grid overlay
 //#define _SHOW_GRID_OVERLAY
+// enable serial screenshot
+//#define _ENABLE_SERIAL_SCREENSHOT_
+// perform a serial screenshot if this condition is true:
+#define _SERIAL_SCREENSHOT_TRIGGER_CONDITION_ ( isDownPressed() )
 
 #if defined(__AVR_ATtiny85__)
   #include <ssd1306xled.h>
@@ -98,10 +102,10 @@ void loop()
 void Tiny_Flip( DUNGEON *dungeon)
 {
   uint8_t statusPaneOffset = 0; 
-  
+
   for ( uint8_t y = 0; y < 8; y++)
   {
-#if defined(__AVR_ATtiny85__)
+  #if defined(__AVR_ATtiny85__)
     // initialize image transfer to segment 'y'
     SSD1306.ssd1306_send_command(0xb0 + y);
   #ifdef _USE_SH1106_
@@ -115,11 +119,12 @@ void Tiny_Flip( DUNGEON *dungeon)
     SSD1306.ssd1306_send_command(0x10);  
   #endif    
     SSD1306.ssd1306_send_data_start();
-#else
-  // allocate a buffer in RAM
-  uint8_t *buffer = display.getBuffer() + y * 128;
-#endif
+  #else
+    // allocate a buffer in RAM
+    uint8_t *buffer = display.getBuffer() + y * 128;
+  #endif
     
+    // the first 96 columns are used to display the dungeon
     for ( uint8_t x = 0; x < 96; x++ )
     {
       uint8_t pixels = getWallPixels( dungeon, x, y );
@@ -128,11 +133,12 @@ void Tiny_Flip( DUNGEON *dungeon)
       if ( ( x & 0x01 ) && ( y < 7 ) ) { pixels |= 0x80; }
       //if ( ( x & 0x07 ) == 0x07 ) { pixels |= 0x55; }
     #endif      
-      #if defined(__AVR_ATtiny85__)
-        SSD1306.ssd1306_send_byte( pixels );
-      #else
-        *buffer++ = pixels;
-      #endif
+    #if defined(__AVR_ATtiny85__)
+      SSD1306.ssd1306_send_byte( pixels );
+    #else
+      // output to buffer of Adafruit_SSD1306 library
+      *buffer++ = pixels;
+    #endif
     } // for x
 
     // display the dashboard here
@@ -166,6 +172,17 @@ void Tiny_Flip( DUNGEON *dungeon)
   dungeon->displayXorEffect = 0;
 
 #if !defined(__AVR_ATtiny85__)
+
+  #ifdef _ENABLE_SERIAL_SCREENSHOT_
+    if ( _SERIAL_SCREENSHOT_TRIGGER_CONDITION_)
+    {
+      // print a short header
+      Serial.println(F("\r\nTinyDungeon screenshot"));
+      // output the full buffer as a hexdump to the serial port
+      printScreenBufferToSerial( display.getBuffer(), 128, 8 );
+    }
+  #endif
+  // display the whole screen at once
   display.display();
 #endif
 }

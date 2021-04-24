@@ -28,6 +28,7 @@ already achieved:
 * added events when player steps on a new field (-> teleporter, spinner)
 * added a spinner
 * added teleporter
+* added screenshot via serial port
 
 next steps:
 * Add game logic: 
