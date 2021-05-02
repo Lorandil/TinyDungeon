@@ -25,7 +25,7 @@ Why not something like a 3D dungeon crawler on the TinyJoypad platform?
 * Sound effects
 
 # Screenshots
-![Picture](https://github.com/screenshots/meet Joey!.png)
+![Picture](https://github.com/screenshots/meet_Joey!.png)
 
 # Open Points
 * Still missing ideas for a combat system
