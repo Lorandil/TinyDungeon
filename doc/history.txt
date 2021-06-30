@@ -29,6 +29,7 @@ already achieved:
 * added a spinner
 * added teleporter
 * added screenshot via serial port
+* added sound support for Arduino Uno R3 and Mega 2560
 
 next steps:
 * Add game logic: 
