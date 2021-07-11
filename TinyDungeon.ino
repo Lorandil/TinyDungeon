@@ -1,7 +1,7 @@
 //   >>>>>  T-I-N-Y  D-U-N-G-E-O-N v0.1 for ATTINY85  GPLv3 <<<<
 //						Tinyjoypad rev2 compatible
 //                   Programmer: Sven B 2021
-//              Contact EMAIL: 
+//              Contact EMAIL: Lorandil@gmx.de
 
 // The code works at 16MHZ internal
 // and uses ssd1306xled Library for SSD1306 oled display 128x64.
