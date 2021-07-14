@@ -91,7 +91,7 @@ const SIMPLE_WALL_INFO arrayOfWallInfo[] PROGMEM = {
 // list of possible non wall objects (i.e. monsters, doors, ...)
 const NON_WALL_OBJECT objectList [] PROGMEM = {
 //  itemType, width, verticalOffset, heightBytes, maskOffset, lineOffset, maxView, scalingThreshold, bitmap
-  { SKELETON    ,  28,         2,             5,          32,         56,         3,  { 0, 1, 2, 99 },  joey        },
+  { SKELETON    ,  28,         2,             5,          28,         56,         3,  { 0, 1, 2, 99 },  joey        },
   { BEHOLDER    ,  32,         0,             7,          32,         64,         3,  { 0, 1, 2,  5 },  beholder    },
   { BARS        ,  32,         1,             6,          32,         64,         3,  { 0, 1, 2,  5 },  newBars     },
   { DOOR        ,  32,         0,             8,          32,         64,         3,  { 0, 1, 3, 13 },  door        },
