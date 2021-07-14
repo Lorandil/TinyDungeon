@@ -40,7 +40,7 @@ enum
   //STAIRS_UP           = 0x04 | FLAG_SOLID,
   //STAIRS_DWN          = 0x05 | FLAG_SOLID,
 
-  //GOBLIN              = 0x10,
+  RAT                 = 0x10,
   SKELETON            = 0x20,
   BEHOLDER            = 0x30,
   CLOSED_CHEST        = 0x40,

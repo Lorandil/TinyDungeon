@@ -24,7 +24,7 @@ const uint8_t Level_1[] PROGMEM =
   // plain level data
 //    0       1          2        3           4        5           6        7
   WALL  , WALL|LVR_UP, WALL,   WALL      ,   WALL ,   WALL     ,FAKE_WALL, WALL  , // 0
-    0   ,     0  ,     BARS , SKELETON   ,   WALL ,   WALL     ,   0     , WALL  , // 1
+   RAT  ,     0  ,     BARS , SKELETON   ,   WALL ,   WALL     ,   0     , WALL  , // 1
     0   ,     0  ,     WALL ,CLOSED_CHEST,   WALL ,  FOUNTAIN  ,BEHOLDER , WALL  , // 2
     0   ,     0  ,     WALL ,   WALL     ,   WALL ,     0      ,   0     , WALL  , // 3
     0   ,     0  ,       0  ,WALL|DOOR   ,   0    , TELEPORTER ,   0     , WALL  , // 4
@@ -91,7 +91,7 @@ const SIMPLE_WALL_INFO arrayOfWallInfo[] PROGMEM = {
 // list of possible non wall objects (i.e. monsters, doors, ...)
 const NON_WALL_OBJECT objectList [] PROGMEM = {
 //  itemType, width, verticalOffset, heightBytes, maskOffset, lineOffset, maxView, scalingThreshold, bitmap
-  { SKELETON    ,  32,         2,             5,          32,         64,         3,  { 0, 1, 2, 99 },  joey        },
+  { SKELETON    ,  28,         2,             5,          32,         56,         3,  { 0, 1, 2, 99 },  joey        },
   { BEHOLDER    ,  32,         0,             7,          32,         64,         3,  { 0, 1, 2,  5 },  beholder    },
   { BARS        ,  32,         1,             6,          32,         64,         3,  { 0, 1, 2,  5 },  newBars     },
   { DOOR        ,  32,         0,             8,          32,         64,         3,  { 0, 1, 3, 13 },  door        },
@@ -100,6 +100,7 @@ const NON_WALL_OBJECT objectList [] PROGMEM = {
   { CLOSED_CHEST,  24,         4,             3,          24,         48,         3,  { 0, 1, 3, 99 },  chestClosed },
   { OPEN_CHEST  ,  24,         4,             3,          24,         48,         3,  { 0, 1, 3, 99 },  chestOpen   },
   { FOUNTAIN    ,  12,         4,             3,          12,         24,         3,  { 0, 1, 2, 99 },  fountain    },
+  { RAT         ,  20,         5,             2,          20,         40,         2,  { 0, 1, 2, 99 },  rat         },
 };
 
 // direction letters for the compass ('0' + dir [0..3])

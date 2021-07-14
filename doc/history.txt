@@ -32,12 +32,13 @@ already achieved:
 * added sound support for Arduino Uno R3 and Mega 2560
 
 next steps:
+* Every decent dungeon needs rats!
 * Add game logic: 
   - define a goal:
   - when does the player lose? -> when the player (or the battery) dies
   - can the player die? -> yes, HP <= 0
   - what happens when the player dies?
-  - what happen when the player wins?
+  - what happens when the player wins?
   - are there walking monsters?
 * "Invent" a combat system:
   - who attacks first?

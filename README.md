@@ -15,7 +15,7 @@ Why not something like a 3D dungeon crawler on the TinyJoypad platform?
 ## Features
 * 3D graphics (ok, pseudo 3D)
 * Large dungeon size of 16x16 tiles
-* Two different monster types
+* Three different monster types
 * Treasure chests
 * Teleporters
 * Spinners
@@ -27,16 +27,16 @@ Why not something like a 3D dungeon crawler on the TinyJoypad platform?
 
 ## First Screenshots
 #### The player has found the compass!
-![Picture](https://github.com/Lorandil/TinyDungeon/blob/main/screenshots/compass_found!.png)
+![Oh, I see!](https://github.com/Lorandil/TinyDungeon/blob/main/screenshots/compass_found!.png)
 
 #### No trespassing here...
-![Picture](https://github.com/Lorandil/TinyDungeon/blob/main/screenshots/the_tunnel_is_blocked.png)
+![Tunnel is blocked](https://github.com/Lorandil/TinyDungeon/blob/main/screenshots/the_tunnel_is_blocked.png)
 
 #### Hi folks!
-![Picture](https://github.com/Lorandil/TinyDungeon/blob/main/screenshots/meet_Joey!.png)
+![Meet Joey!](https://github.com/Lorandil/TinyDungeon/blob/main/screenshots/meet_Joey!.png)
 
 #### Die Scum!
-![Picture](https://github.com/Lorandil/TinyDungeon/blob/main/screenshots/the_boss.png)
+![The Boss](https://github.com/Lorandil/TinyDungeon/blob/main/screenshots/the_boss.png)
 
 ## Open Points
 * Still missing ideas for a combat system
@@ -60,8 +60,8 @@ Why not something like a 3D dungeon crawler on the TinyJoypad platform?
   [only on MCUs with serial port, so not on ATtiny85 ;)]
 
 ## Current Size
-Sketch uses 7478 bytes (91%) of program storage space. Maximum is 8192 bytes.
+Sketch uses 7530 bytes (91%) of program storage space. Maximum is 8192 bytes.
 Global variables use 342 bytes (66%) of dynamic memory, leaving 170 bytes for local variables. Maximum is 512 bytes.
 
 ## License
-tbd
+GNU General Public License v3.0
