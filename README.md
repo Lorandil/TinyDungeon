@@ -60,7 +60,7 @@ Why not something like a 3D dungeon crawler on the TinyJoypad platform?
   [only on MCUs with serial port, so not on ATtiny85 ;)]
 
 ## Current Size
-Sketch uses 7530 bytes (91%) of program storage space. Maximum is 8192 bytes.
+Sketch uses 7482 bytes (91%) of program storage space. Maximum is 8192 bytes.
 Global variables use 342 bytes (66%) of dynamic memory, leaving 170 bytes for local variables. Maximum is 512 bytes.
 
 ## License

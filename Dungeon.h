@@ -93,7 +93,7 @@ const NON_WALL_OBJECT objectList [] PROGMEM = {
 //  itemType, width, verticalOffset, heightBytes, maskOffset, lineOffset, maxView, scalingThreshold, bitmap
   { SKELETON    ,  28,         2,             5,          28,         56,         3,  { 0, 1, 2, 99 },  joey        },
   { BEHOLDER    ,  32,         0,             7,          32,         64,         3,  { 0, 1, 2,  5 },  beholder    },
-  { BARS        ,  32,         1,             6,          32,         64,         3,  { 0, 1, 2,  5 },  newBars     },
+  { BARS        ,  28,         1,             6,          28,         56,         3,  { 0, 1, 2,  5 },  newBars     },
   { DOOR        ,  32,         0,             8,          32,         64,         3,  { 0, 1, 3, 13 },  door        },
   { LVR_UP      ,  16,         2,             3,          16,         32,         3,  { 0, 1, 2,  8 },  leverUp     },
   { LVR_DWN     ,  16,         3,             3,          16,         32,         3,  { 0, 1, 2,  8 },  leverDown   },
