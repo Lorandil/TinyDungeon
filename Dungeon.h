@@ -4,6 +4,9 @@
 #include "dungeonTypes.h"
 #include "spritebank.h"
 
+const uint8_t LEVEL_WIDTH = 16;
+const uint8_t LEVEL_HEIGHT = 16;
+
 uint8_t *getCell( DUNGEON *dungeon, int8_t x, int8_t y, const int8_t distance, const int8_t offsetLR, const uint8_t orientation );
 void limitDungeonPosition( DUNGEON *dungeon, int8_t &x, int8_t &y );
 void updateStatusPane( DUNGEON *dungeon );
@@ -13,40 +16,44 @@ void openChest( DUNGEON *dungeon, INTERACTION_INFO &info );
 const uint8_t Level_1[] PROGMEM = 
 {
   // width x height
-   8,  8,
+   LEVEL_WIDTH,  LEVEL_HEIGHT,  // ###! not used
   // stairs up
-  0xFF, 0xFF,
+  0xFF, 0xFF,                   // ###! not used
   // stairs down
-  0xFF, 0xFF,
+  0xFF, 0xFF,                   // ###! not used
   // level number
-   1,
+   1,                           // ###! not used
 
   // plain level data
-//    0       1          2        3           4        5           6        7
-  WALL  , WALL|LVR_UP, WALL,   WALL      ,   WALL ,   WALL     ,FAKE_WALL, WALL  , // 0
-   RAT  ,     0  ,     BARS , SKELETON   ,   WALL ,   WALL     ,   0     , WALL  , // 1
-    0   ,     0  ,     WALL ,CLOSED_CHEST,   WALL ,  FOUNTAIN  ,BEHOLDER , WALL  , // 2
-    0   ,     0  ,     WALL ,   WALL     ,   WALL ,     0      ,   0     , WALL  , // 3
-    0   ,     0  ,       0  ,WALL|DOOR   ,   0    , TELEPORTER ,   0     , WALL  , // 4
-  WALL  ,   WALL ,       0  ,   WALL     ,   WALL ,     0      ,   0     , WALL  , // 5
-  SKELETON,   0  , SPINNER  ,     0      ,     0  ,     0      ,   0     ,   0   , // 6
-  WALL  ,   WALL ,     WALL ,   WALL     ,   WALL ,CLOSED_CHEST,   0     , WALL  , // 7
-//    0       1          2        3           4        5           6        7
+/*             0            1            2            3            4            5            6            7            8            9           10           11           12           13           14           15              */
+/*  0 */     WALL     ,WALL|LVR_UP ,   WALL     ,   WALL     ,   WALL     ,   WALL     ,  FAKE_WALL ,   WALL     ,     0      ,     0      ,     0      ,     0      ,     0      ,     0      ,     0      ,     0      , /*  0 */ 
+/*  1 */      RAT     ,     0      ,   BARS     , SKELETON   ,   WALL     ,   WALL     ,     0      ,   WALL     ,     0      ,     0      ,     0      ,     0      ,     0      ,     0      ,     0      ,     0      , /*  1 */
+/*  2 */       0      ,     0      ,   WALL     ,CLOSED_CHEST,   WALL     ,  FOUNTAIN  ,  BEHOLDER  ,   WALL     ,     0      ,     0      ,     0      ,     0      ,     0      ,     0      ,     0      ,     0      , /*  2 */
+/*  3 */       0      ,     0      ,   WALL     ,   WALL     ,   WALL     ,     0      ,     0      ,   WALL     ,     0      ,     0      ,     0      ,     0      ,     0      ,     0      ,     0      ,     0      , /*  3 */
+/*  4 */       0      ,     0      ,     0      ,WALL|DOOR   ,     0      , TELEPORTER ,     0      ,   WALL     ,     0      ,     0      ,     0      ,     0      ,     0      ,     0      ,     0      ,     0      , /*  4 */
+/*  5 */     WALL     ,   WALL     ,     0      ,   WALL     ,   WALL     ,     0      ,     0      ,   WALL     ,     0      ,     0      ,     0      ,     0      ,     0      ,     0      ,     0      ,     0      , /*  5 */
+/*  6 */   SKELETON   ,     0      ,  SPINNER   ,     0      ,     0      ,     0      ,     0      ,     0      ,     0      ,     0      ,     0      ,     0      ,     0      ,     0      ,     0      ,     0      , /*  6 */
+/*  7 */     WALL     ,   WALL     ,   WALL     ,   WALL     ,   WALL     ,CLOSED_CHEST,     0      ,   WALL     ,     0      ,     0      ,     0      ,     0      ,     0      ,     0      ,     0      ,     0      , /*  7 */
+/*  8 */       0      ,     0      ,     0      ,     0      ,     0      ,     0      ,     0      ,     0      ,     0      ,     0      ,     0      ,     0      ,     0      ,     0      ,     0      ,     0      , /*  8 */ 
+/*  9 */       0      ,     0      ,     0      ,     0      ,     0      ,     0      ,     0      ,     0      ,     0      ,     0      ,     0      ,     0      ,     0      ,     0      ,     0      ,     0      , /*  9 */
+/* 10 */       0      ,     0      ,     0      ,     0      ,     0      ,     0      ,     0      ,     0      ,     0      ,     0      ,     0      ,     0      ,     0      ,     0      ,     0      ,     0      , /* 10 */
+/* 11 */       0      ,     0      ,     0      ,     0      ,     0      ,     0      ,     0      ,     0      ,     0      ,     0      ,     0      ,     0      ,     0      ,     0      ,     0      ,     0      , /* 11 */
+/* 12 */       0      ,     0      ,     0      ,     0      ,     0      ,     0      ,     0      ,     0      ,     0      ,     0      ,     0      ,     0      ,     0      ,     0      ,     0      ,     0      , /* 12 */
+/* 13 */       0      ,     0      ,     0      ,     0      ,     0      ,     0      ,     0      ,     0      ,     0      ,     0      ,     0      ,     0      ,     0      ,     0      ,     0      ,     0      , /* 13 */
+/* 14 */       0      ,     0      ,     0      ,     0      ,     0      ,     0      ,     0      ,     0      ,     0      ,     0      ,     0      ,     0      ,     0      ,     0      ,     0      ,     0      , /* 14 */
+/* 15 */       0      ,     0      ,     0      ,     0      ,     0      ,     0      ,     0      ,     0      ,     0      ,     0      ,     0      ,     0      ,     0      ,     0      ,     0      ,     0      , /* 15 */
+/*             0            1            2            3            4            5            6            7            8            9           10           11           12           13           14           15              */
 };
 
 // interaction data for level 1
 const INTERACTION_INFO interactionData[] PROGMEM =
 {
-  // currentPos currentStatus  currentStatusMask nextStatus   newItem itemValue modifiedPos   modifiedPosCellValue;
-  { 1 + 0 * 8,    LVR_UP       , OBJECT_MASK    , LVR_DWN     ,     0    ,  0      , 2 + 1 * 8   ,       0      },
-  { 1 + 0 * 8,    LVR_DWN      , OBJECT_MASK    , LVR_UP      ,     0    ,  0      , 2 + 1 * 8   , BARS         },
-  //{ ANY_POSITION, CLOSED_CHEST , OBJECT_MASK    , OPEN_CHEST  ,     0    ,  0      , ANY_POSITION, OPEN_CHEST   },
-  //{ ANY_POSITION, OPEN_CHEST   , OBJECT_MASK    , CLOSED_CHEST,     0    ,  0      , ANY_POSITION, CLOSED_CHEST },
-  { 3 + 4 * 8,    DOOR         , OBJECT_MASK    ,    0        ,     0    ,  0      , 3 + 4 * 8   ,       0      },
-  { 3 + 2 * 8,    CLOSED_CHEST , OBJECT_MASK    , OPEN_CHEST  , ITEM_COMPASS,  0      , 3 + 2 * 8  , OPEN_CHEST   },
-  //{ 3 + 2 * 8,    OPEN_CHEST   , OBJECT_MASK    , CLOSED_CHEST,     0    ,  0      , 3 + 2 * 8  , CLOSED_CHEST },
-  { 5 + 7 * 8,    CLOSED_CHEST , OBJECT_MASK    , OPEN_CHEST  ,     0    ,  0      , 5 + 7 * 8  , OPEN_CHEST   },
-  //{ 5 + 7 * 8,    OPEN_CHEST   , OBJECT_MASK    , CLOSED_CHEST,     0    ,  0      , 5 + 7 * 8  , CLOSED_CHEST },
+  // currentPos currentStatus    currentStatus    currentStatusMask  nextStatus     newItem      itemValue      modifiedPos        modifiedPosCellValue
+  { 1 + 0 * LEVEL_WIDTH        ,    LVR_UP       , OBJECT_MASK     , LVR_DWN     ,     0       ,    0      , 2 + 1 * LEVEL_WIDTH  ,      0        },
+  { 1 + 0 * LEVEL_WIDTH        ,    LVR_DWN      , OBJECT_MASK     , LVR_UP      ,     0       ,    0      , 2 + 1 * LEVEL_WIDTH  ,     BARS      },
+  { 3 + 4 * LEVEL_WIDTH        ,    DOOR         , OBJECT_MASK     ,    0        ,     0       ,    0      , 3 + 4 * LEVEL_WIDTH  ,      0        },
+  { 3 + 2 * LEVEL_WIDTH        ,    CLOSED_CHEST , OBJECT_MASK     , OPEN_CHEST  , ITEM_COMPASS,    0      , 3 + 2 * LEVEL_WIDTH  ,  OPEN_CHEST   },
+  { 5 + 7 * LEVEL_WIDTH        ,    CLOSED_CHEST , OBJECT_MASK     , OPEN_CHEST  ,     0       ,    0      , 5 + 7 * LEVEL_WIDTH  ,  OPEN_CHEST   },
 };
 
 // special cell effects
