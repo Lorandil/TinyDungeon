@@ -4,7 +4,7 @@
 
 #if !defined(__AVR_ATtiny85__)
   static uint8_t hexdumpPositionCount = 0;
-  static uint8_t hexdumpValuesPerLine = 8;
+  static uint8_t hexdumpValuesPerLine = 16;
 
   void hexdumpResetPositionCount();
   void hexdumpToSerial( uint8_t *pData, uint16_t byteCount, bool finalComma = false, bool finalLinebreak = true );

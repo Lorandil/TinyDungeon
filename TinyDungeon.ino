@@ -15,18 +15,7 @@
 
 // show an 8x8 grid overlay
 //#define _SHOW_GRID_OVERLAY
-// enable serial screenshot
-//#define _ENABLE_SERIAL_SCREENSHOT_
-// perform a serial screenshot if this condition is true:
-#define _SERIAL_SCREENSHOT_TRIGGER_CONDITION_ ( isDownPressed() )
 
-#if defined(__AVR_ATtiny85__)
-  #include <ssd1306xled.h>
-#else
-  #include "SerialHexTools.h"
-  #include <Adafruit_SSD1306.h>
-  Adafruit_SSD1306 display( 128, 64, &Wire, -1 );
-#endif
 #include "dungeon.h"
 #include "spritebank.h"
 #include "bitmapDrawing.h"
@@ -41,28 +30,10 @@ DUNGEON _dungeon;
 /*--------------------------------------------------------*/
 void setup()
 {
-#if defined(__AVR_ATtiny85__)
-  SSD1306.ssd1306_init();
-  // not using 'pinMode()' here saves ~100 bytes of flash!
-  // configure A0, A3 and D1 as input
-  DDRB &= ~( ( 1 << PB5) | ( 1 << PB3 ) | ( 1 << PB1 ) );
-  // configure A2 as output
-  DDRB |= ( 1 << PB4 );
-#else
-  // DEBUG version on controller with serial ports
-  Serial.begin( 115200 );
-  // SSD1306_SWITCHCAPVCC = generate display voltage from 3.3V internally
-  if(!display.begin(SSD1306_SWITCHCAPVCC, 0x3C)) { // Address 0x3D for 128x64
-    Serial.println(F("SSD1306 allocation failed"));
-    for(;;); // Don't proceed, loop forever
-  }
-  // use 'pinMode()' for simplicity's sake... any other micro controller has enough flash :)
-  pinMode( LEFT_RIGHT_BUTTON, INPUT );
-  pinMode( UP_DOWN_BUTTON, INPUT );
-  pinMode( FIRE_BUTTON, INPUT );
-  // configure PB4 as output (Pin D12 on Arduino UNO R3 and Pin D10 on Arduino Mega 2560 )
-  DDRB |= ( 1 << PB4 );
-#endif
+  // initialize the pins (and serial port if present)
+  InitTinyJoypad();
+  // perform display initialization
+  InitDisplay();
 }
 
 /*--------------------------------------------------------*/
@@ -107,24 +78,8 @@ void Tiny_Flip( DUNGEON *dungeon)
 
   for ( uint8_t y = 0; y < 8; y++)
   {
-  #if defined(__AVR_ATtiny85__)
-    // initialize image transfer to segment 'y'
-    SSD1306.ssd1306_send_command(0xb0 + y);
-  #ifdef _USE_SH1106_
-    // SH1106 internally uses 132 pixels/line,
-    // output is (always?) centered, so we need to start at position 2
-    SSD1306.ssd1306_send_command(0x02);
-    SSD1306.ssd1306_send_command(0x10);  
-  #else
-    // classic SSD1306 supports only 128 pixels/line, so we start at 0
-    SSD1306.ssd1306_send_command(0x00);
-    SSD1306.ssd1306_send_command(0x10);  
-  #endif    
-    SSD1306.ssd1306_send_data_start();
-  #else
-    // allocate a buffer in RAM
-    uint8_t *buffer = display.getBuffer() + y * 128;
-  #endif
+    // prepare display of row <y>
+    TinyFlip_PrepareDisplayRow( y );
     
     // the first 96 columns are used to display the dungeon
     for ( uint8_t x = 0; x < 96; x++ )
@@ -135,12 +90,8 @@ void Tiny_Flip( DUNGEON *dungeon)
       if ( ( x & 0x01 ) && ( y < 7 ) ) { pixels |= 0x80; }
       //if ( ( x & 0x07 ) == 0x07 ) { pixels |= 0x55; }
     #endif      
-    #if defined(__AVR_ATtiny85__)
-      SSD1306.ssd1306_send_byte( pixels );
-    #else
-      // output to buffer of Adafruit_SSD1306 library
-      *buffer++ = pixels;
-    #endif
+      // send 8 vertical pixels to the display
+      TinyFlip_SendPixels( pixels );
     } // for x
 
     // display the dashboard here
@@ -155,38 +106,21 @@ void Tiny_Flip( DUNGEON *dungeon)
       {
         pixels = 0;
       }
-      #if defined(__AVR_ATtiny85__)
-        SSD1306.ssd1306_send_byte( pixels );
-      #else
-        *buffer++ = pixels;
-      #endif
+      // send 8 vertical pixels to the display
+      TinyFlip_SendPixels( pixels );
+
       statusPaneOffset++;
     }
     
-#if defined(__AVR_ATtiny85__)
-    // this line appears to be optional, as it was never called during the intro screen...
-    // but hey, we still have some bytes left ;)
-    SSD1306.ssd1306_send_data_stop();
-#endif
+    // this row has been finished
+    TinyFlip_FinishDisplayRow();
   } // for y
 
   // no more flashing
   dungeon->displayXorEffect = 0;
 
-#if !defined(__AVR_ATtiny85__)
-
-  #ifdef _ENABLE_SERIAL_SCREENSHOT_
-    if ( _SERIAL_SCREENSHOT_TRIGGER_CONDITION_)
-    {
-      // print a short header
-      Serial.println(F("\r\nTinyDungeon screenshot"));
-      // output the full buffer as a hexdump to the serial port
-      printScreenBufferToSerial( display.getBuffer(), 128, 8 );
-    }
-  #endif
-  // display the whole screen at once
-  display.display();
-#endif
+  // display the whole screen
+  TinyFlip_DisplayBuffer();
 }
 
 /*--------------------------------------------------------*/
