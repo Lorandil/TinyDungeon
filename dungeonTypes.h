@@ -127,7 +127,7 @@ public:
 } DUNGEON;
 #endif
 
-
+/*
 // LEVEL_HEADER
 typedef struct
 {
@@ -144,7 +144,7 @@ typedef struct
   int8_t levelNumber;
   
 } LEVEL_HEADER;
-
+*/
 
 // NON_WALL_OBJECT
 

@@ -26,7 +26,7 @@
 
 ////////////////////////////////////////////////////////////
 // enable serial screenshot
-#define _ENABLE_SERIAL_SCREENSHOT_
+//#define _ENABLE_SERIAL_SCREENSHOT_
 // perform a serial screenshot if this condition is true:
 #define _SERIAL_SCREENSHOT_TRIGGER_CONDITION_ ( isDownPressed() )
 // uncomment to disable automatic screenshot function

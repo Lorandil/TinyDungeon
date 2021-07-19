@@ -15,6 +15,7 @@ void openChest( DUNGEON *dungeon, INTERACTION_INFO &info );
 // simple level - 1 byte per cell
 const uint8_t Level_1[] PROGMEM = 
 {
+  /*
   // width x height
    LEVEL_WIDTH,  LEVEL_HEIGHT,  // ###! not used
   // stairs up
@@ -23,25 +24,26 @@ const uint8_t Level_1[] PROGMEM =
   0xFF, 0xFF,                   // ###! not used
   // level number
    1,                           // ###! not used
+   */
 
   // plain level data
 /*             0            1            2            3            4            5            6            7            8            9           10           11           12           13           14           15              */
-/*  0 */     WALL     ,WALL|LVR_UP ,   WALL     ,   WALL     ,   WALL     ,   WALL     ,  FAKE_WALL ,   WALL     ,     0      ,     0      ,     0      ,     0      ,     0      ,     0      ,     0      ,     0      , /*  0 */ 
-/*  1 */      RAT     ,     0      ,   BARS     , SKELETON   ,   WALL     ,   WALL     ,     0      ,   WALL     ,     0      ,     0      ,     0      ,     0      ,     0      ,     0      ,     0      ,     0      , /*  1 */
+/*  0 */     WALL     ,     0      ,   WALL     ,   WALL     ,   WALL     ,   WALL     ,  FAKE_WALL ,   WALL     ,     0      ,     0      ,     0      ,     0      ,     0      ,     0      ,     0      ,     0      , /*  0 */ 
+/*  1 */      RAT     ,     0      ,   BARS     , SKELETON   ,   WALL     ,     0      ,     0      ,   WALL     ,     0      ,     0      ,     0      ,     0      ,     0      ,     0      ,     0      ,     0      , /*  1 */
 /*  2 */       0      ,     0      ,   WALL     ,CLOSED_CHEST,   WALL     ,  FOUNTAIN  ,  BEHOLDER  ,   WALL     ,     0      ,     0      ,     0      ,     0      ,     0      ,     0      ,     0      ,     0      , /*  2 */
-/*  3 */       0      ,     0      ,   WALL     ,   WALL     ,   WALL     ,     0      ,     0      ,   WALL     ,     0      ,     0      ,     0      ,     0      ,     0      ,     0      ,     0      ,     0      , /*  3 */
-/*  4 */       0      ,     0      ,     0      ,WALL|DOOR   ,     0      , TELEPORTER ,     0      ,   WALL     ,     0      ,     0      ,     0      ,     0      ,     0      ,     0      ,     0      ,     0      , /*  4 */
-/*  5 */     WALL     ,   WALL     ,     0      ,   WALL     ,   WALL     ,     0      ,     0      ,   WALL     ,     0      ,     0      ,     0      ,     0      ,     0      ,     0      ,     0      ,     0      , /*  5 */
-/*  6 */   SKELETON   ,     0      ,  SPINNER   ,     0      ,     0      ,     0      ,     0      ,     0      ,     0      ,     0      ,     0      ,     0      ,     0      ,     0      ,     0      ,     0      , /*  6 */
-/*  7 */     WALL     ,   WALL     ,   WALL     ,   WALL     ,   WALL     ,CLOSED_CHEST,     0      ,   WALL     ,     0      ,     0      ,     0      ,     0      ,     0      ,     0      ,     0      ,     0      , /*  7 */
-/*  8 */       0      ,     0      ,     0      ,     0      ,     0      ,     0      ,     0      ,     0      ,     0      ,     0      ,     0      ,     0      ,     0      ,     0      ,     0      ,     0      , /*  8 */ 
-/*  9 */       0      ,     0      ,     0      ,     0      ,     0      ,     0      ,     0      ,     0      ,     0      ,     0      ,     0      ,     0      ,     0      ,     0      ,     0      ,     0      , /*  9 */
+/*  3 */       0      ,     0      ,   WALL     ,   WALL     ,   WALL     ,     0      ,     0      ,   WALL     ,   WALL     ,   WALL     ,   WALL     ,   WALL     ,   WALL     ,   WALL     ,     0      ,     0      , /*  3 */
+/*  4 */       0      ,     0      ,     0      ,WALL|DOOR   ,     0      , TELEPORTER ,     0      ,   WALL     ,     0      ,     0      ,     0      ,     0      ,     0      ,   WALL     ,     0      ,     0      , /*  4 */
+/*  5 */     WALL     ,   WALL     ,     0      ,   WALL     ,   WALL     ,     0      ,     0      ,   WALL     ,     0      ,   WALL     ,     0      ,   WALL     ,     0      ,   WALL     ,     0      ,     0      , /*  5 */
+/*  6 */   SKELETON   ,     0      ,  SPINNER   ,     0      ,     0      ,     0      ,     0      ,     0      ,     0      ,     0      ,     0      ,     0      ,     0      ,   WALL     ,     0      ,     0      , /*  6 */
+/*  7 */     WALL     ,   WALL     ,   WALL     ,   WALL     ,   WALL     ,CLOSED_CHEST,     0      ,   WALL     ,     0      ,   WALL     ,     0      ,   WALL     ,     0      ,   WALL     ,     0      ,     0      , /*  7 */
+/*  8 */       0      ,     0      ,     0      ,     0      ,     0      ,     0      ,     0      ,   WALL     ,     0      ,     0      ,     0      ,     0      ,     0      ,   WALL     ,     0      ,     0      , /*  8 */ 
+/*  9 */       0      ,     0      ,     0      ,     0      ,     0      ,     0      ,     0      ,   WALL     ,   WALL     ,   WALL     ,   WALL     ,   WALL     ,   WALL     ,   WALL     ,     0      ,     0      , /*  9 */
 /* 10 */       0      ,     0      ,     0      ,     0      ,     0      ,     0      ,     0      ,     0      ,     0      ,     0      ,     0      ,     0      ,     0      ,     0      ,     0      ,     0      , /* 10 */
 /* 11 */       0      ,     0      ,     0      ,     0      ,     0      ,     0      ,     0      ,     0      ,     0      ,     0      ,     0      ,     0      ,     0      ,     0      ,     0      ,     0      , /* 11 */
 /* 12 */       0      ,     0      ,     0      ,     0      ,     0      ,     0      ,     0      ,     0      ,     0      ,     0      ,     0      ,     0      ,     0      ,     0      ,     0      ,     0      , /* 12 */
 /* 13 */       0      ,     0      ,     0      ,     0      ,     0      ,     0      ,     0      ,     0      ,     0      ,     0      ,     0      ,     0      ,     0      ,     0      ,     0      ,     0      , /* 13 */
-/* 14 */       0      ,     0      ,     0      ,     0      ,     0      ,     0      ,     0      ,     0      ,     0      ,     0      ,     0      ,     0      ,     0      ,     0      ,     0      ,     0      , /* 14 */
-/* 15 */       0      ,     0      ,     0      ,     0      ,     0      ,     0      ,     0      ,     0      ,     0      ,     0      ,     0      ,     0      ,     0      ,     0      ,     0      ,     0      , /* 15 */
+/* 14 */       0      ,   WALL     ,     0      ,     0      ,     0      ,     0      ,     0      ,     0      ,     0      ,     0      ,     0      ,     0      ,     0      ,     0      ,     0      ,     0      , /* 14 */
+/* 15 */     WALL     ,WALL|LVR_UP ,    WALL    ,     0      ,     0      ,     0      ,     0      ,     0      ,     0      ,     0      ,     0      ,     0      ,     0      ,     0      ,     0      ,     0      , /* 15 */
 /*             0            1            2            3            4            5            6            7            8            9           10           11           12           13           14           15              */
 };
 
@@ -49,11 +51,11 @@ const uint8_t Level_1[] PROGMEM =
 const INTERACTION_INFO interactionData[] PROGMEM =
 {
   // currentPos currentStatus    currentStatus    currentStatusMask  nextStatus     newItem      itemValue      modifiedPos        modifiedPosCellValue
-  { 1 + 0 * LEVEL_WIDTH        ,    LVR_UP       , OBJECT_MASK     , LVR_DWN     ,     0       ,    0      , 2 + 1 * LEVEL_WIDTH  ,      0        },
-  { 1 + 0 * LEVEL_WIDTH        ,    LVR_DWN      , OBJECT_MASK     , LVR_UP      ,     0       ,    0      , 2 + 1 * LEVEL_WIDTH  ,     BARS      },
-  { 3 + 4 * LEVEL_WIDTH        ,    DOOR         , OBJECT_MASK     ,    0        ,     0       ,    0      , 3 + 4 * LEVEL_WIDTH  ,      0        },
-  { 3 + 2 * LEVEL_WIDTH        ,    CLOSED_CHEST , OBJECT_MASK     , OPEN_CHEST  , ITEM_COMPASS,    0      , 3 + 2 * LEVEL_WIDTH  ,  OPEN_CHEST   },
-  { 5 + 7 * LEVEL_WIDTH        ,    CLOSED_CHEST , OBJECT_MASK     , OPEN_CHEST  ,     0       ,    0      , 5 + 7 * LEVEL_WIDTH  ,  OPEN_CHEST   },
+  { 1 + 15 * LEVEL_WIDTH        ,    LVR_UP       , OBJECT_MASK     , LVR_DWN     ,     0       ,    0      , 2 + 1 * LEVEL_WIDTH  ,      0        },
+  { 1 + 15 * LEVEL_WIDTH        ,    LVR_DWN      , OBJECT_MASK     , LVR_UP      ,     0       ,    0      , 2 + 1 * LEVEL_WIDTH  ,     BARS      },
+  { 3 +  4 * LEVEL_WIDTH        ,    DOOR         , OBJECT_MASK     ,    0        ,     0       ,    0      , 3 + 4 * LEVEL_WIDTH  ,      0        },
+  { 3 +  2 * LEVEL_WIDTH        ,    CLOSED_CHEST , OBJECT_MASK     , OPEN_CHEST  , ITEM_COMPASS,    0      , 3 + 2 * LEVEL_WIDTH  ,  OPEN_CHEST   },
+  { 5 +  7 * LEVEL_WIDTH        ,    CLOSED_CHEST , OBJECT_MASK     , OPEN_CHEST  ,     0       ,    0      , 5 + 7 * LEVEL_WIDTH  ,  OPEN_CHEST   },
 };
 
 // special cell effects
@@ -91,22 +93,22 @@ const SIMPLE_WALL_INFO arrayOfWallInfo[] PROGMEM = {
   { leftRightWalls, 35, 47, 0, 7, 3, -1, WALL & ~FLAG_SOLID },
   { leftRightWalls, 48, 60, 0, 7, 3, +1, WALL & ~FLAG_SOLID },
   
-  { NULL,            0,  0, 0, 0, 0,  0,    0 },
+  { NULL,            0,  0, 0, 0, 0,  0,    0 }, // 7 unused bytes.. how can I save them?
 };
 
 
 // list of possible non wall objects (i.e. monsters, doors, ...)
 const NON_WALL_OBJECT objectList [] PROGMEM = {
-//  itemType, width, verticalOffset, heightBytes, maskOffset, lineOffset, maxView, scalingThreshold, bitmap
+//  itemType    , width, verticalOffset, heightBytes, maskOffset, lineOffset, maxView, scalingThreshold, bitmap
   { SKELETON    ,  28,         2,             5,          28,         56,         3,  { 0, 1, 2, 99 },  joey        },
   { BEHOLDER    ,  32,         0,             7,          32,         64,         3,  { 0, 1, 2,  5 },  beholder    },
   { BARS        ,  28,         1,             6,          28,         56,         3,  { 0, 1, 2,  5 },  newBars     },
   { DOOR        ,  32,         0,             8,          32,         64,         3,  { 0, 1, 3, 13 },  door        },
   { LVR_UP      ,  16,         2,             3,          16,         32,         3,  { 0, 1, 2,  8 },  leverUp     },
   { LVR_DWN     ,  16,         3,             3,          16,         32,         3,  { 0, 1, 2,  8 },  leverDown   },
-  { CLOSED_CHEST,  24,         4,             3,          24,         48,         3,  { 0, 1, 3, 99 },  chestClosed },
-  { OPEN_CHEST  ,  24,         4,             3,          24,         48,         3,  { 0, 1, 3, 99 },  chestOpen   },
-  { FOUNTAIN    ,  12,         4,             3,          12,         24,         3,  { 0, 1, 2, 99 },  fountain    },
+  { CLOSED_CHEST,  24,         4,             3,          24,         48,         2,  { 0, 1, 3, 99 },  chestClosed },
+  { OPEN_CHEST  ,  24,         4,             3,          24,         48,         2,  { 0, 1, 3, 99 },  chestOpen   },
+  { FOUNTAIN    ,  12,         4,             3,          12,         24,         2,  { 0, 1, 2, 99 },  fountain    },
   { RAT         ,  20,         5,             2,          20,         40,         2,  { 0, 1, 2, 99 },  rat         },
 };
 

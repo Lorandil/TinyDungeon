@@ -49,11 +49,11 @@ void loop()
   _dungeon.playerKeys = 2;  
 
   // Prepare first level
-  LEVEL_HEADER *header = (LEVEL_HEADER *)Level_1;
-  _dungeon.levelWidth = header->width;
-  _dungeon.levelHeight = header->height;
+  //LEVEL_HEADER *header = (LEVEL_HEADER *)Level_1;
+  _dungeon.levelWidth = LEVEL_WIDTH;
+  _dungeon.levelHeight = LEVEL_HEIGHT;
   // copy the level data to RAM
-  memcpy_P( _dungeon.currentLevel, Level_1 + sizeof( LEVEL_HEADER ), _dungeon.levelWidth * _dungeon.levelHeight );
+  memcpy_P( _dungeon.currentLevel, Level_1 /*+ sizeof( LEVEL_HEADER )*/, _dungeon.levelWidth * _dungeon.levelHeight );
 
   // clear text buffer
   clearTextBuffer();
