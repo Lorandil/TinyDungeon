@@ -99,17 +99,17 @@ const SIMPLE_WALL_INFO arrayOfWallInfo[] PROGMEM = {
 
 // list of possible non wall objects (i.e. monsters, doors, ...)
 const NON_WALL_OBJECT objectList [] PROGMEM = {
-//  itemType    , width, verticalOffset, heightBytes, maskOffset, lineOffset, maxView, scalingThreshold, bitmap
-  { SKELETON    ,  28,         2,             5,          28,         56,         3,  { 0, 1, 2, 99 },  joey        },
-  { BEHOLDER    ,  32,         0,             7,          32,         64,         3,  { 0, 1, 2,  5 },  beholder    },
-  { BARS        ,  28,         1,             6,          28,         56,         3,  { 0, 1, 2,  5 },  newBars     },
-  { DOOR        ,  32,         0,             8,          32,         64,         3,  { 0, 1, 3, 13 },  door        },
-  { LVR_UP      ,  16,         2,             3,          16,         32,         3,  { 0, 1, 2,  8 },  leverUp     },
-  { LVR_DWN     ,  16,         3,             3,          16,         32,         3,  { 0, 1, 2,  8 },  leverDown   },
-  { CLOSED_CHEST,  24,         4,             3,          24,         48,         2,  { 0, 1, 3, 99 },  chestClosed },
-  { OPEN_CHEST  ,  24,         4,             3,          24,         48,         2,  { 0, 1, 3, 99 },  chestOpen   },
-  { FOUNTAIN    ,  12,         4,             3,          12,         24,         2,  { 0, 1, 2, 99 },  fountain    },
-  { RAT         ,  20,         5,             2,          20,         40,         2,  { 0, 1, 2, 99 },  rat         },
+//  itemType    , width, verticalOffset, heightBytes, /*maskOffset,*/ lineOffset, maxView, scalingThreshold, bitmap
+  { SKELETON    ,  28,         2,             5,      /*    28,    */     56,         3,  { 1, 2, 99 },  joey        },
+  { BEHOLDER    ,  32,         0,             7,      /*    32,    */     64,         3,  { 1, 2,  5 },  beholder    },
+  { BARS        ,  28,         1,             6,      /*    28,    */     56,         3,  { 1, 2,  5 },  newBars     },
+  { DOOR        ,  32,         0,             8,      /*    32,    */     64,         3,  { 1, 3, 13 },  door        },
+  { LVR_UP      ,  16,         2,             3,      /*    16,    */     32,         3,  { 1, 2,  8 },  leverUp     },
+  { LVR_DWN     ,  16,         3,             3,      /*    16,    */     32,         3,  { 1, 2,  8 },  leverDown   },
+  { CLOSED_CHEST,  24,         4,             3,      /*    24,    */     48,         2,  { 1, 3, 99 },  chestClosed },
+  { OPEN_CHEST  ,  24,         4,             3,      /*    24,    */     48,         2,  { 1, 3, 99 },  chestOpen   },
+  { FOUNTAIN    ,  12,         4,             3,      /*    12,    */     24,         2,  { 1, 2, 99 },  fountain    },
+  { RAT         ,  20,         5,             2,      /*    20,    */     40,         2,  { 1, 2, 99 },  rat         },
 };
 
 // direction letters for the compass ('0' + dir [0..3])

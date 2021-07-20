@@ -160,10 +160,10 @@ typedef struct
   uint8_t bitmapWidth;
   uint8_t bitmapVerticalOffsetInBytes;
   uint8_t bitmapHeightInBytes;
-  uint8_t maskOffset;
+  //uint8_t maskOffset;
   uint8_t nextLineOffset;
   uint8_t maxViewDistance;
-  uint8_t scalingThreshold[4];
+  uint8_t scalingThreshold[3];
   const uint8_t *bitmapData;
 
 #if !defined(__AVR_ATtiny85__)
@@ -174,12 +174,12 @@ typedef struct
     Serial.print( F("  bitmapWidth                  = ") );Serial.print( bitmapWidth );Serial.println();
     Serial.print( F("  bitmapVerticalOffsetInBytes  = ") );Serial.print( bitmapVerticalOffsetInBytes );Serial.println();
     Serial.print( F("  bitmapHeightInBytes          = ") );Serial.print( bitmapHeightInBytes );Serial.println();
-    Serial.print( F("  maskOffset                   = ") );Serial.print( maskOffset );Serial.println();
+    //Serial.print( F("  maskOffset                   = ") );Serial.print( maskOffset );Serial.println();
     Serial.print( F("  nextLineOffset               = ") );Serial.println( nextLineOffset );
     Serial.print( F("  maxViewDistance              = ") );Serial.println( maxViewDistance );
-    Serial.print( F("  scalingThreshold[1]          = ") );Serial.print( scalingThreshold[1] );Serial.println();
-    Serial.print( F("  scalingThreshold[2]          = ") );Serial.print( scalingThreshold[2] );Serial.println();
-    Serial.print( F("  scalingThreshold[3]          = ") );Serial.print( scalingThreshold[3] );Serial.println();
+    Serial.print( F("  scalingThreshold[0]          = ") );Serial.print( scalingThreshold[1] );Serial.println();
+    Serial.print( F("  scalingThreshold[1]          = ") );Serial.print( scalingThreshold[2] );Serial.println();
+    Serial.print( F("  scalingThreshold[2]          = ") );Serial.print( scalingThreshold[3] );Serial.println();
     Serial.println();
   }
 #endif  

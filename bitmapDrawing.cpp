@@ -98,12 +98,12 @@ uint8_t getDownScaledBitmapData( int8_t x,                      // already downs
 
   // get start address (and add optional offset for mask)
   const uint8_t *bitmapData = object->bitmapData;
-  if ( useMask ) { bitmapData += object->maskOffset; }
+  if ( useMask ) { bitmapData += object->bitmapWidth; }
 
-  // get scaling factor from LUT (efficient and still flexible)
+  // Get scaling factor from LUT (efficient and still flexible).
   uint8_t scaleFactor = pgm_read_byte( scalingFactorFromDistance + distance );
-  // get threshold
-  const uint8_t threshold = object->scalingThreshold[distance];
+  // get threshold (distance is 1..3, so subtract 1 (at no cost!))
+  const uint8_t threshold = object->scalingThreshold[distance - 1];
 
   // is there anything to be done?
   uint8_t startOffsetY = pgm_read_byte( verticalStartOffset + distance );
