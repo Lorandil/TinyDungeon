@@ -52,5 +52,17 @@ void TinyFlip_PrepareDisplayRow( uint8_t y );
 void TinyFlip_SendPixels( uint8_t pixels );
 void TinyFlip_FinishDisplayRow();
 void TinyFlip_DisplayBuffer();
+
+// screenshot functions
 void TinyFlip_SerialScreenshot();
 void TinyFlip_CheckForSerialScreenshot();
+
+// serial output without clustering the code with #if !defined(__AVR_ATtiny85__)...
+void serialPrint( const char *text );
+void serialPrintln( const char *text );
+void serialPrint( const __FlashStringHelper *text );
+void serialPrintln( const __FlashStringHelper *text );
+void serialPrint( const uint16_t number );
+void serialPrintln( const uint16_t number );
+void serialPrint( const int16_t number );
+void serialPrintln( const int16_t number );

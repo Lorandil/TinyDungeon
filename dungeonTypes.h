@@ -21,6 +21,9 @@ const uint8_t POS_HITPOINTS   = 4 * 8 + 5;
 const uint8_t POS_DAMAGE      = 5 * 8 + 5;
 const uint8_t POS_KEYS        = 6 * 8 + 5;
 
+// we will be using an old fashioned D8 (counting from 0 to 7)
+const uint8_t MAX_DICE_VALUE  = 0x07;
+
 // possible item types
 enum
 {
@@ -76,6 +79,8 @@ public:
   int8_t  playerDAM;
   int8_t  playerKeys;
   bool    playerHasCompass;
+  bool    playerHasAmulett;
+  int8_t  dice;
   uint8_t displayXorEffect;
   
   uint8_t levelHeight;

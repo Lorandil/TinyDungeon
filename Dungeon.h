@@ -11,6 +11,7 @@ uint8_t *getCell( DUNGEON *dungeon, int8_t x, int8_t y, const int8_t distance, c
 void limitDungeonPosition( DUNGEON *dungeon, int8_t &x, int8_t &y );
 void updateStatusPane( DUNGEON *dungeon );
 void openChest( DUNGEON *dungeon, INTERACTION_INFO &info );
+void updateDice( DUNGEON *dungeon );
 
 // simple level - 1 byte per cell
 const uint8_t Level_1[] PROGMEM = 

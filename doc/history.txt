@@ -1,44 +1,47 @@
 // Just a text file, but Ardiono IDE doesn't like "txt" to be added to the project
 
-Current size 7542 bytes - 650 bytes remaining (192 bytes thereof required for full 16x16 level)
-
 History and open points list of TinyDungeon
 
 already achieved:
 * made walls solid
 * copy level from flash to RAM
-* store level dimensions in level structure,
-  thus enabling arbitrary level sizes
-  add information about stairs up and down to the level structure, too
+* set Level size to fixed 16x16. There will be no stairs (lack of flash for more images or levels)
 * mirror walls between odd and even cells to produce a "walking" effect
 * added skeleton and beholder bitmap
 * very plain draw function for non-wall-objects
 * always respect solid bit
 * added bitmap scaling
 * added scripted events (levers switching doors, ...)
-* code works on Arduino UNO and MEGA2560 (without sound) too
+* code works on Arduino UNO and MEGA2560, too
 * enhanced bitmap scaling to work with bitmap heights (in bytes) which are not a power of 2
 * cropped the wall bitmaps to the required size saving 960 bytes
 * added compass
 * added open chest image
 * added special treatment for item groups like chests and monsters
-* removed alphabet except NESW for compass
+* removed alphabet except NESW for compass (to save flash)
 * placed a compass in a chest
 * added flash effect for teleporters (and spinners?)
 * added events when player steps on a new field (-> teleporter, spinner)
+* added a fountain (still without function)
 * added a spinner
 * added teleporter
 * added screenshot via serial port
 * added sound support for Arduino Uno R3 and Mega 2560
+* every decent dungeon needs rats!
+* player movement control now has a fast running loop. This will be used to create "random" numbers by counting fast
 
 next steps:
-* Every decent dungeon needs rats!
+* Check/Change: 
+  - player movement control has to have a fast running loop. This will be used to create "random" numbers by counting fast
+  - required for walking monsters, too
+  - and for healing over time
 * Add game logic: 
   - define a goal:
   - when does the player lose? -> when the player (or the battery) dies
   - can the player die? -> yes, HP <= 0
   - what happens when the player dies?
   - what happens when the player wins?
+  - can the player "break" the dungeon [i.e. get in a deadlock - probably yes :)]
   - are there walking monsters?
 * "Invent" a combat system:
   - who attacks first?

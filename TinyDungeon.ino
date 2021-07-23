@@ -1,11 +1,22 @@
-//   >>>>>  T-I-N-Y  D-U-N-G-E-O-N v0.1 for ATTINY85  GPLv3 <<<<
+//   >>>>>  T-I-N-Y  D-U-N-G-E-O-N v0.5 for ATTINY85  GPLv3 <<<<
 //						Tinyjoypad rev2 compatible
 //                   Programmer: Sven B 2021
 //              Contact EMAIL: Lorandil@gmx.de
 
-// The code works at 16MHZ internal
-// and uses ssd1306xled Library for SSD1306 oled display 128x64.
-//
+//  Tiny Dungeon is free software: you can redistribute it and/or modify
+//  it under the terms of the GNU General Public License as published by
+// the Free Software Foundation, either version 3 of the License, or
+// (at your option) any later version.
+
+//  This program is distributed in the hope that it will be useful,
+//  but WITHOUT ANY WARRANTY; without even the implied warranty of
+//  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+//  GNU General Public License for more details.
+
+// The code works at 16MHZ internal PLL
+// and uses the ssd1306xled library for SSD1306 oled display 128x64 (on ATtiny85)
+// or the Adafruit_SSD1306 library on any other micro controller.
+
 // To stuff all code and data into the 8192 bytes of the ATtiny85
 // the ATTinyCore (v1.5.2) by Spence Konde is recommended.
 // The core is available at github: [https://github.com/SpenceKonde/ATTinyCore], just add the
@@ -39,14 +50,20 @@ void setup()
 /*--------------------------------------------------------*/
 void loop()
 {
+  // zero dungeon structure
+  memset( &_dungeon, 0x00, sizeof( _dungeon ) );
+
   // Prepare the dungeon
   _dungeon.playerX = 5;
   _dungeon.playerY = 3;
-  _dungeon.dir  = NORTH;
+  //_dungeon.dir  = NORTH; // NORTH = 0!
   // prepare player stats
   _dungeon.playerHP = 30;
   _dungeon.playerDAM = 10;
-  _dungeon.playerKeys = 2;  
+  //_dungeon.playerKeys = 0;  
+  //_dungeon.playerHasCompass = false;
+  //_dungeon.playerHasAmulett = false;
+  //_dungeon.displayXorEffect = 0;
 
   // Prepare first level
   //LEVEL_HEADER *header = (LEVEL_HEADER *)Level_1;
@@ -116,9 +133,6 @@ void Tiny_Flip( DUNGEON *dungeon)
     TinyFlip_FinishDisplayRow();
   } // for y
 
-  // no more flashing
-  dungeon->displayXorEffect = 0;
-
   // display the whole screen
   TinyFlip_DisplayBuffer();
 }
@@ -131,196 +145,212 @@ void checkPlayerMovement( DUNGEON *dungeon )
 
   // no movement yet
   bool playerHasReachedNewCell = false;
+  bool playerAction = false;
 
-  if ( isLeftPressed() ) 
-  {
-    // turn left
-    dungeon->dir = ( dungeon->dir - 1 ) & 0x03;
-    stepSound();
-  }
-  
-  if ( isRightPressed() )
-  {
-    // turn right
-    dungeon->dir = ( dungeon->dir + 1 ) & 0x03;
-    stepSound();
-  }
+  // remember to disable the flashing effect
+  bool disableFlashEffect = dungeon->displayXorEffect;
+  dungeon->displayXorEffect = 0;
 
-  if ( isUpPressed() )
+  // stay in this loop until the player does anything (just increase the random counter)
+  while ( !playerAction && !disableFlashEffect )
   {
-    if ( ( ( *cell ) & FLAG_SOLID ) != FLAG_SOLID )
+    playerAction = dungeon->displayXorEffect;
+
+    // prepare the dice
+    updateDice( dungeon );
+
+    if ( isLeftPressed() ) 
     {
+      // turn left
+      dungeon->dir = ( dungeon->dir - 1 ) & 0x03;
       stepSound();
+      playerAction = true;
+    }
+    
+    if ( isRightPressed() )
+    {
+      // turn right
+      dungeon->dir = ( dungeon->dir + 1 ) & 0x03;
       stepSound();
+      playerAction = true;
+    }
+
+    if ( isUpPressed() )
+    {
+      if ( ( ( *cell ) & FLAG_SOLID ) != FLAG_SOLID )
+      {
+        stepSound();
+        stepSound();
+        
+        switch( dungeon->dir )
+        {
+          case NORTH:
+            dungeon->playerY--; break;
+          case EAST:
+            dungeon->playerX++; break;
+          case SOUTH:
+            dungeon->playerY++; break;
+          case WEST:
+            dungeon->playerX--; break;
+        }
+
+        // just a small step for a player
+        playerHasReachedNewCell = true;
+      }
+      else
+      {
+        wallSound();
+      }
+    }
+    
+    if ( isDownPressed() )
+    {
+      if ( ( *( getCell( dungeon, dungeon->playerX, dungeon->playerY, -1, 0, dungeon->dir ) ) & FLAG_SOLID ) != FLAG_SOLID )
+      {
+        stepSound();
+        stepSound();
+    
+        switch( dungeon->dir )
+        {
+          case NORTH:
+            dungeon->playerY++; break;
+          case EAST:
+            dungeon->playerX--; break;
+          case SOUTH:
+            dungeon->playerY--; break;
+          case WEST:
+            dungeon->playerX++; break;
+        }
       
-      switch( dungeon->dir )
-      {
-        case NORTH:
-          dungeon->playerY--; break;
-        case EAST:
-          dungeon->playerX++; break;
-        case SOUTH:
-          dungeon->playerY++; break;
-        case WEST:
-          dungeon->playerX--; break;
+        // just a small step for a player
+        playerHasReachedNewCell = true;
       }
-
-      // just a small step for a player
-      playerHasReachedNewCell = true;
-    }
-    else
-    {
-      wallSound();
-    }
-  }
-  
-  if ( isDownPressed() )
-  {
-    if ( ( *( getCell( dungeon, dungeon->playerX, dungeon->playerY, -1, 0, dungeon->dir ) ) & FLAG_SOLID ) != FLAG_SOLID )
-    {
-      stepSound();
-      stepSound();
-  
-      switch( dungeon->dir )
+      else
       {
-        case NORTH:
-          dungeon->playerY++; break;
-        case EAST:
-          dungeon->playerX--; break;
-        case SOUTH:
-          dungeon->playerY--; break;
-        case WEST:
-          dungeon->playerX++; break;
-      }
-    
-      // just a small step for a player
-      playerHasReachedNewCell = true;
-}
-    else
-    {
-      wallSound();
-    }
-  }
-
-  // check for special cell effects like teleporter or spinner
-  if ( playerHasReachedNewCell )
-  {
-  #if !defined(__AVR_ATtiny85__)
-    // log player coordinates
-    Serial.print( F("player position = (") );Serial.print( dungeon->playerX ); Serial.print( F(", ") );Serial.print( dungeon->playerY );Serial.println( F(")"));
-  #endif
-
-    SPECIAL_CELL_INFO specialCellInfo;
-    
-    //const SPECIAL_CELL_INFO *specialCellFXPtr = specialCellFX;
-
-    for ( int n = 0; n < sizeof( specialCellFX ) / sizeof( specialCellFX[0] ); n++ )
-    {
-      // copy cell info object from flash to RAM
-      memcpy_P( &specialCellInfo, &specialCellFX[n], sizeof( specialCellInfo ) );
-
-    #if !defined(__AVR_ATtiny85__)
-      specialCellInfo.serialPrint();
-    #endif
-      // does this entry refer to the current position?
-      if (    ( specialCellInfo.positionX == dungeon->playerX )
-           && ( specialCellInfo.positionY == dungeon->playerY )
-         )
-      {
-        // teleporter?
-        if ( specialCellInfo.specialFX == TELEPORTER )
-        {
-          dungeon->playerX = specialCellInfo.value_1;
-          dungeon->playerY = specialCellInfo.value_2;
-        }
-        else // it's a spinner
-        {
-          // modify player's orientation
-          dungeon->dir += specialCellInfo.value_1;
-          dungeon->dir &= 0x03;
-        }
-        // *** BAZINGA! ***
-        dungeon->displayXorEffect = 0xff;
+        wallSound();
       }
     }
-  }
-  else
-  {
-    // ... and ACTION!
-    if ( isFirePressed() )
+
+    // check for special cell effects like teleporter or spinner
+    if ( playerHasReachedNewCell )
     {
-      uint8_t cellValue = *cell;
+      // obviously that's a player action, too
+      playerAction = true;
+      // log player coordinates
+      serialPrint( F("player position = (") ); serialPrint( dungeon->playerX ); serialPrint( F(", ") ); serialPrint( dungeon->playerY ); serialPrintln( F(")") );
+
+      SPECIAL_CELL_INFO specialCellInfo;
+      
+      for ( int n = 0; n < sizeof( specialCellFX ) / sizeof( specialCellFX[0] ); n++ )
+      {
+        // copy cell info object from flash to RAM
+        memcpy_P( &specialCellInfo, &specialCellFX[n], sizeof( specialCellInfo ) );
 
       #if !defined(__AVR_ATtiny85__)
-        dungeon->serialPrint();
-        Serial.print( F("dungeon = ") );Serial.print( uint16_t( dungeon ) );
-        Serial.print( F(", cell = ") );Serial.println( uint16_t( cell ) );
-        Serial.println();
-        Serial.print(F("*cell = "));printHexToSerial( cellValue );Serial.println();
+        specialCellInfo.serialPrint();
       #endif
-
-      INTERACTION_INFO interactionInfo;
-      for ( uint8_t n = 0; n < sizeof( interactionData ) / sizeof( INTERACTION_INFO ); n++ )
-      {
-        // get data from progmem
-        memcpy_P( &interactionInfo, interactionData + n, sizeof( INTERACTION_INFO ) );
-
-        // does this info cover the current position?
-        if (    ( cell == dungeon->currentLevel + interactionInfo.currentPosition )
-            //|| ( interactionInfo.currentPosition == ANY_POSITION )
+        // does this entry refer to the current position?
+        if (    ( specialCellInfo.positionX == dungeon->playerX )
+            && ( specialCellInfo.positionY == dungeon->playerY )
           )
         {
-          // is the status correct?
-          if ( ( cellValue & interactionInfo.currentStatusMask ) == interactionInfo.currentStatus )
+          // teleporter?
+          if ( specialCellInfo.specialFX == TELEPORTER )
           {
-          #if !defined(__AVR_ATtiny85__)
-            Serial.print(F("+ Matching entry found <"));Serial.print( n );Serial.println(F(">"));
-            // print entry information
-            interactionInfo.serialPrint();
-          #endif
+            dungeon->playerX = specialCellInfo.value_1;
+            dungeon->playerY = specialCellInfo.value_2;
+          }
+          else // it's a spinner
+          {
+            // modify player's orientation
+            dungeon->dir += specialCellInfo.value_1;
+            dungeon->dir &= 0x03;
+          }
+          // *** BAZINGA! ***
+          dungeon->displayXorEffect = 0xff;
+        }
+      }
+    }
+    else
+    {
+      // ... and ACTION!
+      if ( isFirePressed() )
+      {
+        playerAction = true;
 
-          bool modifyCurrentPosition = true;
-          bool modifyTargetPosition = true;
+        uint8_t cellValue = *cell;
 
-            // special handling for special types
-            switch ( cellValue )
+        #if !defined(__AVR_ATtiny85__)
+          dungeon->serialPrint();
+          Serial.print( F("dungeon = ") );Serial.print( uint16_t( dungeon ) );
+          Serial.print( F(", cell = ") );Serial.println( uint16_t( cell ) );
+          Serial.println();
+          Serial.print(F("*cell = "));printHexToSerial( cellValue );Serial.println();
+        #endif
+
+        INTERACTION_INFO interactionInfo;
+        for ( uint8_t n = 0; n < sizeof( interactionData ) / sizeof( INTERACTION_INFO ); n++ )
+        {
+          // get data from progmem
+          memcpy_P( &interactionInfo, interactionData + n, sizeof( INTERACTION_INFO ) );
+
+          // does this info cover the current position?
+          if (    ( cell == dungeon->currentLevel + interactionInfo.currentPosition )
+              //|| ( interactionInfo.currentPosition == ANY_POSITION )
+            )
+          {
+            // is the status correct?
+            if ( ( cellValue & interactionInfo.currentStatusMask ) == interactionInfo.currentStatus )
             {
-            case CLOSED_CHEST:
+            #if !defined(__AVR_ATtiny85__)
+              Serial.print(F("+ Matching entry found <"));Serial.print( n );Serial.println(F(">"));
+              // print entry information
+              interactionInfo.serialPrint();
+            #endif
+
+            bool modifyCurrentPosition = true;
+            bool modifyTargetPosition = true;
+
+              // special handling for special types
+              switch ( cellValue )
               {
-                // plunder the chest!
-                openChest( dungeon, interactionInfo );
-                break;
+              case CLOSED_CHEST:
+                {
+                  // plunder the chest!
+                  openChest( dungeon, interactionInfo );
+                  break;
+                }
+              // Monstaz!
+              case SKELETON:
+              case BEHOLDER:
+                {
+                  break;
+                }
               }
-            // Monstaz!
-            case SKELETON:
-            case BEHOLDER:
+
+              if ( modifyCurrentPosition )
               {
-                break;
+                // change current position
+                *cell = ( cellValue - interactionInfo.currentStatus ) | interactionInfo.nextStatus;
               }
-            }
 
-            if ( modifyCurrentPosition )
-            {
-              // change current position
-              *cell = ( cellValue - interactionInfo.currentStatus ) | interactionInfo.nextStatus;
-            }
+              if ( modifyTargetPosition )
+              {
+                // modify target position
+                dungeon->currentLevel[interactionInfo.modifiedPosition] = interactionInfo.modifiedPositionCellValue;
+              }
 
-            if ( modifyTargetPosition )
-            {
-              // modify target position
-              dungeon->currentLevel[interactionInfo.modifiedPosition] = interactionInfo.modifiedPositionCellValue;
+              swordSound();
+              
+              // perform only the first action, otherwise on/off actions might be immediately revoked ;)
+              break;
             }
-
-            swordSound();
-            
-            // perform only the first action, otherwise on/off actions might be immediately revoked ;)
-            break;
           }
         }
       }
     }
+    
+    // limit the positions
+    limitDungeonPosition( dungeon, dungeon->playerX, dungeon->playerY );
   }
-  
-  // limit the positions
-  limitDungeonPosition( dungeon, dungeon->playerX, dungeon->playerY );
 }

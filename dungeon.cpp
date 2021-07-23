@@ -3,6 +3,7 @@
 #include "dungeon.h"
 #include "dungeonTypes.h"
 #include "textUtils.h"
+#include "tinyJoypadUtils.h"
 
 /*--------------------------------------------------------*/
 // Returns a pointer to the cell which is 
@@ -84,17 +85,20 @@ void updateStatusPane( DUNGEON *dungeon )
 // opens a chest
 void openChest( DUNGEON *dungeon, INTERACTION_INFO &info )
 {
-#if !defined(__AVR_ATtiny85__)
-  Serial.println(F("openChest()") );
-#endif
+  serialPrintln( F("openChest()") );
 
   // is there a compass in this chest?
   if ( info.newItem == ITEM_COMPASS )
   {
     dungeon->playerHasCompass = true;
     // hooray!
-  #if !defined(__AVR_ATtiny85__)
-    Serial.println(F("+ Compass found!"));
-  #endif
+    serialPrintln( F("+ Compass found!") );
   }
+}
+
+/*--------------------------------------------------------*/
+void updateDice( DUNGEON *dungeon )
+{ 
+  dungeon->dice++; dungeon->dice &= MAX_DICE_VALUE;
+  serialPrint( F("D8 = ")); serialPrintln( dungeon->dice + 1 );
 }
