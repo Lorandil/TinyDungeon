@@ -40,7 +40,8 @@ Why not something like a 3D dungeon crawler on the TinyJoypad platform?
 
 ## Magic Objects
 * The Compass (visible as a compass)
-* Amulett of True Sight (visible as an eye, lets the screen flash when teleporting or spinning, removes fake walls)
+* Amulet of True Sight (visible as an eye, removes fake walls)
+* Ring of Orientation (lets the screen flash when teleporting or spinning)
 
 ## Combat System
 

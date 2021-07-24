@@ -61,7 +61,9 @@ enum
 enum
 {
   ITEM_NONE    = 0x00,
-  ITEM_COMPASS = 0x01
+  ITEM_COMPASS = 0x01,
+  ITEM_AMULET  = 0x02,
+  ITEM_RING    = 0x03,
 };
 
 // DUNGEON
@@ -79,7 +81,8 @@ public:
   int8_t  playerDAM;
   int8_t  playerKeys;
   bool    playerHasCompass;
-  bool    playerHasAmulett;
+  bool    playerHasAmulet; 
+  uint8_t playerHasRing;    /* 0x00 if player has no amulet, 0xFF if he/she has the amulett */
   int8_t  dice;
   uint8_t displayXorEffect;
   

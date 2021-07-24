@@ -56,7 +56,7 @@ const INTERACTION_INFO interactionData[] PROGMEM =
   { 1 + 15 * LEVEL_WIDTH        ,    LVR_DWN      , OBJECT_MASK     , LVR_UP      ,     0       ,    0      , 2 + 1 * LEVEL_WIDTH  ,     BARS      },
   { 3 +  4 * LEVEL_WIDTH        ,    DOOR         , OBJECT_MASK     ,    0        ,     0       ,    0      , 3 + 4 * LEVEL_WIDTH  ,      0        },
   { 3 +  2 * LEVEL_WIDTH        ,    CLOSED_CHEST , OBJECT_MASK     , OPEN_CHEST  , ITEM_COMPASS,    0      , 3 + 2 * LEVEL_WIDTH  ,  OPEN_CHEST   },
-  { 5 +  7 * LEVEL_WIDTH        ,    CLOSED_CHEST , OBJECT_MASK     , OPEN_CHEST  ,     0       ,    0      , 5 + 7 * LEVEL_WIDTH  ,  OPEN_CHEST   },
+  { 5 +  7 * LEVEL_WIDTH        ,    CLOSED_CHEST , OBJECT_MASK     , OPEN_CHEST  , ITEM_RING   ,    0      , 5 + 7 * LEVEL_WIDTH  ,  OPEN_CHEST   },
 };
 
 // special cell effects

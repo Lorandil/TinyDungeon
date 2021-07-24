@@ -267,7 +267,7 @@ void checkPlayerMovement( DUNGEON *dungeon )
             dungeon->dir &= 0x03;
           }
           // *** BAZINGA! ***
-          dungeon->displayXorEffect = 0xff;
+          dungeon->displayXorEffect = dungeon->playerHasRing; /* visualize by flashing if player has the <Ring of Orientation>*/
         }
       }
     }

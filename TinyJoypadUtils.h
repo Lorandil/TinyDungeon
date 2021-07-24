@@ -36,6 +36,7 @@
 // funciton for initializing the TinyJoypad (ATtiny85) and other microcontrollers
 void InitTinyJoypad();
 
+// function for direct joystick readings
 bool isLeftPressed();
 bool isRightPressed();
 bool isUpPressed();
@@ -43,6 +44,18 @@ bool isDownPressed();
 bool isFirePressed();
 void waitUntilButtonsReleased();
 void waitUntilButtonsReleased( const uint8_t delay );
+
+// read analog joystick inputs into internal variables
+void readAnalogJoystick();
+// functions for working on buffered joystick readings
+bool wasLeftPressed();
+bool wasRightPressed();
+bool wasUpPressed();
+bool wasDownPressed();
+// returns the analog values
+uint16_t getAnalogValueX();
+uint16_t getAnalogValueY();
+
 void _variableDelay_us( uint8_t delayValue );
 void Sound( const uint8_t freq, const uint8_t dur );
 

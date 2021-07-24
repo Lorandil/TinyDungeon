@@ -87,12 +87,26 @@ void openChest( DUNGEON *dungeon, INTERACTION_INFO &info )
 {
   serialPrintln( F("openChest()") );
 
-  // is there a compass in this chest?
-  if ( info.newItem == ITEM_COMPASS )
+  switch( info.newItem )
   {
-    dungeon->playerHasCompass = true;
-    // hooray!
-    serialPrintln( F("+ Compass found!") );
+    case ITEM_COMPASS:
+      // a compass will be displayed
+      dungeon->playerHasCompass = true;
+      // hooray!
+      serialPrintln( F("+ <Compass> found!") );
+      break;
+    case ITEM_AMULET:
+      // fake will be removed
+      dungeon->playerHasAmulet = true;
+      // hooray!
+      serialPrintln( F("+ <Amulet of True Sight> found!") );
+      break;
+    case ITEM_RING:
+      // spinning and teleporting revealed by flashing the screen
+      dungeon->playerHasRing = 0xff;
+      // hooray!
+      serialPrintln( F("+ <Ring of Orientation> found!") );
+      break;
   }
 }
 
@@ -100,5 +114,9 @@ void openChest( DUNGEON *dungeon, INTERACTION_INFO &info )
 void updateDice( DUNGEON *dungeon )
 { 
   dungeon->dice++; dungeon->dice &= MAX_DICE_VALUE;
-  serialPrint( F("D8 = ")); serialPrintln( dungeon->dice + 1 );
+  //serialPrint( F("D8 = ")); serialPrint( dungeon->dice + 1 );
+  //readAnalogJoystick();
+  //serialPrint( F(", analogX = ")); serialPrint( getAnalogValueX() );
+  //serialPrint( F(", analogY = ")); serialPrintln( getAnalogValueY() );
+
 }

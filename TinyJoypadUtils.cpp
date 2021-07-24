@@ -23,6 +23,10 @@
   #endif
 #endif
 
+// buffered analog joystick inputs
+uint16_t analogJoystickX;
+uint16_t analogJoystickY;
+
 
 /*-------------------------------------------------------*/
 // function for initializing the TinyJoypad (ATtiny85) and other microcontrollers
@@ -94,6 +98,50 @@ void waitUntilButtonsReleased( const uint8_t delay )
 {
   waitUntilButtonsReleased();
   _delay_ms( delay );
+}
+
+/*-------------------------------------------------------*/
+// read analog joystick inputs into internal variables
+void readAnalogJoystick()
+{
+  analogJoystickX = analogRead( LEFT_RIGHT_BUTTON );
+  analogJoystickY = analogRead( UP_DOWN_BUTTON );
+}
+
+/*-------------------------------------------------------*/
+bool wasLeftPressed()
+{
+  return( ( analogJoystickX >= 750 ) && ( analogJoystickX < 950 ) );
+}
+
+/*-------------------------------------------------------*/
+bool wasRightPressed()
+{
+  return( ( analogJoystickX > 500 ) && ( analogJoystickX < 750 ) );
+}
+
+/*-------------------------------------------------------*/
+bool wasUpPressed()
+{
+  return( ( analogJoystickY > 500 ) && ( analogJoystickY < 750 ) );
+}
+
+/*-------------------------------------------------------*/
+bool wasDownPressed()
+{
+  return( ( analogJoystickY >= 750 ) && ( analogJoystickY < 950 ) );
+}
+
+/*-------------------------------------------------------*/
+uint16_t getAnalogValueX()
+{
+  return( analogJoystickX );
+}
+
+/*-------------------------------------------------------*/
+uint16_t getAnalogValueY()
+{
+  return( analogJoystickY );
 }
 
 /*-------------------------------------------------------*/
