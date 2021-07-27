@@ -30,7 +30,7 @@ const uint8_t Level_1[] PROGMEM =
   // plain level data
 /*             0            1            2            3            4            5            6            7            8            9           10           11           12           13           14           15              */
 /*  0 */     WALL     ,     0      ,   WALL     ,   WALL     ,   WALL     ,   WALL     ,  FAKE_WALL ,   WALL     ,     0      ,     0      ,     0      ,     0      ,     0      ,     0      ,     0      ,     0      , /*  0 */ 
-/*  1 */      RAT     ,     0      ,   BARS     , SKELETON   ,   WALL     ,     0      ,     0      ,   WALL     ,     0      ,     0      ,     0      ,     0      ,     0      ,     0      ,     0      ,     0      , /*  1 */
+/*  1 */      RAT     ,     0      ,   BARS     , SKELETON   ,   WALL     ,     0      , CLOSED_CHEST ,   WALL     ,     0      ,     0      ,     0      ,     0      ,     0      ,     0      ,     0      ,     0      , /*  1 */
 /*  2 */       0      ,     0      ,   WALL     ,CLOSED_CHEST,   WALL     ,  FOUNTAIN  ,  BEHOLDER  ,   WALL     ,     0      ,     0      ,     0      ,     0      ,     0      ,     0      ,     0      ,     0      , /*  2 */
 /*  3 */       0      ,     0      ,   WALL     ,   WALL     ,   WALL     ,     0      ,     0      ,   WALL     ,   WALL     ,   WALL     ,   WALL     ,   WALL     ,   WALL     ,   WALL     ,     0      ,     0      , /*  3 */
 /*  4 */       0      ,     0      ,     0      ,WALL|DOOR   ,     0      , TELEPORTER ,     0      ,   WALL     ,     0      ,     0      ,     0      ,     0      ,     0      ,   WALL     ,     0      ,     0      , /*  4 */
@@ -57,6 +57,7 @@ const INTERACTION_INFO interactionData[] PROGMEM =
   { 3 +  4 * LEVEL_WIDTH        ,    DOOR         , OBJECT_MASK     ,    0        ,     0       ,    0      , 3 + 4 * LEVEL_WIDTH  ,      0        },
   { 3 +  2 * LEVEL_WIDTH        ,    CLOSED_CHEST , OBJECT_MASK     , OPEN_CHEST  , ITEM_COMPASS,    0      , 3 + 2 * LEVEL_WIDTH  ,  OPEN_CHEST   },
   { 5 +  7 * LEVEL_WIDTH        ,    CLOSED_CHEST , OBJECT_MASK     , OPEN_CHEST  , ITEM_RING   ,    0      , 5 + 7 * LEVEL_WIDTH  ,  OPEN_CHEST   },
+  { 6 +  1 * LEVEL_WIDTH        ,    CLOSED_CHEST , OBJECT_MASK     , OPEN_CHEST  , ITEM_AMULET ,    0      , 6 + 1 * LEVEL_WIDTH  ,  OPEN_CHEST   },
 };
 
 // special cell effects

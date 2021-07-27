@@ -98,6 +98,14 @@ void openChest( DUNGEON *dungeon, INTERACTION_INFO &info )
     case ITEM_AMULET:
       // fake will be removed
       dungeon->playerHasAmulet = true;
+      // remove all fake walls
+      uint8_t *currentCell = dungeon->currentLevel;
+      while ( currentCell < dungeon->currentLevel + LEVEL_WIDTH * LEVEL_HEIGHT )
+      {
+        // fake? let's stay with the facts...
+        if ( *currentCell == FAKE_WALL ) { *currentCell = EMPTY; }
+        currentCell++;
+      }
       // hooray!
       serialPrintln( F("+ <Amulet of True Sight> found!") );
       break;

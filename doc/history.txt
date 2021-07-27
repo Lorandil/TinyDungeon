@@ -29,6 +29,10 @@ already achieved:
 * added sound support for Arduino Uno R3 and Mega 2560
 * every decent dungeon needs rats!
 * player movement control now has a fast running loop. This will be used to create "random" numbers by counting fast
+* new item: <Amulet of True Sight> removes all fake walls from the game
+* new item <Ring of Orientation> causes the screen to flash if the player is teleported or spun
+* placed Amulet of True Sight in a chest
+* placed Ring of Orientation in a chest
 
 next steps:
 * Check/Change: 
