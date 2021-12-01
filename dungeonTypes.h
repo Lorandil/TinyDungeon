@@ -164,8 +164,8 @@ typedef struct
   
   uint8_t itemType;
   uint8_t bitmapWidth;
-  uint8_t bitmapVerticalOffsetInBytes;
-  uint8_t bitmapHeightInBytes;
+  uint8_t bitmapVerticalOffsetInBits;
+  uint8_t bitmapHeightInBits;
   //uint8_t maskOffset;
   uint8_t nextLineOffset;
   uint8_t maxViewDistance;

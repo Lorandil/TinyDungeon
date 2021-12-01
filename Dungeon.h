@@ -16,17 +16,6 @@ void updateDice( DUNGEON *dungeon );
 // simple level - 1 byte per cell
 const uint8_t Level_1[] PROGMEM = 
 {
-  /*
-  // width x height
-   LEVEL_WIDTH,  LEVEL_HEIGHT,  // ###! not used
-  // stairs up
-  0xFF, 0xFF,                   // ###! not used
-  // stairs down
-  0xFF, 0xFF,                   // ###! not used
-  // level number
-   1,                           // ###! not used
-   */
-
   // plain level data
 /*             0            1            2            3            4            5            6            7            8            9           10           11           12           13           14           15              */
 /*  0 */     WALL     ,     0      ,   WALL     ,   WALL     ,   WALL     ,   WALL     ,  FAKE_WALL ,   WALL     ,     0      ,     0      ,     0      ,     0      ,     0      ,     0      ,     0      ,     0      , /*  0 */ 
@@ -48,7 +37,7 @@ const uint8_t Level_1[] PROGMEM =
 /*             0            1            2            3            4            5            6            7            8            9           10           11           12           13           14           15              */
 };
 
-// interaction data for level 1
+// interaction data (8 bytes per event)
 const INTERACTION_INFO interactionData[] PROGMEM =
 {
   // currentPos currentStatus    currentStatus    currentStatusMask  nextStatus     newItem      itemValue      modifiedPos        modifiedPosCellValue
@@ -60,7 +49,7 @@ const INTERACTION_INFO interactionData[] PROGMEM =
   { 6 +  1 * LEVEL_WIDTH        ,    CLOSED_CHEST , OBJECT_MASK     , OPEN_CHEST  , ITEM_AMULET ,    0      , 6 + 1 * LEVEL_WIDTH  ,  OPEN_CHEST   },
 };
 
-// special cell effects
+// special cell effects (5 bytes per FX)
 const SPECIAL_CELL_INFO specialCellFX[] PROGMEM =
 {
   // cell type ,  posX , posY , value_1, value_2
@@ -69,7 +58,7 @@ const SPECIAL_CELL_INFO specialCellFX[] PROGMEM =
 };
 
 
-// array of conditions for wall display
+// array of conditions for wall display (9 bytes per row)
 const SIMPLE_WALL_INFO arrayOfWallInfo[] PROGMEM = {
   // distance 0
   { leftRightWalls,  0,  4, 0, 7, 0, -1, WALL & ~FLAG_SOLID },
@@ -95,23 +84,23 @@ const SIMPLE_WALL_INFO arrayOfWallInfo[] PROGMEM = {
   { leftRightWalls, 35, 47, 0, 7, 3, -1, WALL & ~FLAG_SOLID },
   { leftRightWalls, 48, 60, 0, 7, 3, +1, WALL & ~FLAG_SOLID },
   
-  { NULL,            0,  0, 0, 0, 0,  0,    0 }, // 7 unused bytes.. how can I save them?
+  { NULL,            0,  0, 0, 0, 0,  0,    0 }, // 7 unused bytes.. how can I save those?
 };
 
 
-// list of possible non wall objects (i.e. monsters, doors, ...)
+// list of possible non wall objects (i.e. monsters, doors, ...) (11 bytes per object)
 const NON_WALL_OBJECT objectList [] PROGMEM = {
-//  itemType    , width, verticalOffset, heightBytes, /*maskOffset,*/ lineOffset, maxView, scalingThreshold, bitmap
-  { SKELETON    ,  28,         2,             5,      /*    28,    */     56,         3,  { 1, 2, 99 },  joey        },
-  { BEHOLDER    ,  32,         0,             7,      /*    32,    */     64,         3,  { 1, 2,  5 },  beholder    },
-  { BARS        ,  28,         1,             6,      /*    28,    */     56,         3,  { 1, 2,  5 },  newBars     },
-  { DOOR        ,  32,         0,             8,      /*    32,    */     64,         3,  { 1, 3, 13 },  door        },
-  { LVR_UP      ,  16,         2,             3,      /*    16,    */     32,         3,  { 1, 2,  8 },  leverUp     },
-  { LVR_DWN     ,  16,         3,             3,      /*    16,    */     32,         3,  { 1, 2,  8 },  leverDown   },
-  { CLOSED_CHEST,  24,         4,             3,      /*    24,    */     48,         2,  { 1, 3, 99 },  chestClosed },
-  { OPEN_CHEST  ,  24,         4,             3,      /*    24,    */     48,         2,  { 1, 3, 99 },  chestOpen   },
-  { FOUNTAIN    ,  12,         4,             3,      /*    12,    */     24,         2,  { 1, 2, 99 },  fountain    },
-  { RAT         ,  20,         5,             2,      /*    20,    */     40,         2,  { 1, 2, 99 },  rat         },
+//  itemType    , width, verticalOffsetBits, heightBits, lineOffset, maxView, scalingThreshold, bitmap
+  { SKELETON    ,  28,         2 * 8,          5 * 8,        56,        3,      { 1, 2, 99 },   joey        },
+  { BEHOLDER    ,  32,         0 * 8,          7 * 8,        64,        3,      { 1, 2,  5 },   beholder    },
+  { BARS        ,  28,         1 * 8,          6 * 8,        56,        3,      { 1, 2,  5 },   newBars     },
+  { DOOR        ,  32,         0 * 8,          8 * 8,        64,        3,      { 1, 3, 13 },   door        },
+  { LVR_UP      ,  16,         2 * 8,          3 * 8,        32,        3,      { 1, 2,  8 },   leverUp     },
+  { LVR_DWN     ,  16,         3 * 8,          3 * 8,        32,        3,      { 1, 2,  8 },   leverDown   },
+  { CLOSED_CHEST,  24,         4 * 8,          3 * 8,        48,        2,      { 1, 3, 99 },   chestClosed },
+  { OPEN_CHEST  ,  24,         4 * 8,          3 * 8,        48,        2,      { 1, 3, 99 },   chestOpen   },
+  { FOUNTAIN    ,  12,         4 * 8,          3 * 8,        24,        2,      { 1, 2, 99 },   fountain    },
+  { RAT         ,  20,         5 * 8,          2 * 8,        40,        2,      { 1, 2, 99 },   rat         },
 };
 
 // direction letters for the compass ('0' + dir [0..3])

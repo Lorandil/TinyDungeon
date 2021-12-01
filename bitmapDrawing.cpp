@@ -91,7 +91,7 @@ uint8_t getDownScaledBitmapData( int8_t x,                      // already downs
                                  int8_t y,                      // unscaled vertical position
                                  const uint8_t distance,        // supported values are 1..3
                                  const NON_WALL_OBJECT *object, // current non wall object
-                                 bool useMask                   // if true returns the down scaled mask
+                                 bool useMask                   // if true returns the down scaled mask instead of the bitmap
                                )
 {
   uint8_t pixels = 0;
@@ -123,20 +123,17 @@ uint8_t getDownScaledBitmapData( int8_t x,                      // already downs
       Serial.print(F(", distance = "));Serial.print( distance );
       //Serial.print(F(", scaleFactor = "));Serial.print( scaleFactor ); Serial.print(F(", threshold = "));Serial.print( threshold );
       //Serial.print(F(", startOffsetY = "));Serial.print( startOffsetY ); Serial.print(F(", endOffsetY = "));Serial.print( endOffsetY );
-      Serial.print(F(", bitmapVerticalOffsetInBytes = "));Serial.print( object->bitmapVerticalOffsetInBytes );
+      Serial.print(F(", bitmapVerticalOffsetInBits = "));Serial.print( object->bitmapVerticalOffsetInBits );
       Serial.println();
     }
   #endif
 
-    // get appropriate bit mask
+    // get associated bit mask
     uint8_t bitMask = pgm_read_byte( bitMaskFromScalingFactor + scaleFactor );
 
-    // empty bytes above the bitmap
-    uint8_t verticalOffsetInBytes = object->bitmapVerticalOffsetInBytes;
-
     // calculate the first and last bit to be processed
-    uint8_t startBitNo = verticalOffsetInBytes * 8;
-    uint8_t endBitNo = startBitNo + object->bitmapHeightInBytes * 8;
+    uint8_t startBitNo = object->bitmapVerticalOffsetInBits;
+    uint8_t endBitNo = startBitNo + object->bitmapHeightInBits;
     
     // but we are starting with bit 0 (and its friends)
     uint8_t bitNo = y * 8 * scaleFactor;
