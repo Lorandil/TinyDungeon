@@ -60,6 +60,7 @@ The damage is shown in the top center of the screen (enlarged by 2?)
 
 ## Open Points
 * When does the player win?
+* What happens when the player wins?
 * When does the player lose (HP <= 0?)
 * Are there different weapons?
 * Can the player heal?

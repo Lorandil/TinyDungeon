@@ -246,14 +246,16 @@ void checkPlayerMovement( DUNGEON *dungeon )
         // copy cell info object from flash to RAM
         memcpy_P( &specialCellInfo, &specialCellFX[n], sizeof( specialCellInfo ) );
 
-      #if !defined(__AVR_ATtiny85__)
-        specialCellInfo.serialPrint();
-      #endif
         // does this entry refer to the current position?
         if (    ( specialCellInfo.positionX == dungeon->playerX )
-            && ( specialCellInfo.positionY == dungeon->playerY )
+             && ( specialCellInfo.positionY == dungeon->playerY )
           )
         {
+        #if !defined(__AVR_ATtiny85__)
+          // print the special effect...
+          specialCellInfo.serialPrint();
+        #endif
+
           // teleporter?
           if ( specialCellInfo.specialFX == TELEPORTER )
           {

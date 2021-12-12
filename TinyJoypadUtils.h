@@ -12,11 +12,43 @@
   #define LEFT_RIGHT_BUTTON A0
   #define UP_DOWN_BUTTON    A3
   #define FIRE_BUTTON        1
+  #define SOUND_PIN          4
+  #define SOUND_PORT_DDR  DDRB
+  #define SOUND_PORT     PORTB
 #else
-  // change these definitions as required
-  #define LEFT_RIGHT_BUTTON A0
-  #define UP_DOWN_BUTTON    A3
-  #define FIRE_BUTTON       A1
+  #if defined(__AVR_ATmega2560__)
+    // Arduino Mega 2560 (and compatible)
+    #define LEFT_RIGHT_BUTTON A0
+    #define UP_DOWN_BUTTON    A3
+    #define FIRE_BUTTON       A1
+    #define SOUND_PIN          6
+    #define SOUND_PORT_DDR  DDRB
+    #define SOUND_PORT     PORTB
+  #elif defined(__AVR_ATmega32U4__)
+    // Arduino Leonardo (and compatible)
+    #define LEFT_RIGHT_BUTTON A0
+    #define UP_DOWN_BUTTON    A3
+    #define FIRE_BUTTON       A1
+    #define SOUND_PIN          6
+    #define SOUND_PORT_DDR  DDRD
+    #define SOUND_PORT     PORTD
+  #elif defined(__AVR_ATmega328P__)
+    // Arduino UNO R3 (and compatible)
+    #define LEFT_RIGHT_BUTTON A0
+    #define UP_DOWN_BUTTON    A3
+    #define FIRE_BUTTON       A1
+    #define SOUND_PIN          4
+    #define SOUND_PORT_DDR  DDRB
+    #define SOUND_PORT     PORTB
+  #else
+    // change these definitions as required
+    #define LEFT_RIGHT_BUTTON A0
+    #define UP_DOWN_BUTTON    A3
+    #define FIRE_BUTTON       A1
+    #define SOUND_PIN          4
+    #define SOUND_PORT_DDR  DDRB
+    #define SOUND_PORT     PORTB
+  #endif
 #endif
 
 

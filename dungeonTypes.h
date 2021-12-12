@@ -289,7 +289,6 @@ public:
 #if !defined(__AVR_ATtiny85__)
   void serialPrint() 
   {
-    Serial.println( F("SPECIAL_CELL_INFO") );
     Serial.print( F("  specialFX    = ") );if ( specialFX == TELEPORTER ) { Serial.println( F("TELEPORTER") ); } else { Serial.println( F("SPINNER") ); }
     Serial.print( F("  position     = (") );Serial.print( positionX ); Serial.print( F(", ") );Serial.print( positionY );Serial.println( F(")"));
     Serial.print( F("  value        = (") );Serial.print( value_1 ); Serial.print( F(", ") );Serial.print( value_2 );Serial.println( F(")"));

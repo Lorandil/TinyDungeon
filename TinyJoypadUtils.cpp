@@ -35,16 +35,16 @@ void InitTinyJoypad()
 #if defined(__AVR_ATtiny85__)
   // not using 'pinMode()' here saves ~100 bytes of flash!
   // configure A0, A3 and D1 as input
-  DDRB &= ~( ( 1 << PB5) | ( 1 << PB3 ) | ( 1 << PB1 ) );
-  // configure A2 (aka PB4) as output
-  DDRB |= ( 1 << PB4 );
+  SOUND_PORT_DDR &= ~( ( 1 << PB5) | ( 1 << PB3 ) | ( 1 << PB1 ) );
+  // configure A2 (aka SOUND_PIN) as output
+  SOUND_PORT_DDR |= ( 1 << SOUND_PIN );
 #else
   // use 'pinMode()' for simplicity's sake... any other micro controller has enough flash :)
   pinMode( LEFT_RIGHT_BUTTON, INPUT );
   pinMode( UP_DOWN_BUTTON, INPUT );
   pinMode( FIRE_BUTTON, INPUT );
-  // configure PB4 as output (Pin D12 on Arduino UNO R3 and Pin D10 on Arduino Mega 2560 )
-  DDRB |= ( 1 << PB4 );
+  // configure SOUND_PIN as output (Pin D12 on Arduino UNO R3 and Pin D10 on Arduino Mega 2560 )
+  SOUND_PORT_DDR |= ( 1 << SOUND_PIN );
 
   // prepare serial port for debugging output
   Serial.begin( 115200 );
@@ -160,9 +160,9 @@ void Sound( const uint8_t freq, const uint8_t dur )
 {
   for ( uint8_t t = 0; t < dur; t++ )
   {
-    if ( freq!=0 ){ PORTB = PORTB|0b00010000; }
+    if ( freq!=0 ){ SOUND_PORT = SOUND_PORT | ( 1 << SOUND_PIN); }
     _variableDelay_us( 255 - freq );
-    PORTB = PORTB&0b11101111;
+    SOUND_PORT = SOUND_PORT & ~( 1 << SOUND_PIN );
     _variableDelay_us( 255 - freq );
   }
 }
