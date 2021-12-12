@@ -23,7 +23,7 @@ uint8_t getWallPixels( DUNGEON *dungeon, const int8_t x, const int8_t y )
     memcpy_P( &wallInfo, wallInfoPtr, sizeof( wallInfo ) );
 
     // end of list reached?
-    if ( wallInfo.wallBitmap == NULL ) { break; }
+    if ( wallInfo.wallBitmap == nullptr ) { break; }
 
     // check conditions
     if ( ( x >= wallInfo.startPosX ) && ( x <= wallInfo.endPosX ) )

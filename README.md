@@ -79,7 +79,7 @@ The damage is shown in the top center of the screen (enlarged by 2?)
   [only on MCUs with serial port, so not on ATtiny85 ;)]
 
 ## Current Size
-Sketch uses 7754 bytes (94%) of program storage space. Maximum is 8192 bytes.
+Sketch uses 7706 bytes (94%) of program storage space. Maximum is 8192 bytes.
 Global variables use 345 bytes (67%) of dynamic memory, leaving 167 bytes for local variables. Maximum is 512 bytes.
 
 ## License

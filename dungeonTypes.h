@@ -12,6 +12,9 @@ const uint8_t WINDOW_CENTER_X = WINDOW_SIZE_X / 2;
 const uint8_t WINDOW_SIZE_Y   = 64;
 const uint8_t WINDOW_CENTER_Y = WINDOW_SIZE_Y / 2;
 
+const uint8_t LEVEL_WIDTH = 16;
+const uint8_t LEVEL_HEIGHT = 16;
+
 // this position is true for every cell
 const uint8_t ANY_POSITION = 0xff;
 
@@ -84,8 +87,8 @@ public:
   int8_t  dice;
   uint8_t displayXorEffect;
   
-  uint8_t levelHeight;
-  uint8_t levelWidth;
+  //uint8_t levelHeight;
+  //uint8_t levelWidth;
   uint8_t currentLevel[MAX_LEVEL_BYTES];
 
 #if !defined(__AVR_ATtiny85__)
@@ -100,15 +103,13 @@ public:
     Serial.print(F(", Keys = ") );Serial.print( playerKeys );
     Serial.print(F(", Compass = ") );Serial.print( playerHasCompass );
     Serial.print(F(", displayXorEffect = ") );Serial.print( displayXorEffect );
-    Serial.print(F("   ( levelHeight = ") );Serial.print( levelHeight );
-    Serial.print(F(", levelWidth  = ") );Serial.print( levelWidth );
     Serial.println(F(" )") );
 
-    for ( uint8_t y = 0; y < levelHeight; y++ )
+    for ( uint8_t y = 0; y < LEVEL_HEIGHT; y++ )
     {
-      for( uint8_t x = 0; x < levelWidth; x++ )
+      for( uint8_t x = 0; x < LEVEL_WIDTH; x++ )
       {
-        uint8_t cellValue = currentLevel[y * levelWidth + x];
+        uint8_t cellValue = currentLevel[y * LEVEL_WIDTH + x];
         Serial.print( ( cellValue & FLAG_SOLID )                              ? F("s")  : F("-") );
         Serial.print( ( cellValue & WALL_MASK ) == FAKE_WALL                  ? F("W")  : F("-") );
         Serial.print( ( cellValue & ( SKELETON | FLAG_SOLID ) ) == SKELETON   ? F("S")  : F("-") );
@@ -124,7 +125,7 @@ public:
     }
     Serial.println();
     hexdumpResetPositionCount();
-    hexdumpToSerial( currentLevel, levelWidth * levelHeight );
+    hexdumpToSerial( currentLevel, LEVEL_WIDTH * LEVEL_HEIGHT );
   }
 #endif
 #if !defined(__AVR_ATtiny85__)
