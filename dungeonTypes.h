@@ -178,8 +178,8 @@ typedef struct
     Serial.println( F("NON_WALL_OBJECT") );
     Serial.print( F("  itemType                     = ") );Serial.println( itemType );
     Serial.print( F("  bitmapWidth                  = ") );Serial.print( bitmapWidth );Serial.println();
-    Serial.print( F("  bitmapVerticalOffsetInBytes  = ") );Serial.print( bitmapVerticalOffsetInBytes );Serial.println();
-    Serial.print( F("  bitmapHeightInBytes          = ") );Serial.print( bitmapHeightInBytes );Serial.println();
+    Serial.print( F("  bitmapVerticalOffsetInBytes  = ") );Serial.print( bitmapVerticalOffsetInBits );Serial.println();
+    Serial.print( F("  bitmapHeightInBytes          = ") );Serial.print( bitmapHeightInBits );Serial.println();
     //Serial.print( F("  maskOffset                   = ") );Serial.print( maskOffset );Serial.println();
     Serial.print( F("  nextLineOffset               = ") );Serial.println( nextLineOffset );
     Serial.print( F("  maxViewDistance              = ") );Serial.println( maxViewDistance );
