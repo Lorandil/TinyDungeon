@@ -6,14 +6,14 @@
   #include "SerialHexTools.h"
 #endif
 
-const uint16_t MAX_LEVEL_BYTES = 256;
+const uint8_t LEVEL_WIDTH = 16;
+const uint8_t LEVEL_HEIGHT = 16;
+const uint16_t MAX_LEVEL_BYTES = LEVEL_WIDTH * LEVEL_HEIGHT;
+
 const uint8_t WINDOW_SIZE_X   = 96;
 const uint8_t WINDOW_CENTER_X = WINDOW_SIZE_X / 2;
 const uint8_t WINDOW_SIZE_Y   = 64;
 const uint8_t WINDOW_CENTER_Y = WINDOW_SIZE_Y / 2;
-
-const uint8_t LEVEL_WIDTH = 16;
-const uint8_t LEVEL_HEIGHT = 16;
 
 // this position is true for every cell
 const uint8_t ANY_POSITION = 0xff;
@@ -83,12 +83,9 @@ public:
   int8_t  playerKeys;
   bool    playerHasCompass;
   bool    playerHasAmulet; 
-  uint8_t playerHasRing;    /* 0x00 if player has no amulet, 0xFF if he/she has the amulett */
+  uint8_t playerHasRing;    /* 0x00 if player has no ring, 0xFF if he/she has the ring */
   int8_t  dice;
   uint8_t displayXorEffect;
-  
-  //uint8_t levelHeight;
-  //uint8_t levelWidth;
   uint8_t currentLevel[MAX_LEVEL_BYTES];
 
 #if !defined(__AVR_ATtiny85__)
