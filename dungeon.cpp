@@ -90,31 +90,37 @@ void openChest( DUNGEON *dungeon, INTERACTION_INFO &info )
   switch( info.newItem )
   {
     case ITEM_COMPASS:
-      // a compass will be displayed
-      dungeon->playerHasCompass = true;
-      // hooray!
-      serialPrintln( F("+ <Compass> found!") );
-      break;
-    case ITEM_AMULET:
-      // fake will be removed
-      dungeon->playerHasAmulet = true;
-      // remove all fake walls
-      uint8_t *currentCell = dungeon->currentLevel;
-      while ( currentCell < dungeon->currentLevel + LEVEL_WIDTH * LEVEL_HEIGHT )
       {
-        // fake? let's stay with the facts...
-        if ( *currentCell == FAKE_WALL ) { *currentCell = EMPTY; }
-        currentCell++;
+        // a compass will be displayed
+        dungeon->playerHasCompass = true;
+        // hooray!
+        serialPrintln( F("+ <Compass> found!") );
+        break;
       }
-      // hooray!
-      serialPrintln( F("+ <Amulet of True Sight> found!") );
-      break;
+    case ITEM_AMULET:
+      {    
+        // fake will be removed
+        dungeon->playerHasAmulet = true;
+        // remove all fake walls
+        uint8_t *currentCell = dungeon->currentLevel;
+        while ( currentCell < dungeon->currentLevel + LEVEL_WIDTH * LEVEL_HEIGHT )
+        {
+          // fake? let's stay with the facts...
+          if ( *currentCell == FAKE_WALL ) { *currentCell = EMPTY; }
+          currentCell++;
+        }
+        // hooray!
+        serialPrintln( F("+ <Amulet of True Sight> found!") );
+        break;
+      }
     case ITEM_RING:
-      // spinning and teleporting revealed by flashing the screen
-      dungeon->playerHasRing = 0xff;
-      // hooray!
-      serialPrintln( F("+ <Ring of Orientation> found!") );
-      break;
+      {    
+        // spinning and teleporting revealed by flashing the screen
+        dungeon->playerHasRing = 0xff;
+        // hooray!
+        serialPrintln( F("+ <Ring of Orientation> found!") );
+        break;
+      }
   }
 }
 
