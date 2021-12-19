@@ -190,7 +190,8 @@ void checkPlayerMovement( DUNGEON *dungeon )
             dungeon->playerX++; break;
           case SOUTH:
             dungeon->playerY++; break;
-          case WEST:
+          //case WEST:
+          default:  // this saves 4 bytes
             dungeon->playerX--; break;
         }
 
@@ -218,7 +219,8 @@ void checkPlayerMovement( DUNGEON *dungeon )
             dungeon->playerX--; break;
           case SOUTH:
             dungeon->playerY--; break;
-          case WEST:
+          //case WEST:
+          default:
             dungeon->playerX++; break;
         }
       

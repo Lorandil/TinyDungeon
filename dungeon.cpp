@@ -33,7 +33,8 @@ uint8_t *getCell( DUNGEON *dungeon, int8_t x, int8_t y, const int8_t distance, c
       y += offsetLR;
       break;
     }
-    case WEST:
+    //case WEST:
+    default:
     {
       x -= distance;
       y -= offsetLR;
