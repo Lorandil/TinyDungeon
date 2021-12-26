@@ -70,7 +70,7 @@ void loop()
   //_dungeon.levelWidth = LEVEL_WIDTH;
   //_dungeon.levelHeight = LEVEL_HEIGHT;
   // copy the level data to RAM
-  memcpy_P( _dungeon.currentLevel, Level_1 /*+ sizeof( LEVEL_HEADER )*/, LEVEL_WIDTH * LEVEL_HEIGHT );
+  memcpy_P( _dungeon.currentLevel, Level_1 /*+ sizeof( LEVEL_HEADER )*/, _dungeon.getLevelWidth() * _dungeon.getLevelHeight() );
 
   // clear text buffer
   clearTextBuffer();

@@ -68,11 +68,7 @@ enum
 };
 
 // DUNGEON
-#if !defined(__AVR_ATtiny85__)
-  class DUNGEON
-#else
-  typedef struct
-#endif
+class DUNGEON
 {
 public:
   int8_t  playerX;
@@ -87,6 +83,9 @@ public:
   int8_t  dice;
   uint8_t displayXorEffect;
   uint8_t currentLevel[MAX_LEVEL_BYTES];
+
+  static constexpr uint8_t getLevelWidth() { return( LEVEL_WIDTH ); }
+  static constexpr uint8_t getLevelHeight() { return( LEVEL_HEIGHT ); }
 
 #if !defined(__AVR_ATtiny85__)
   void serialPrint()
@@ -125,11 +124,7 @@ public:
     hexdumpToSerial( currentLevel, LEVEL_WIDTH * LEVEL_HEIGHT );
   }
 #endif
-#if !defined(__AVR_ATtiny85__)
 };
-#else
-} DUNGEON;
-#endif
 
 /*
 // LEVEL_HEADER
@@ -152,11 +147,7 @@ typedef struct
 
 // NON_WALL_OBJECT
 
-#if !defined(__AVR_ATtiny85__)
-  class NON_WALL_OBJECT
-#else
-  typedef struct
-#endif
+class NON_WALL_OBJECT
 {
   public:
   
@@ -187,12 +178,7 @@ typedef struct
     Serial.println();
   }
 #endif  
-
-#if defined(__AVR_ATtiny85__)
-} NON_WALL_OBJECT;
-#else
 };
-#endif
 
 
 // information for single wall display
@@ -219,11 +205,7 @@ typedef struct
 } SIMPLE_WALL_INFO;
 
 // interaction information
-#if !defined(__AVR_ATtiny85__)
-  class INTERACTION_INFO
-#else
-  typedef struct
-#endif
+class INTERACTION_INFO
 {
 public:
   // position in which the dungeon is interacted with
@@ -258,18 +240,10 @@ public:
     Serial.println();
   }
 #endif
-#if defined(__AVR_ATtiny85__)
-} INTERACTION_INFO;
-#else
 };
-#endif
 
 // interaction information
-#if !defined(__AVR_ATtiny85__)
-  class SPECIAL_CELL_INFO
-#else
-  typedef struct
-#endif
+class SPECIAL_CELL_INFO
 {
 public:
   // cell type
@@ -292,11 +266,7 @@ public:
     Serial.println();
   }
 #endif
-#if defined(__AVR_ATtiny85__)
-} SPECIAL_CELL_INFO;
-#else
 };
-#endif
 
 // orientations
 enum 

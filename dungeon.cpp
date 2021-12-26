@@ -44,7 +44,7 @@ uint8_t *getCell( DUNGEON *dungeon, int8_t x, int8_t y, const int8_t distance, c
 
   limitDungeonPosition( dungeon, x, y );
 
-  return( dungeon->currentLevel + y * LEVEL_WIDTH + x );
+  return( dungeon->currentLevel + y * dungeon->getLevelWidth() + x );
 }
 
 
@@ -52,10 +52,10 @@ uint8_t *getCell( DUNGEON *dungeon, int8_t x, int8_t y, const int8_t distance, c
 // Limits the position in the dungeon, but enables wrap-around :)
 void limitDungeonPosition( DUNGEON *dungeon, int8_t &x, int8_t &y )
 {
-  if ( x < 0 ) { x += LEVEL_WIDTH; }
-  if ( x >= LEVEL_WIDTH ) { x -= LEVEL_WIDTH; }
-  if ( y < 0 ) { y += LEVEL_HEIGHT; }
-  if ( y >= LEVEL_HEIGHT ) { y -= LEVEL_HEIGHT; }
+  if ( x < 0 ) { x += dungeon->getLevelWidth(); }
+  if ( x >= dungeon->getLevelWidth() ) { x -= dungeon->getLevelWidth(); }
+  if ( y < 0 ) { y += dungeon->getLevelHeight(); }
+  if ( y >= dungeon->getLevelHeight() ) { y -= dungeon->getLevelHeight(); }
 }
 
 
@@ -104,7 +104,7 @@ void openChest( DUNGEON *dungeon, INTERACTION_INFO &info )
         dungeon->playerHasAmulet = true;
         // remove all fake walls
         uint8_t *currentCell = dungeon->currentLevel;
-        while ( currentCell < dungeon->currentLevel + LEVEL_WIDTH * LEVEL_HEIGHT )
+        while ( currentCell < dungeon->currentLevel + dungeon->getLevelWidth() * dungeon->getLevelHeight() )
         {
           // fake? let's stay with the facts...
           if ( *currentCell == FAKE_WALL ) { *currentCell = EMPTY; }
