@@ -1,6 +1,7 @@
 # TinyDungeon
-***
- Just a simple DungeonMaster "clone". let's see how far we can get!
+
+Just a simple DungeonMaster "clone" for the ATtiny85 with an 128x64 OLED display (especially for the TinyJoypad platform).<br>
+Let's see how far we can get!
 
 ## The Idea
 When I discovered Daniel C's TinyJoypad project I was stunned by all the cool retro like
@@ -68,16 +69,17 @@ The state of the monsters should be persistent, so damaged monsters should stay 
 * The monster states need to be held in RAM at all times (perhaps EEPROM if code is not too expensive - 'EEPROM.write()' costs 36 bytes, 'EEPROM.update()' consts 62 bytes)
 
 ### Losing the game
-The player looses the game, if the hit points fall to 0 or below (use 'int8_t' for hit points!).
+The player loses the game, if the hit points fall to 0 or below (use 'int8_t' for hit points!).<br>
 If the game is lost, the game will restart after a short delay.
 If flash permits, there might be a sound or a flash effect.
 
-## Open Points
-* When does the player win?
-* What happens when the player wins?
-* When does the player lose (HP <= 0?)
-* Are there different weapons?
-* Can the player heal?
+### Winning the Game
+The player wins the game when... well yes - when does the player win?<br>
+What happens when the player wins?
+
+## Other Open Points
+* Are there different weapons? - nope!
+* Can the player heal? - perhaps ;)
 
 ## Engine Features
 * realtime rendering in 96x64
