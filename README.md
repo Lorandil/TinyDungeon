@@ -53,13 +53,6 @@ If it's the player's turn, the player can chose to attack by pressing the fire b
 If the monster survives the attack it will retaliate immediately.
 The monster might also hit the player when the player choses to retreat (1 and 2 on D8).
 
-### Monster Management
-The state of the monsters should be persistent, so damaged monsters should stay damaged (if possible).
-* How is the mapping between the dungeon cells and the monster data?
-* Perhaps an index is stored with the monster type in the dungeon
-* The monster states need to be held in RAM at all times (perhaps EEPROM if code is not too expensive - 'EEPROM.write()' costs 36 bytes, 'EEPROM.update()' consts 62 bytes)
-
-
 #### Damage
 The damage is determined by a roll of a D8 plus/minus some monster specific value. 
 Obviously the damage value is always positive.
@@ -67,6 +60,12 @@ The damage is shown in the top center of the screen (enlarged by 2?)
 
 ### Rewards on Dead Monsters
 Some monsters could leave a chest.
+
+### Monster Management
+The state of the monsters should be persistent, so damaged monsters should stay damaged (if possible).
+* How is the mapping between the dungeon cells and the monster data?
+* Perhaps an index is stored with the monster type in the dungeon
+* The monster states need to be held in RAM at all times (perhaps EEPROM if code is not too expensive - 'EEPROM.write()' costs 36 bytes, 'EEPROM.update()' consts 62 bytes)
 
 ### Losing the game
 The player looses the game, if the hit points fall to 0 or below (use 'int8_t' for hit points!).
@@ -80,7 +79,7 @@ If flash permits, there might be a sound or a flash effect.
 * Are there different weapons?
 * Can the player heal?
 
-### Engine Features
+## Engine Features
 * realtime rendering in 96x64
 * realtime bitmap scaling in up to three sizes (full, half, quarter) with a variable threshold for each view distance to optimize the visuals
 * all bitmaps have a mask to keep the background from shimmering through
@@ -98,7 +97,7 @@ If flash permits, there might be a sound or a flash effect.
 * Screenshot functionality: Dump screen content to serial port as a hexdump
   [only on MCUs with serial port, so not on ATtiny85 ;)]
 
-### Engine Limitations
+## Engine Limitations
 * some objects don't look good when scaled (even with a variable threshold)
 * on-wall objects (switches, doors) aren't rendered correctly when seen from the side -> architectual measures required (e.g. doors need to be set back by one field)
 * at the moment non-wall objects like monsters or chests are only rendered in front of the player.
