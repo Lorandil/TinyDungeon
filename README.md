@@ -12,7 +12,7 @@ When I had finished most of my ideas on that project, I thought of a game projec
 I always loved games like The Bard's Tale or DungeonMaster in the 80s and early 90s.
 Why not something like a 3D dungeon crawler on the TinyJoypad platform?
 
-## Features
+## Game Features
 * 3D graphics (ok, pseudo 3D)
 * Large dungeon size of 16x16 tiles
 * Three different monster types
@@ -24,6 +24,22 @@ Why not something like a 3D dungeon crawler on the TinyJoypad platform?
 * Bars
 * Switches
 * Sound effects
+
+### Engine Features
+* realtime rendering in 96x64
+* realtime bitmap scaling in up to three sizes (full, half, quarter) with a variable threshold to optimize the visuals
+* believable movement illusion when walking through tunnels (done by mirroring left and right wall bitmap every two steps)
+* different sound effects
+* some magic items
+* easily expandle scripted interactions (monsters, switches, chests, teleporters, spinners)
+* unlimited dungeon size (theoretically)
+* opimized for size (target system is an ANtiny85 with 512 bytes of RAM and 8kB of flash)
+
+### Engine Limitations
+* some objects don't look good when scaled (even with a variable threshold)
+* on-wall objects (switches, doors) aren't rendered correctly when seen from the side -> architectual measures required (e.g. doors need to be set back by one field)
+* at the moment non-wall objects like monsters or chests are only rendered in front of the player.
+* no floor or ceiling for now (mostly because of lack of memory)
 
 ## First Screenshots
 #### The player has found the compass!
@@ -53,10 +69,25 @@ If it's the player's turn, the player can chose to attack by pressing <fire> or 
 If the monster survives the attack it will retaliate immediately.
 The monster might also hit the player when the player choses to retreat (1 and 2 on D8).
 
+### Monster Management
+The state of the monsters should be persistent, so damaged monsters should stay damaged (if possible).
+* How is the mapping between the dungeon cells and the monster data?
+* Perhaps an index is stored with the monster type in the dungeon
+* The monster states need to be held in RAM at all times (perhaps EEPROM if code is not too expensive - 'EEPROM.write()' costs 36 bytes, 'EEPROM.update()' consts 62 bytes)
+
+
 #### Damage
 The damage is determined by a roll of a D8 plus/minus some monster specific value. 
 Obviously the damage value is always positive.
 The damage is shown in the top center of the screen (enlarged by 2?)
+
+### Rewards on Dead Monsters
+Some monsters could leave a chest.
+
+### Losing the game
+The player looses the game, if the hit points fall to 0 or below (use 'int8_t' for hit points!).
+If the game is lost, the game will restart after a short delay.
+If flash permits, there might be a sound or a flash effect.
 
 ## Open Points
 * When does the player win?

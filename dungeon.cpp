@@ -128,10 +128,7 @@ void openChest( DUNGEON *dungeon, INTERACTION_INFO &info )
 /*--------------------------------------------------------*/
 void updateDice( DUNGEON *dungeon )
 { 
-  dungeon->dice++; dungeon->dice &= MAX_DICE_VALUE;
+  dungeon->dice++; 
+  dungeon->dice &= MAX_DICE_VALUE;
   //serialPrint( F("D8 = ")); serialPrint( dungeon->dice + 1 );
-  //readAnalogJoystick();
-  //serialPrint( F(", analogX = ")); serialPrint( getAnalogValueX() );
-  //serialPrint( F(", analogY = ")); serialPrintln( getAnalogValueY() );
-
 }
