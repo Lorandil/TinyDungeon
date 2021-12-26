@@ -25,22 +25,6 @@ Why not something like a 3D dungeon crawler on the TinyJoypad platform?
 * Switches
 * Sound effects
 
-### Engine Features
-* realtime rendering in 96x64
-* realtime bitmap scaling in up to three sizes (full, half, quarter) with a variable threshold to optimize the visuals
-* believable movement illusion when walking through tunnels (done by mirroring left and right wall bitmap every two steps)
-* different sound effects
-* some magic items
-* easily expandle scripted interactions (monsters, switches, chests, teleporters, spinners)
-* unlimited dungeon size (theoretically)
-* opimized for size (target system is an ANtiny85 with 512 bytes of RAM and 8kB of flash)
-
-### Engine Limitations
-* some objects don't look good when scaled (even with a variable threshold)
-* on-wall objects (switches, doors) aren't rendered correctly when seen from the side -> architectual measures required (e.g. doors need to be set back by one field)
-* at the moment non-wall objects like monsters or chests are only rendered in front of the player.
-* no floor or ceiling for now (mostly because of lack of memory)
-
 ## First Screenshots
 #### The player has found the compass!
 ![Oh, I see!](https://github.com/Lorandil/TinyDungeon/blob/main/screenshots/compass_found!.png)
@@ -62,10 +46,10 @@ Why not something like a 3D dungeon crawler on the TinyJoypad platform?
 ## Combat System
 
 #### Initiative
-A die is thrown. If the result is even, the player attacks first, if odd the monster attacks first.
+A D8 is thrown. If the result is even, the player attacks first, if odd the monster attacks first.
 
 #### Attack or Run
-If it's the player's turn, the player can chose to attack by pressing <fire> or run away by moving back.
+If it's the player's turn, the player can chose to attack by pressing the fire button or run away by moving back.
 If the monster survives the attack it will retaliate immediately.
 The monster might also hit the player when the player choses to retreat (1 and 2 on D8).
 
@@ -96,19 +80,29 @@ If flash permits, there might be a sound or a flash effect.
 * Are there different weapons?
 * Can the player heal?
 
-## Technical Details
-* game window resolution is 96x48 pixels
-* on-the-fly bitmaps scaling (1x,2x,4x) with variable threshold and view distance
-* view distance is up to 3 tiles
-* Bitmaps can have a mask to keep the background from shimmering through
-* all interactions are scripted (not hardcoded)
+### Engine Features
+* realtime rendering in 96x64
+* realtime bitmap scaling in up to three sizes (full, half, quarter) with a variable threshold for each view distance to optimize the visuals
+* all bitmaps have a mask to keep the background from shimmering through
+* view distance is up to three tiles (depending on the object)
+* believable movement illusion when walking through tunnels (done by mirroring left and right wall bitmap every two steps)
+* different sound effects
+* some magic items
+* easily expandle scripted interactions (monsters, switches, chests, teleporters, spinners)
 * extensible design (levels, bitmaps, interactions, ...)
-* highly optimized code ;)
+* unlimited dungeon size (theoretically)
+* highly opimized for size (target system is an ANtiny85 with 512 bytes of RAM and 8kB of flash)
 * code compiles for ATtiny85 with xled1306 library
 * code compiles Arduino Uno R3, Arduino Mega 2560 and many boards more using
-  the Adafruit SSD1306 library (no sound support yet)
+  the Adafruit SSD1306 library
 * Screenshot functionality: Dump screen content to serial port as a hexdump
   [only on MCUs with serial port, so not on ATtiny85 ;)]
+
+### Engine Limitations
+* some objects don't look good when scaled (even with a variable threshold)
+* on-wall objects (switches, doors) aren't rendered correctly when seen from the side -> architectual measures required (e.g. doors need to be set back by one field)
+* at the moment non-wall objects like monsters or chests are only rendered in front of the player.
+* no floor or ceiling for now (mostly because of lack of memory)
 
 ## Current Size
 Sketch uses 7672 bytes (93%) of program storage space. Maximum is 8192 bytes (520 bytes remaining).
