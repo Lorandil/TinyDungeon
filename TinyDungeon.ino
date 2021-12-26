@@ -233,6 +233,9 @@ void checkPlayerMovement( DUNGEON *dungeon )
       }
     }
 
+    // always limit the positions
+    limitDungeonPosition( dungeon, dungeon->playerX, dungeon->playerY );
+
     // check for special cell effects like teleporter or spinner
     if ( playerHasReachedNewCell )
     {
@@ -353,8 +356,5 @@ void checkPlayerMovement( DUNGEON *dungeon )
         }
       }
     }
-    
-    // limit the positions
-    limitDungeonPosition( dungeon, dungeon->playerX, dungeon->playerY );
   }
 }
