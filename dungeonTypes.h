@@ -11,9 +11,9 @@ const uint8_t LEVEL_HEIGHT = 16;
 const uint16_t MAX_LEVEL_BYTES = LEVEL_WIDTH * LEVEL_HEIGHT;
 
 const uint8_t WINDOW_SIZE_X   = 96;
-const uint8_t WINDOW_CENTER_X = WINDOW_SIZE_X / 2;
+const uint8_t WINDOW_CENTER_X = WINDOW_SIZE_X / 2; /* = 48 */
 const uint8_t WINDOW_SIZE_Y   = 64;
-const uint8_t WINDOW_CENTER_Y = WINDOW_SIZE_Y / 2;
+const uint8_t WINDOW_CENTER_Y = WINDOW_SIZE_Y / 2; /* = 32 */
 
 // this position is true for every cell
 const uint8_t ANY_POSITION = 0xff;
@@ -30,32 +30,38 @@ const uint8_t MAX_DICE_VALUE  = 0x07;
 // possible item types
 enum
 {
-  // bit 3 is reserved for "SOLID" objects, making them unpassable
+  // bit 7 is reserved for marking objects as "SOLID", making them impassable
   FLAG_SOLID          = 0x08,
 
-  WALL_MASK           = 0x07,
+  WALL_MASK           = 0x10,
   OBJECT_MASK         = 0xF0 | FLAG_SOLID,
 
   EMPTY               = 0x00,
-  // fake wall
-  FAKE_WALL           = 0x01,
-  // solid wall
-  WALL                = 0x01 | FLAG_SOLID,
-  TELEPORTER          = 0x02,
-  SPINNER             = 0x03,
-  //STAIRS_UP           = 0x04 | FLAG_SOLID,
-  //STAIRS_DWN          = 0x05 | FLAG_SOLID,
 
-  RAT                 = 0x10,// | FLAG_SOLID,
-  SKELETON            = 0x20,// | FLAG_SOLID,
-  BEHOLDER            = 0x30,// | FLAG_SOLID,
-  CLOSED_CHEST        = 0x40,// | FLAG_SOLID,
-  OPEN_CHEST          = 0x50,// | FLAG_SOLID,
-  FOUNTAIN            = 0x60 | FLAG_SOLID,
-  DOOR                = 0x70 | FLAG_SOLID,
-  BARS                = 0x80 | FLAG_SOLID,
-  LVR_UP              = 0x90 | FLAG_SOLID,
-  LVR_DWN             = 0xA0 | FLAG_SOLID,
+  // Caution! The following objects are always rendered *on* a wall,
+  // so the wall bit (0) is always set!
+  FAKE_WALL           = 0x10,
+  WALL                = FAKE_WALL | FLAG_SOLID,
+  DOOR                = 0x30	| FLAG_SOLID,
+  LVR_UP              = 0x50	| FLAG_SOLID,
+  LVR_DWN             = 0x70	| FLAG_SOLID,
+
+  // Caution! The following objects are *never* rendered on a wall,
+  // so the wall bit (0) must be '0'
+  RAT                 = 0x20, // | FLAG_SOLID,
+  SKELETON            = 0x40, // | FLAG_SOLID,
+  BEHOLDER            = 0x60, // | FLAG_SOLID,
+  CLOSED_CHEST        = 0x80, // | FLAG_SOLID,
+  OPEN_CHEST          = 0xA0, // | FLAG_SOLID,
+  FOUNTAIN            = 0xC0 | FLAG_SOLID,
+  BARS                = 0xE0 | FLAG_SOLID,
+};
+
+// special FX types
+enum 
+{
+  TELEPORTER          = 0x01,
+  SPINNER             = 0x02,
 };
 
 // list of items in chests or monster treasure
@@ -64,7 +70,9 @@ enum
   ITEM_NONE    = 0x00,
   ITEM_COMPASS = 0x01,
   ITEM_AMULET  = 0x02,
-  ITEM_RING    = 0x03,
+  ITEM_RING    = 0x04,
+  ITEM_KEY     = 0x08,
+  ITEM_POTION  = 0x10,
 };
 
 // DUNGEON
@@ -146,7 +154,6 @@ typedef struct
 */
 
 // NON_WALL_OBJECT
-
 class NON_WALL_OBJECT
 {
   public:
@@ -183,8 +190,10 @@ class NON_WALL_OBJECT
 
 // information for single wall display
 // SIMPLE_WALL_INFO
-typedef struct
+class SIMPLE_WALL_INFO
 {
+  public:
+	
   // wall bitmap to use
   const uint8_t *wallBitmap;
   // screen start position for this bitmap
@@ -201,8 +210,7 @@ typedef struct
   int8_t   leftRightOffset;
   // object selector, e.g. WALL
   uint8_t  objectMask;
-  
-} SIMPLE_WALL_INFO;
+};
 
 // interaction information
 class INTERACTION_INFO

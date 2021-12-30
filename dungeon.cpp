@@ -50,7 +50,7 @@ uint8_t *getCell( DUNGEON *dungeon, int8_t x, int8_t y, const int8_t distance, c
 
 /*--------------------------------------------------------*/
 // Limits the position in the dungeon, but enables wrap-around :)
-void limitDungeonPosition( DUNGEON *dungeon, int8_t &x, int8_t &y )
+void limitDungeonPosition( const DUNGEON *dungeon, int8_t &x, int8_t &y )
 {
   if ( x < 0 ) { x += dungeon->getLevelWidth(); }
   if ( x >= dungeon->getLevelWidth() ) { x -= dungeon->getLevelWidth(); }
@@ -61,16 +61,13 @@ void limitDungeonPosition( DUNGEON *dungeon, int8_t &x, int8_t &y )
 
 /*--------------------------------------------------------*/
 // updates the compass and the player stats
-void updateStatusPane( DUNGEON *dungeon )
+void updateStatusPane( const DUNGEON *dungeon )
 {
   // display viewing direction
   uint8_t *textBuffer = getTextBuffer();
 
   // display compass
-  //if ( dungeon->playerHasCompass ) 
-  { textBuffer[POS_COMPASS] = pgm_read_byte( directionLetter + dungeon->dir ); }
-  //else // show '?'
-  //{ textBuffer[POS_COMPASS] = '>'; }
+  textBuffer[POS_COMPASS] = pgm_read_byte( directionLetter + dungeon->dir );
 
   // and the hitpoints
   convertValueToDigits( dungeon->playerHP, textBuffer + POS_HITPOINTS );

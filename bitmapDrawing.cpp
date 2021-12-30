@@ -35,16 +35,16 @@ uint8_t getWallPixels( DUNGEON *dungeon, const int8_t x, const int8_t y )
         if ( ( y >= wallInfo.startPosY ) && ( y <= wallInfo.endPosY ) )
         {
           // mirror walls on odd fields
-          uint8_t offsetX = ( ( dungeon->playerX + dungeon->playerY ) & 0x01 ) ? 95 - x : x;
+          uint8_t offsetX = ( ( dungeon->playerX + dungeon->playerY ) & 0x01 ) ? ( WINDOW_SIZE_X - 1 ) - x : x;
           // get wall pixels (shave off the empty rows)
-          pixels = pgm_read_byte( wallInfo.wallBitmap + ( y - wallInfo.startPosY ) * 96 + offsetX );
+          pixels = pgm_read_byte( wallInfo.wallBitmap + ( y - wallInfo.startPosY ) * WINDOW_SIZE_X + offsetX );
         }
         else
         {
           // nope, just nothing
           pixels = 0;
         }
-        // objects behind walls are not invisible, but doors or switches might be placed *on* walls
+        // objects behind walls are not visible, but doors or switches might be placed *on* walls
         maxObjectDistance = wallInfo.viewDistance;
         // that's it!
         break;
@@ -56,7 +56,7 @@ uint8_t getWallPixels( DUNGEON *dungeon, const int8_t x, const int8_t y )
 
   NON_WALL_OBJECT object;
 
-  // draw NWOs (Non Wall Objects) over the wall pixls (with mask!)
+  // draw NWOs (Non Wall Objects) over the background pixels (with mask!)
   for ( uint8_t distance = maxObjectDistance; distance > 0; distance-- )
   {
     for ( uint8_t n = 0; n < sizeof( objectList ) / sizeof( objectList[0] ); n++ )
@@ -64,6 +64,7 @@ uint8_t getWallPixels( DUNGEON *dungeon, const int8_t x, const int8_t y )
       memcpy_P( &object, &objectList[n], sizeof( object ) );
       uint8_t objectWidth = object.bitmapWidth >> distance;
 
+      // non wall objects will only be rendered if directly in front of the player (for now!)
       if ( ( x >= WINDOW_CENTER_X - objectWidth ) && ( x < WINDOW_CENTER_X + objectWidth ) )
       {
         if ( ( *( getCell( dungeon, dungeon->playerX, dungeon->playerY, distance, 0, dungeon->dir ) ) & OBJECT_MASK ) == object.itemType )

@@ -54,7 +54,7 @@ void loop()
   memset( &_dungeon, 0x00, sizeof( _dungeon ) );
 
   // Prepare the dungeon
-  _dungeon.playerX = 5;
+  _dungeon.playerX = 5; // could save 4 bytes here, if the whole level is shifted, so that the starting point is at (0,0)
   _dungeon.playerY = 3;
   //_dungeon.dir  = NORTH; // NORTH = 0!
   // prepare player stats

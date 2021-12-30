@@ -94,8 +94,7 @@ What happens when the player wins?
 * unlimited dungeon size (theoretically)
 * highly opimized for size (target system is an ANtiny85 with 512 bytes of RAM and 8kB of flash)
 * code compiles for ATtiny85 with xled1306 library
-* code compiles Arduino Uno R3, Arduino Mega 2560 and many boards more using
-  the Adafruit SSD1306 library
+* code compiles for Arduino Uno R3, Arduino Mega 2560 and many boards more using the Adafruit SSD1306 library (encapsuled in `"tinyJoypadUtils.h"`)
 * Screenshot functionality: Dump screen content to serial port as a hexdump
   [only on MCUs with serial port, so not on ATtiny85 ;)]
 
@@ -105,8 +104,11 @@ What happens when the player wins?
 * at the moment non-wall objects like monsters or chests are only rendered in front of the player.
 * no floor or ceiling for now (mostly because of lack of memory)
 
+## Optimization Potential
+* is the NON_WALL_OBJECT view distance really necessary? Wouldn't it suffice to set the threshold to 99? 
+
 ## Current Size
-Sketch uses 7672 bytes (93%) of program storage space. Maximum is 8192 bytes (520 bytes remaining).
+Sketch uses 7668 bytes (93%) of program storage space. Maximum is 8192 bytes (524 bytes remaining).
 Global variables use 343 bytes (66%) of dynamic memory, leaving 169 bytes for local variables. Maximum is 512 bytes.
 
 ## License
