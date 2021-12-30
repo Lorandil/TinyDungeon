@@ -72,6 +72,9 @@ void loop()
   // copy the level data to RAM
   memcpy_P( _dungeon.currentLevel, Level_1 /*+ sizeof( LEVEL_HEADER )*/, _dungeon.getLevelWidth() * _dungeon.getLevelHeight() );
 
+  // populate dungeon with monsters
+  memcpy_P( _dungeon.monsterStats, monsterStats, sizeof( monsterStats ) );
+
   // clear text buffer
   clearTextBuffer();
 
@@ -252,9 +255,7 @@ void checkPlayerMovement( DUNGEON *dungeon )
         memcpy_P( &specialCellInfo, &specialCellFX[n], sizeof( specialCellInfo ) );
 
         // does this entry refer to the current position?
-        if (    ( specialCellInfo.positionX == dungeon->playerX )
-             && ( specialCellInfo.positionY == dungeon->playerY )
-          )
+        if ( specialCellInfo.position == dungeon->playerX + dungeon->playerY * dungeon->getLevelWidth() )
         {
         #if !defined(__AVR_ATtiny85__)
           // print the special effect...
@@ -289,69 +290,76 @@ void checkPlayerMovement( DUNGEON *dungeon )
 
         #if !defined(__AVR_ATtiny85__)
           dungeon->serialPrint();
-          Serial.print( F("dungeon = ") );Serial.print( uint16_t( dungeon ) );
-          Serial.print( F(", cell = ") );Serial.println( uint16_t( cell ) );
-          Serial.println();
           Serial.print(F("*cell = "));printHexToSerial( cellValue );Serial.println();
         #endif
 
-        INTERACTION_INFO interactionInfo;
-        for ( uint8_t n = 0; n < sizeof( interactionData ) / sizeof( INTERACTION_INFO ); n++ )
+        switch( cellValue )
         {
-          // get data from progmem
-          memcpy_P( &interactionInfo, interactionData + n, sizeof( INTERACTION_INFO ) );
-
-          // does this info cover the current position?
-          if (    ( cell == dungeon->currentLevel + interactionInfo.currentPosition )
-              //|| ( interactionInfo.currentPosition == ANY_POSITION )
-            )
+        // Monstaz!
+        case SKELETON:
+        case BEHOLDER:
+        case RAT:
           {
-            // is the status correct?
-            if ( ( cellValue & interactionInfo.currentStatusMask ) == interactionInfo.currentStatus )
+            // let's fight!
+            fightMonster( dungeon, dungeon->playerX + dungeon->playerY * dungeon->getLevelWidth() );
+            break;
+          }
+        default:
+          {        
+            INTERACTION_INFO interactionInfo;
+            for ( uint8_t n = 0; n < sizeof( interactionData ) / sizeof( INTERACTION_INFO ); n++ )
             {
-            #if !defined(__AVR_ATtiny85__)
-              Serial.print(F("+ Matching entry found <"));Serial.print( n );Serial.println(F(">"));
-              // print entry information
-              interactionInfo.serialPrint();
-            #endif
+              // get data from progmem
+              memcpy_P( &interactionInfo, interactionData + n, sizeof( INTERACTION_INFO ) );
 
-            bool modifyCurrentPosition = true;
-            bool modifyTargetPosition = true;
-
-              // special handling for special types
-              switch ( cellValue )
+              // does this info cover the current position?
+              if (    ( cell == dungeon->currentLevel + interactionInfo.currentPosition )
+                  //|| ( interactionInfo.currentPosition == ANY_POSITION )
+                )
               {
-              case CLOSED_CHEST:
+                // is the status correct?
+                if ( ( cellValue & interactionInfo.currentStatusMask ) == interactionInfo.currentStatus )
                 {
-                  // plunder the chest!
-                  openChest( dungeon, interactionInfo );
+                #if !defined(__AVR_ATtiny85__)
+                  Serial.print(F("+ Matching entry found <"));Serial.print( n );Serial.println(F(">"));
+                  // print entry information
+                  interactionInfo.serialPrint();
+                #endif
+
+                bool modifyCurrentPosition = true;
+                bool modifyTargetPosition = true;
+
+                  // special handling for special types
+                  switch ( cellValue )
+                  {
+                  case CLOSED_CHEST:
+                    {
+                      // plunder the chest!
+                      openChest( dungeon, interactionInfo );
+                      break;
+                    }
+                  }
+
+                  if ( modifyCurrentPosition )
+                  {
+                    // change current position
+                    *cell = ( cellValue - interactionInfo.currentStatus ) | interactionInfo.nextStatus;
+                  }
+
+                  if ( modifyTargetPosition )
+                  {
+                    // modify target position
+                    dungeon->currentLevel[interactionInfo.modifiedPosition] = interactionInfo.modifiedPositionCellValue;
+                  }
+
+                  swordSound();
+                  
+                  // perform only the first action, otherwise on/off actions might be immediately revoked ;)
                   break;
                 }
-              // Monstaz!
-              case SKELETON:
-              case BEHOLDER:
-                {
-                  break;
-                }
               }
-
-              if ( modifyCurrentPosition )
-              {
-                // change current position
-                *cell = ( cellValue - interactionInfo.currentStatus ) | interactionInfo.nextStatus;
-              }
-
-              if ( modifyTargetPosition )
-              {
-                // modify target position
-                dungeon->currentLevel[interactionInfo.modifiedPosition] = interactionInfo.modifiedPositionCellValue;
-              }
-
-              swordSound();
-              
-              // perform only the first action, otherwise on/off actions might be immediately revoked ;)
-              break;
             }
+            break;
           }
         }
       }

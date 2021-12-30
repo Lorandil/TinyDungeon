@@ -129,3 +129,10 @@ void updateDice( DUNGEON *dungeon )
   dungeon->dice &= MAX_DICE_VALUE;
   //serialPrint( F("D8 = ")); serialPrint( dungeon->dice + 1 );
 }
+
+/*--------------------------------------------------------*/
+void fightMonster( DUNGEON *dungeon, const uint8_t position )
+{
+  serialPrintln(F("fightMonster()") );
+  // find the monster  
+}

@@ -10,6 +10,9 @@ const uint8_t LEVEL_WIDTH = 16;
 const uint8_t LEVEL_HEIGHT = 16;
 const uint16_t MAX_LEVEL_BYTES = LEVEL_WIDTH * LEVEL_HEIGHT;
 
+const uint8_t MAX_MONSTERS = 8;
+const uint8_t MONSTER_INDEX_MASK = ( MAX_MONSTERS - 1 );
+
 const uint8_t WINDOW_SIZE_X   = 96;
 const uint8_t WINDOW_CENTER_X = WINDOW_SIZE_X / 2; /* = 48 */
 const uint8_t WINDOW_SIZE_Y   = 64;
@@ -35,6 +38,8 @@ enum
 
   WALL_MASK           = 0x10,
   OBJECT_MASK         = 0xF0 | FLAG_SOLID,
+  // mask for retreiving the index from the cell data (used for managing monsters)
+  INDEX_MASK          = 0x07,
 
   EMPTY               = 0x00,
 
@@ -73,7 +78,37 @@ enum
   ITEM_RING    = 0x04,
   ITEM_KEY     = 0x08,
   ITEM_POTION  = 0x10,
+  ITEM_VICTORY = 0x80,
 };
+
+
+// monster stats
+class MONSTER_STATS
+{
+  public:
+  // monster position (byte offset from level start)
+  uint8_t position;
+  // hit points
+  int8_t  hitpoints;
+  // damage (additional to 1D8)
+  int8_t  damageBonus;
+  // monster attacks first?
+  uint8_t attacksFirst;
+  // treasure (bit mask)
+  uint8_t treasureMask;
+#if !defined(__AVR_ATtiny85__)
+  void serialPrint() 
+  {
+    Serial.print( F("  position     = ( ") ); Serial.print( position % LEVEL_WIDTH ); Serial.print(F(",")); Serial.print( position / LEVEL_WIDTH ); Serial.println(F(")"));
+    Serial.print( F("  hitpoints    = ") ); Serial.println( hitpoints );
+    Serial.print( F("  damageBonus  = (") ); Serial.println( damageBonus );
+    Serial.print( F("  attacksFirst = (") ); Serial.println( ( attacksFirst != 0 ) ? "yes" : "no" );
+    Serial.print( F("  treasureMask = (") ); Serial.println( treasureMask );
+    Serial.println();
+  }
+#endif
+};
+
 
 // DUNGEON
 class DUNGEON
@@ -91,6 +126,7 @@ public:
   int8_t  dice;
   uint8_t displayXorEffect;
   uint8_t currentLevel[MAX_LEVEL_BYTES];
+  MONSTER_STATS monsterStats[MAX_MONSTERS];
 
   static constexpr uint8_t getLevelWidth() { return( LEVEL_WIDTH ); }
   static constexpr uint8_t getLevelHeight() { return( LEVEL_HEIGHT ); }
@@ -128,8 +164,8 @@ public:
     Serial.println();
     }
     Serial.println();
-    hexdumpResetPositionCount();
-    hexdumpToSerial( currentLevel, LEVEL_WIDTH * LEVEL_HEIGHT );
+    //hexdumpResetPositionCount();
+    //hexdumpToSerial( currentLevel, LEVEL_WIDTH * LEVEL_HEIGHT );
   }
 #endif
 };
@@ -162,7 +198,6 @@ class NON_WALL_OBJECT
   uint8_t bitmapWidth;
   uint8_t bitmapVerticalOffsetInBits;
   uint8_t bitmapHeightInBits;
-  //uint8_t maskOffset;
   uint8_t nextLineOffset;
   uint8_t maxViewDistance;
   uint8_t scalingThreshold[3];
@@ -176,7 +211,6 @@ class NON_WALL_OBJECT
     Serial.print( F("  bitmapWidth                  = ") );Serial.print( bitmapWidth );Serial.println();
     Serial.print( F("  bitmapVerticalOffsetInBytes  = ") );Serial.print( bitmapVerticalOffsetInBits );Serial.println();
     Serial.print( F("  bitmapHeightInBytes          = ") );Serial.print( bitmapHeightInBits );Serial.println();
-    //Serial.print( F("  maskOffset                   = ") );Serial.print( maskOffset );Serial.println();
     Serial.print( F("  nextLineOffset               = ") );Serial.println( nextLineOffset );
     Serial.print( F("  maxViewDistance              = ") );Serial.println( maxViewDistance );
     Serial.print( F("  scalingThreshold[0]          = ") );Serial.print( scalingThreshold[1] );Serial.println();
@@ -256,10 +290,8 @@ class SPECIAL_CELL_INFO
 public:
   // cell type
   uint8_t specialFX;
-  // x-position of the effect
-  uint8_t positionX;
-  // y-position of the effect
-  uint8_t positionY;
+  // combined xy-position of the effect (as byte offset from level start)
+  uint8_t position;
   // additional parameter 1 (target position x, ...)
   uint8_t value_1;
   // additional parameter 2 (target position y, ...)
@@ -269,7 +301,7 @@ public:
   void serialPrint() 
   {
     Serial.print( F("  specialFX    = ") );if ( specialFX == TELEPORTER ) { Serial.println( F("TELEPORTER") ); } else { Serial.println( F("SPINNER") ); }
-    Serial.print( F("  position     = (") );Serial.print( positionX ); Serial.print( F(", ") );Serial.print( positionY );Serial.println( F(")"));
+    //Serial.print( F("  position     = (") );Serial.print( position % LEVEL_WIDTH ); Serial.print( F(", ") );Serial.print( position / LEVEL_WIDTH );Serial.println( F(")"));
     Serial.print( F("  value        = (") );Serial.print( value_1 ); Serial.print( F(", ") );Serial.print( value_2 );Serial.println( F(")"));
     Serial.println();
   }
