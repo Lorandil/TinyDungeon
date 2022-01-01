@@ -37,7 +37,7 @@ enum
   FLAG_MONSTER        = 0x04,
   // bit 3 is reserved for marking objects as "SOLID", making them impassable
   FLAG_SOLID          = 0x08,
-
+  
   WALL_MASK           = 0x10,
   OBJECT_MASK         = 0xF0 | FLAG_SOLID | FLAG_MONSTER,
 
