@@ -136,7 +136,7 @@ void updateDice( DUNGEON *dungeon )
 // If no monster is found, everything goes directly to hell :)
 MONSTER_STATS *findMonster( DUNGEON *dungeon, const uint8_t position )
 {
-  serialPrint(F("findMonster( position = ")); serialPrint( position ); serialPrintln(F(" )"));
+  serialPrint(F("findMonster( position = (")); serialPrint( position % dungeon->getLevelWidth()); serialPrint(F(", ")); serialPrint( position / dungeon->getLevelWidth());serialPrintln(F(") )"));
 
   // no monster found
   MONSTER_STATS *monster = dungeon->monsterStats;
@@ -163,9 +163,9 @@ MONSTER_STATS *findMonster( DUNGEON *dungeon, const uint8_t position )
     if ( monster >= maxMonster )
     {
       // print error message
-      serialPrint(F("*** No entry found for monster on position (")); serialPrint( position % dungeon->getLevelWidth() ); serialPrint(F(", ")); serialPrint( position / dungeon->getLevelWidth() ); serialPrintln(F(")"));
+      serialPrint(F("*** No entry found for monster at position (")); serialPrint( position % dungeon->getLevelWidth() ); serialPrint(F(", ")); serialPrint( position / dungeon->getLevelWidth() ); serialPrintln(F(")"));
       // leave function early
-      break;
+      return( nullptr );
     }
 #endif
   }
@@ -183,10 +183,18 @@ MONSTER_STATS *findMonster( DUNGEON *dungeon, const uint8_t position )
 // If no monster is found, everything goes directly to hell :)
 void fightMonster( DUNGEON *dungeon, const uint8_t position )
 {
-  serialPrint(F("fightMonster( position = ")); serialPrint( position ); serialPrintln(F(" )"));
-
   // find the monster...
   MONSTER_STATS *monster = findMonster( dungeon, position );
+
+  serialPrint(F("fightMonster( position = (")); serialPrint( position % dungeon->getLevelWidth()); serialPrint(F(", ")); serialPrint( position / dungeon->getLevelWidth());serialPrintln(F(") )"));
+
+#ifdef USE_EXTENDED_CHECKS
+  if ( !monster ) 
+  { 
+    serialPrintln(F("*** No monster - no fight!"));
+    return;
+  }
+#endif
 
   // attack the monster (use D7 + player's damage bonus)
   monster->hitpoints -= dungeon->dice + dungeon->playerDAM;
