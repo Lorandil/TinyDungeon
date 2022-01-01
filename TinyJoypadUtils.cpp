@@ -291,7 +291,7 @@ void TinyFlip_CheckForSerialScreenshot()
 /*-------------------------------------------------------*/
 void serialPrint( const char *text )
 {
-#if !defined(__AVR_ATtiny85__)
+#ifdef USE_SERIAL_PRINT
   Serial.print( text );
 #endif
 }
@@ -299,7 +299,7 @@ void serialPrint( const char *text )
 /*-------------------------------------------------------*/
 void serialPrintln( const char *text )
 {
-#if !defined(__AVR_ATtiny85__)
+#ifdef USE_SERIAL_PRINT
   Serial.println( text );
 #endif
 }
@@ -307,7 +307,7 @@ void serialPrintln( const char *text )
 /*-------------------------------------------------------*/
 void serialPrint( const __FlashStringHelper *text )
 {
-#if !defined(__AVR_ATtiny85__)
+#ifdef USE_SERIAL_PRINT
   Serial.print( text );
 #endif
 }
@@ -315,7 +315,7 @@ void serialPrint( const __FlashStringHelper *text )
 /*-------------------------------------------------------*/
 void serialPrintln( const __FlashStringHelper *text )
 {
-#if !defined(__AVR_ATtiny85__)
+#ifdef USE_SERIAL_PRINT
   Serial.println( text );
 #endif
 }
@@ -323,7 +323,7 @@ void serialPrintln( const __FlashStringHelper *text )
 /*-------------------------------------------------------*/
 void serialPrint( const uint16_t number )
 {
-#if !defined(__AVR_ATtiny85__)
+#ifdef USE_SERIAL_PRINT
   Serial.print( number );
 #endif
 }
@@ -331,7 +331,7 @@ void serialPrint( const uint16_t number )
 /*-------------------------------------------------------*/
 void serialPrintln( const uint16_t number )
 {
-#if !defined(__AVR_ATtiny85__)
+#ifdef USE_SERIAL_PRINT
   Serial.println( number );
 #endif
 }
@@ -339,7 +339,7 @@ void serialPrintln( const uint16_t number )
 /*-------------------------------------------------------*/
 void serialPrint( const int16_t number )
 {
-#if !defined(__AVR_ATtiny85__)
+#ifdef USE_SERIAL_PRINT
   Serial.print( number );
 #endif
 }
@@ -347,7 +347,7 @@ void serialPrint( const int16_t number )
 /*-------------------------------------------------------*/
 void serialPrintln( const int16_t number )
 {
-#if !defined(__AVR_ATtiny85__)
+#ifdef USE_SERIAL_PRINT
   Serial.println( number );
 #endif
 }

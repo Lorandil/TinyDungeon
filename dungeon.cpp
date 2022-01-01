@@ -126,13 +126,96 @@ void openChest( DUNGEON *dungeon, INTERACTION_INFO &info )
 void updateDice( DUNGEON *dungeon )
 { 
   dungeon->dice++; 
-  dungeon->dice &= MAX_DICE_VALUE;
-  //serialPrint( F("D8 = ")); serialPrint( dungeon->dice + 1 );
+  dungeon->dice &= DICE_MASK;
+  //serialPrint( F("D8 = ")); serialPrintln( dungeon->dice + 1 );
 }
 
 /*--------------------------------------------------------*/
+// Every single monster is mapped to an entry in the monsterStats table.
+// The table size is only (sic!) restricted by the RAM size (change to EEPROM???).
+// If no monster is found, everything goes directly to hell :)
+MONSTER_STATS *findMonster( DUNGEON *dungeon, const uint8_t position )
+{
+  serialPrint(F("findMonster( position = ")); serialPrint( position ); serialPrintln(F(" )"));
+
+  // no monster found
+  MONSTER_STATS *monster = dungeon->monsterStats;
+
+#ifdef USE_EXTENDED_CHECKS
+  MONSTER_STATS *maxMonster = monster + sizeof( dungeon->monsterStats ) / sizeof( dungeon->monsterStats[0] );
+#endif
+
+  // find the monster
+  while ( true  )
+  {
+    if ( monster->position == position )
+    {
+      // monster found!
+      serialPrintln(F("+ Monster found!") );
+      break;
+    }
+    serialPrintln(F("- nope") );
+    // next monster
+    monster++;
+
+#ifdef USE_EXTENDED_CHECKS
+    // check if we are leaving the table
+    if ( monster >= maxMonster )
+    {
+      // print error message
+      serialPrint(F("*** No entry found for monster on position (")); serialPrint( position % dungeon->getLevelWidth() ); serialPrint(F(", ")); serialPrint( position / dungeon->getLevelWidth() ); serialPrintln(F(")"));
+      // leave function early
+      break;
+    }
+#endif
+  }
+
+#ifdef USE_SERIAL_PRINT
+  monster->serialPrint();
+#endif
+
+  return( monster );
+}
+
+/*--------------------------------------------------------*/
+// Every single monster is mapped to an entry in the monsterStats table.
+// The table size is only (sic!) restricted by the RAM size (change to EEPROM???).
+// If no monster is found, everything goes directly to hell :)
 void fightMonster( DUNGEON *dungeon, const uint8_t position )
 {
-  serialPrintln(F("fightMonster()") );
-  // find the monster  
+  serialPrint(F("fightMonster( position = ")); serialPrint( position ); serialPrintln(F(" )"));
+
+  // find the monster...
+  MONSTER_STATS *monster = findMonster( dungeon, position );
+
+  // attack the monster (use D7 + player's damage bonus)
+  monster->hitpoints -= dungeon->dice + dungeon->playerDAM;
+
+  // wait for fire button to be released
+  while ( isFirePressed() )
+  {
+    updateDice( dungeon );
+  }
+
+  // monster retaliates
+  int8_t damage = dungeon->dice + monster->damageBonus;
+  if ( damage > 0 )
+  {
+    dungeon->playerHP -= damage;
+  }
+  
+#ifdef USE_SERIAL_PRINT
+  monster->serialPrint();
+#endif
+
+  // is the monster dead?
+  if ( monster->hitpoints < 0 )
+  {
+    // the monster has been defeated!
+    serialPrintln(F("Monster defeated!"));
+    // remove the monster from the dungeon
+    dungeon->currentLevel[position] = EMPTY;
+    // remove line from monster list?
+    // ...
+  }
 }

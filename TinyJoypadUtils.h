@@ -5,6 +5,7 @@
 // required for _delay_us()
 #include <ssd1306xled.h>
 
+
 ////////////////////////////////////////////////////////////
 // Pin definitions for the joystick and the fire button
 #if defined(__AVR_ATtiny85__)
@@ -15,6 +16,9 @@
   #define SOUND_PIN          4
   #define SOUND_PORT_DDR  DDRB
   #define SOUND_PORT     PORTB
+  // disable extended features
+  #undef USE_EXTENDED_CHECKS
+  #undef USE_SERIAL_PRINT
 #else
   #if defined(__AVR_ATmega2560__)
     // Arduino Mega 2560 (and compatible)
@@ -49,6 +53,9 @@
     #define SOUND_PORT_DDR  DDRB
     #define SOUND_PORT     PORTB
   #endif
+  // use extensive checks (not memory restricted by ATtiny85...)
+  #define USE_EXTENDED_CHECKS
+  #define USE_SERIAL_PRINT
 #endif
 
 

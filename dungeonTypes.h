@@ -28,18 +28,18 @@ const uint8_t POS_DAMAGE      = 5 * 8 + 5;
 const uint8_t POS_KEYS        = 6 * 8 + 5;
 
 // we will be using an old fashioned D8 (counting from 0 to 7)
-const uint8_t MAX_DICE_VALUE  = 0x07;
+const uint8_t DICE_MASK  = 0x07;
 
 // possible item types
 enum
 {
-  // bit 7 is reserved for marking objects as "SOLID", making them impassable
+  // bit 2 marks an object as a "monster" 
+  FLAG_MONSTER        = 0x04,
+  // bit 3 is reserved for marking objects as "SOLID", making them impassable
   FLAG_SOLID          = 0x08,
 
   WALL_MASK           = 0x10,
-  OBJECT_MASK         = 0xF0 | FLAG_SOLID,
-  // mask for retreiving the index from the cell data (used for managing monsters)
-  INDEX_MASK          = 0x07,
+  OBJECT_MASK         = 0xF0 | FLAG_SOLID | FLAG_MONSTER,
 
   EMPTY               = 0x00,
 
@@ -53,9 +53,9 @@ enum
 
   // Caution! The following objects are *never* rendered on a wall,
   // so the wall bit (0) must be '0'
-  RAT                 = 0x20, // | FLAG_SOLID,
-  SKELETON            = 0x40, // | FLAG_SOLID,
-  BEHOLDER            = 0x60, // | FLAG_SOLID,
+  RAT                 = 0x20 | FLAG_MONSTER | FLAG_SOLID,
+  SKELETON            = 0x40 | FLAG_MONSTER | FLAG_SOLID,
+  BEHOLDER            = 0x60 | FLAG_MONSTER | FLAG_SOLID,
   CLOSED_CHEST        = 0x80, // | FLAG_SOLID,
   OPEN_CHEST          = 0xA0, // | FLAG_SOLID,
   FOUNTAIN            = 0xC0 | FLAG_SOLID,
@@ -99,11 +99,11 @@ class MONSTER_STATS
 #if !defined(__AVR_ATtiny85__)
   void serialPrint() 
   {
-    Serial.print( F("  position     = ( ") ); Serial.print( position % LEVEL_WIDTH ); Serial.print(F(",")); Serial.print( position / LEVEL_WIDTH ); Serial.println(F(")"));
+    Serial.print( F("  position     = (") ); Serial.print( position % LEVEL_WIDTH ); Serial.print(F(", ")); Serial.print( position / LEVEL_WIDTH ); Serial.println(F(")"));
     Serial.print( F("  hitpoints    = ") ); Serial.println( hitpoints );
-    Serial.print( F("  damageBonus  = (") ); Serial.println( damageBonus );
-    Serial.print( F("  attacksFirst = (") ); Serial.println( ( attacksFirst != 0 ) ? "yes" : "no" );
-    Serial.print( F("  treasureMask = (") ); Serial.println( treasureMask );
+    Serial.print( F("  damageBonus  = ") ); Serial.println( damageBonus );
+    Serial.print( F("  attacksFirst = ") ); Serial.println( ( attacksFirst != 0 ) ? "yes" : "no" );
+    Serial.print( F("  treasureMask = ") ); Serial.println( treasureMask );
     Serial.println();
   }
 #endif
@@ -143,22 +143,23 @@ public:
     Serial.print(F(", Keys = ") );Serial.print( playerKeys );
     Serial.print(F(", Compass = ") );Serial.print( playerHasCompass );
     Serial.print(F(", displayXorEffect = ") );Serial.print( displayXorEffect );
-    Serial.println(F(" )") );
+    Serial.println();
 
     for ( uint8_t y = 0; y < LEVEL_HEIGHT; y++ )
     {
       for( uint8_t x = 0; x < LEVEL_WIDTH; x++ )
       {
         uint8_t cellValue = currentLevel[y * LEVEL_WIDTH + x];
-        Serial.print( ( cellValue & FLAG_SOLID )                              ? F("s")  : F("-") );
-        Serial.print( ( cellValue & WALL_MASK ) == FAKE_WALL                  ? F("W")  : F("-") );
-        Serial.print( ( cellValue & ( SKELETON | FLAG_SOLID ) ) == SKELETON   ? F("S")  : F("-") );
-        Serial.print( ( cellValue & ( BEHOLDER | FLAG_SOLID ) ) == BEHOLDER   ? F("B")  : F("-") );
-        Serial.print( ( cellValue & OBJECT_MASK ) == DOOR                     ? F("D")  : F("-") );
-        Serial.print( ( cellValue & OBJECT_MASK ) == BARS                     ? F("#")  : F("-") );
-        Serial.print( ( cellValue & OBJECT_MASK ) == LVR_UP                   ? F("u")
-                                                                              : ( cellValue & OBJECT_MASK ) == LVR_DWN ? F("d")
-                                                                                                                       : F("-") );
+        Serial.print( ( cellValue & FLAG_SOLID )                ? F("s")  : F("-") );
+        Serial.print( ( cellValue & WALL_MASK ) == FAKE_WALL    ? F("W")  : F("-") );
+        Serial.print( ( cellValue == SKELETON                   ? F("S")  : F("-") ) );
+        Serial.print( ( cellValue == BEHOLDER                   ? F("B")  : F("-") ) );
+        Serial.print( ( cellValue == RAT                        ? F("R")  : F("-") ) );
+        Serial.print( ( cellValue & OBJECT_MASK ) == DOOR       ? F("D")  : F("-") );
+        Serial.print( ( cellValue & OBJECT_MASK ) == BARS       ? F("#")  : F("-") );
+        Serial.print( ( cellValue & OBJECT_MASK ) == LVR_UP     ? F("u")
+                                                                : ( cellValue & OBJECT_MASK ) == LVR_DWN ? F("d")
+                                                                                                         : F("-") );
         Serial.print( F("   ") );
       }
     Serial.println();

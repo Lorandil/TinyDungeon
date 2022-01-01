@@ -293,73 +293,69 @@ void checkPlayerMovement( DUNGEON *dungeon )
           Serial.print(F("*cell = "));printHexToSerial( cellValue );Serial.println();
         #endif
 
-        switch( cellValue )
+        if ( cellValue & FLAG_MONSTER )
         {
-        // Monstaz!
-        case SKELETON:
-        case BEHOLDER:
-        case RAT:
+          fightMonster( dungeon, cell - dungeon->currentLevel );
+
+        #if !defined(__AVR_ATtiny85__)
+          dungeon->serialPrint();
+          Serial.print(F("*cell = "));printHexToSerial( cellValue );Serial.println();
+        #endif
+        }
+        else
+        {
+          INTERACTION_INFO interactionInfo;
+          for ( uint8_t n = 0; n < sizeof( interactionData ) / sizeof( INTERACTION_INFO ); n++ )
           {
-            // let's fight!
-            fightMonster( dungeon, dungeon->playerX + dungeon->playerY * dungeon->getLevelWidth() );
-            break;
-          }
-        default:
-          {        
-            INTERACTION_INFO interactionInfo;
-            for ( uint8_t n = 0; n < sizeof( interactionData ) / sizeof( INTERACTION_INFO ); n++ )
+            // get data from progmem
+            memcpy_P( &interactionInfo, interactionData + n, sizeof( INTERACTION_INFO ) );
+
+            // does this info cover the current position?
+            if (    ( cell == dungeon->currentLevel + interactionInfo.currentPosition )
+                //|| ( interactionInfo.currentPosition == ANY_POSITION )
+              )
             {
-              // get data from progmem
-              memcpy_P( &interactionInfo, interactionData + n, sizeof( INTERACTION_INFO ) );
-
-              // does this info cover the current position?
-              if (    ( cell == dungeon->currentLevel + interactionInfo.currentPosition )
-                  //|| ( interactionInfo.currentPosition == ANY_POSITION )
-                )
+              // is the status correct?
+              if ( ( cellValue & interactionInfo.currentStatusMask ) == interactionInfo.currentStatus )
               {
-                // is the status correct?
-                if ( ( cellValue & interactionInfo.currentStatusMask ) == interactionInfo.currentStatus )
+              #if !defined(__AVR_ATtiny85__)
+                Serial.print(F("+ Matching entry found <"));Serial.print( n );Serial.println(F(">"));
+                // print entry information
+                interactionInfo.serialPrint();
+              #endif
+
+              bool modifyCurrentPosition = true;
+              bool modifyTargetPosition = true;
+
+                // special handling for special types
+                switch ( cellValue )
                 {
-                #if !defined(__AVR_ATtiny85__)
-                  Serial.print(F("+ Matching entry found <"));Serial.print( n );Serial.println(F(">"));
-                  // print entry information
-                  interactionInfo.serialPrint();
-                #endif
-
-                bool modifyCurrentPosition = true;
-                bool modifyTargetPosition = true;
-
-                  // special handling for special types
-                  switch ( cellValue )
+                case CLOSED_CHEST:
                   {
-                  case CLOSED_CHEST:
-                    {
-                      // plunder the chest!
-                      openChest( dungeon, interactionInfo );
-                      break;
-                    }
+                    // plunder the chest!
+                    openChest( dungeon, interactionInfo );
+                    break;
                   }
-
-                  if ( modifyCurrentPosition )
-                  {
-                    // change current position
-                    *cell = ( cellValue - interactionInfo.currentStatus ) | interactionInfo.nextStatus;
-                  }
-
-                  if ( modifyTargetPosition )
-                  {
-                    // modify target position
-                    dungeon->currentLevel[interactionInfo.modifiedPosition] = interactionInfo.modifiedPositionCellValue;
-                  }
-
-                  swordSound();
-                  
-                  // perform only the first action, otherwise on/off actions might be immediately revoked ;)
-                  break;
                 }
+
+                if ( modifyCurrentPosition )
+                {
+                  // change current position
+                  *cell = ( cellValue - interactionInfo.currentStatus ) | interactionInfo.nextStatus;
+                }
+
+                if ( modifyTargetPosition )
+                {
+                  // modify target position
+                  dungeon->currentLevel[interactionInfo.modifiedPosition] = interactionInfo.modifiedPositionCellValue;
+                }
+
+                swordSound();
+                
+                // perform only the first action, otherwise on/off actions might be immediately revoked ;)
+                break;
               }
             }
-            break;
           }
         }
       }

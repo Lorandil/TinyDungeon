@@ -9,6 +9,7 @@ void limitDungeonPosition( const DUNGEON *dungeon, int8_t &x, int8_t &y );
 void updateStatusPane( const DUNGEON *dungeon );
 void openChest( DUNGEON *dungeon, INTERACTION_INFO &info );
 void updateDice( DUNGEON *dungeon );
+MONSTER_STATS *findMonster( DUNGEON *dungeon, const uint8_t position );
 void fightMonster( DUNGEON *dungeon, const uint8_t position );
 
 // simple level - 1 byte per cell

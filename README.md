@@ -43,16 +43,19 @@ Why not something like a 3D dungeon crawler on the TinyJoypad platform?
 * The Compass (visible as a compass)
 * Amulet of True Sight (visible as an eye, removes fake walls)
 * Ring of Orientation (lets the screen flash when teleporting or spinning)
+* Healing Potions (granting addditional hitpoints)
+* The Armor of Faith (massively reducing damage taken)
+* The Glass Sword (killing every enemy with the first blow, then breaking)
 
 ## Combat System
 
 #### Initiative
-A D8 is thrown. If the result is even, the player attacks first, if odd the monster attacks first.
+A special D8 is thrown (ranging from 0..7). If the result is even, the player attacks first, if odd the monster attacks first.
 
 #### Attack or Run
 If it's the player's turn, the player can chose to attack by pressing the fire button or run away by moving back.
 If the monster survives the attack it will retaliate immediately.
-The monster might also hit the player when the player choses to retreat (1 and 2 on D8).
+The monster might also hit the player when the player choses to retreat (0 and 1 on D8).
 
 #### Damage
 The damage is determined by a roll of a D8 plus/minus some monster specific value. 
