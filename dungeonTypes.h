@@ -125,6 +125,7 @@ public:
   uint8_t playerHasRing;    /* 0x00 if player has no ring, 0xFF if he/she has the ring */
   int8_t  dice;
   uint8_t displayXorEffect;
+  uint8_t invertMonsterEffect;
   uint8_t currentLevel[MAX_LEVEL_BYTES];
   MONSTER_STATS monsterStats[MAX_MONSTERS];
 

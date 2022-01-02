@@ -75,9 +75,6 @@ void loop()
   // populate dungeon with monsters
   memcpy_P( _dungeon.monsterStats, monsterStats, sizeof( monsterStats ) );
 
-  // clear text buffer
-  clearTextBuffer();
-
   while( 1 )
   {
     // update the status pane
@@ -151,8 +148,9 @@ void checkPlayerMovement( DUNGEON *dungeon )
   bool playerAction = false;
 
   // remember to disable the flashing effect
-  bool disableFlashEffect = dungeon->displayXorEffect;
+  bool disableFlashEffect = dungeon->displayXorEffect | dungeon->invertMonsterEffect;
   dungeon->displayXorEffect = 0;
+  dungeon->invertMonsterEffect = 0;
 
   // stay in this loop until the player does anything (just increase the random counter)
   while ( !playerAction && !disableFlashEffect )
@@ -295,7 +293,55 @@ void checkPlayerMovement( DUNGEON *dungeon )
 
         if ( cellValue & FLAG_MONSTER )
         {
-          fightMonster( dungeon, cell - dungeon->currentLevel );
+          /////////////////////////////////////////////
+          // find the monster...
+          MONSTER_STATS *monster = findMonster( dungeon, cell - dungeon->currentLevel );
+
+
+          /////////////////////////////////////////////
+          // player attacks monster
+          playerAttack( dungeon, monster, cell );
+
+          // wait for fire button to be released (random number generation!)
+          while ( isFirePressed() )
+          {
+            updateDice( dungeon );
+          }
+
+          // update the status pane
+          updateStatusPane( &_dungeon );
+
+          // update display
+          Tiny_Flip( dungeon );
+
+
+          /////////////////////////////////////////////
+          // is the monster still alive?
+          if ( monster->hitpoints > 0 )
+          {
+            // just wait a moment (for the display effect to be visible)
+            _delay_ms( 100 );
+            
+            // now let the monster attack the player            
+            monsterAttack( dungeon, monster );
+
+            // update the status pane
+            updateStatusPane( &_dungeon );
+
+            // update display
+            Tiny_Flip( dungeon );
+            // just wait a moment (for the display effect to be visible)
+            _delay_ms( 100 );
+          }
+          else
+          {
+            // the monster has been defeated!
+            serialPrintln(F("Monster defeated!"));
+            // remove the monster from the dungeon
+            *cell = EMPTY;
+            // remove line from monster list?
+            // maybe later... just unnecessary code!
+          }
 
         #ifdef USE_SERIAL_PRINT
           dungeon->serialPrint();

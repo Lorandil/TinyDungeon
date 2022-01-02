@@ -66,6 +66,7 @@ void updateStatusPane( const DUNGEON *dungeon )
 {
   // display viewing direction
   uint8_t *textBuffer = getTextBuffer();
+  clearTextBuffer();
 
   // display compass
   textBuffer[POS_COMPASS] = pgm_read_byte( directionLetter + dungeon->dir );
@@ -179,16 +180,8 @@ MONSTER_STATS *findMonster( DUNGEON *dungeon, const uint8_t position )
 }
 
 /*--------------------------------------------------------*/
-// Every single monster is mapped to an entry in the monsterStats table.
-// The table size is only (sic!) restricted by the RAM size (change to EEPROM???).
-// If no monster is found, everything goes directly to hell :)
-void fightMonster( DUNGEON *dungeon, const uint8_t position )
+void playerAttack( DUNGEON *dungeon, MONSTER_STATS *monster, uint8_t *cell )
 {
-  // find the monster...
-  MONSTER_STATS *monster = findMonster( dungeon, position );
-
-  serialPrint(F("fightMonster( position = (")); serialPrint( position % dungeon->getLevelWidth()); serialPrint(F(", ")); serialPrint( position / dungeon->getLevelWidth());serialPrintln(F(") )"));
-
 #ifdef USE_EXTENDED_CHECKS
   if ( !monster ) 
   { 
@@ -201,33 +194,17 @@ void fightMonster( DUNGEON *dungeon, const uint8_t position )
   monster->hitpoints -= dungeon->dice + dungeon->playerDAM;
   // there should be a sound
   swordSound();
+  // invert monster!
+  dungeon->invertMonsterEffect = 0xFF;
 
-  // wait for fire button to be released
-  while ( isFirePressed() )
-  {
-    updateDice( dungeon );
-  }
-
- 
 #ifdef USE_SERIAL_PRINT
   monster->serialPrint();
 #endif
+}
 
-  // is the monster dead?
-  if ( monster->hitpoints <= 0 )
-  {
-    // the monster has been defeated!
-    serialPrintln(F("Monster defeated!"));
-    // remove the monster from the dungeon
-    dungeon->currentLevel[position] = EMPTY;
-    // remove line from monster list?
-    // ...
-    return;
-  }
-
-  // just wait a moment
-  _delay_ms( 255 );
-
+/*--------------------------------------------------------*/
+void monsterAttack( DUNGEON *dungeon, MONSTER_STATS *monster )
+{
   // monster retaliates
   int8_t damage = dungeon->dice + monster->damageBonus;
   if ( damage > 0 )

@@ -111,8 +111,8 @@ What happens when the player wins?
 * is the NON_WALL_OBJECT view distance really necessary? Wouldn't it suffice to set the threshold to 99? 
 
 ## Current Size
-Sketch uses 7668 bytes (93%) of program storage space. Maximum is 8192 bytes (524 bytes remaining).
-Global variables use 343 bytes (66%) of dynamic memory, leaving 169 bytes for local variables. Maximum is 512 bytes.
+Sketch uses 7974 bytes (97%) of program storage space. Maximum is 8192 bytes (216 bytes remaining).
+Global variables use 384 bytes (75%) of dynamic memory, leaving 128 bytes for local variables. Maximum is 512 bytes.
 
 ## License
 GNU General Public License v3.0

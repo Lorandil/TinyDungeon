@@ -72,9 +72,16 @@ uint8_t getWallPixels( DUNGEON *dungeon, const int8_t x, const int8_t y )
           objectWidth = WINDOW_CENTER_X - objectWidth;
           uint8_t posX = x - objectWidth;
           // free background
-          pixels &= getDownScaledBitmapData( posX, y, distance, &object, true );
+          uint8_t mask = getDownScaledBitmapData( posX, y, distance, &object, true );
+          pixels &= mask;
           // and overlay scaled bitmap
-          pixels |= getDownScaledBitmapData( posX, y, distance, &object, false );
+          uint8_t scaledBitmap = getDownScaledBitmapData( posX, y, distance, &object, false );
+          if ( distance == 1 )
+          {
+            // invert monster?!
+            scaledBitmap ^= ( dungeon->invertMonsterEffect & ~mask );
+          }
+          pixels |= scaledBitmap;
         }
       }
     }
