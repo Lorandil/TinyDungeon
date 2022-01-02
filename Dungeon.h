@@ -11,6 +11,7 @@ void openChest( DUNGEON *dungeon, INTERACTION_INFO &info );
 void updateDice( DUNGEON *dungeon );
 MONSTER_STATS *findMonster( DUNGEON *dungeon, const uint8_t position );
 void fightMonster( DUNGEON *dungeon, const uint8_t position );
+void playerInteraction( DUNGEON *dungeon, uint8_t *cell, const uint8_t cellValue );
 
 // simple level - 1 byte per cell
 const uint8_t Level_1[] PROGMEM = 

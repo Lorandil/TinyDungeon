@@ -2,6 +2,7 @@
 
 #include "dungeon.h"
 #include "dungeonTypes.h"
+#include "soundFX.h"
 #include "textUtils.h"
 #include "tinyJoypadUtils.h"
 
@@ -198,6 +199,8 @@ void fightMonster( DUNGEON *dungeon, const uint8_t position )
 
   // attack the monster (use D7 + player's damage bonus)
   monster->hitpoints -= dungeon->dice + dungeon->playerDAM;
+  // there should be a sound
+  swordSound();
 
   // wait for fire button to be released
   while ( isFirePressed() )
@@ -205,19 +208,13 @@ void fightMonster( DUNGEON *dungeon, const uint8_t position )
     updateDice( dungeon );
   }
 
-  // monster retaliates
-  int8_t damage = dungeon->dice + monster->damageBonus;
-  if ( damage > 0 )
-  {
-    dungeon->playerHP -= damage;
-  }
-  
+ 
 #ifdef USE_SERIAL_PRINT
   monster->serialPrint();
 #endif
 
   // is the monster dead?
-  if ( monster->hitpoints < 0 )
+  if ( monster->hitpoints <= 0 )
   {
     // the monster has been defeated!
     serialPrintln(F("Monster defeated!"));
@@ -225,5 +222,78 @@ void fightMonster( DUNGEON *dungeon, const uint8_t position )
     dungeon->currentLevel[position] = EMPTY;
     // remove line from monster list?
     // ...
+    return;
+  }
+
+  // just wait a moment
+  _delay_ms( 255 );
+
+  // monster retaliates
+  int8_t damage = dungeon->dice + monster->damageBonus;
+  if ( damage > 0 )
+  {
+    dungeon->playerHP -= damage;
+    // ouch!
+    swordSound();
+    // invert screen
+    dungeon->displayXorEffect = 0xFF;
+  }
+}
+
+/*--------------------------------------------------------*/
+void playerInteraction( DUNGEON *dungeon, uint8_t *cell, const uint8_t cellValue )
+{
+  INTERACTION_INFO interactionInfo;
+  for ( uint8_t n = 0; n < sizeof( interactionData ) / sizeof( INTERACTION_INFO ); n++ )
+  {
+    // get data from progmem
+    memcpy_P( &interactionInfo, interactionData + n, sizeof( INTERACTION_INFO ) );
+
+    // does this info cover the current position?
+    if (    ( cell == dungeon->currentLevel + interactionInfo.currentPosition )
+        //|| ( interactionInfo.currentPosition == ANY_POSITION )
+      )
+    {
+      // is the status correct?
+      if ( ( cellValue & interactionInfo.currentStatusMask ) == interactionInfo.currentStatus )
+      {
+      #ifdef USE_SERIAL_PRINT
+        Serial.print(F("+ Matching entry found <"));Serial.print( n );Serial.println(F(">"));
+        // print entry information
+        interactionInfo.serialPrint();
+      #endif
+
+      bool modifyCurrentPosition = true;
+      bool modifyTargetPosition = true;
+
+        // special handling for special types
+        switch ( cellValue )
+        {
+        case CLOSED_CHEST:
+          {
+            // plunder the chest!
+            openChest( dungeon, interactionInfo );
+            break;
+          }
+        }
+
+        if ( modifyCurrentPosition )
+        {
+          // change current position
+          *cell = ( cellValue - interactionInfo.currentStatus ) | interactionInfo.nextStatus;
+        }
+
+        if ( modifyTargetPosition )
+        {
+          // modify target position
+          dungeon->currentLevel[interactionInfo.modifiedPosition] = interactionInfo.modifiedPositionCellValue;
+        }
+
+        swordSound();
+        
+        // perform only the first action, otherwise on/off actions might be immediately revoked ;)
+        break;
+      }
+    }
   }
 }
