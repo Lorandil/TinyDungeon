@@ -5,18 +5,18 @@
 #include "smallFont.h"
 
 /*--------------------------------------------------------------*/
-// Converts 'value' to 5 decimal digits
-// Not the most elegant version, but the shortest for uint16_t
-void convertValueToDigits( uint16_t value, uint8_t *digits )
+// Converts 'value' to 3 decimal digits
+// Not the most elegant version, but the shortest for uint8_t
+void convertValueToDigits( uint8_t value, uint8_t *digits )
 {
-  static uint16_t dividerList[] = { 10000, 1000, 100, 10, 1, 0 };
+  static uint8_t dividerList[] = { 100, 10, 1, 0 };
 
-  uint16_t *divider = dividerList;
+  uint8_t *divider = dividerList;
 
   // wait for the first divider which is smaller than the value
   while ( *divider > value ) { divider++; }
   // if we reach zero, the divider pointer has to be reset to '1'
-  if ( value == 0 ) { divider = &dividerList[4]; }
+  if ( value == 0 ) { divider = &dividerList[2]; }
   
   do
   {

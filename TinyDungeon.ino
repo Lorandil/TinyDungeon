@@ -77,10 +77,7 @@ void loop()
 
   while( 1 )
   {
-    // update the status pane
-    updateStatusPane( &_dungeon );
-
-    // display the dungeon
+    // update the status pane and render the screen
     Tiny_Flip( &_dungeon );
 
     // update player's position and orientation
@@ -91,6 +88,9 @@ void loop()
 /*--------------------------------------------------------*/
 void Tiny_Flip( DUNGEON *dungeon)
 {
+  // update the status pane
+  updateStatusPane( dungeon );
+
   uint8_t statusPaneOffset = 0; 
 
   for ( uint8_t y = 0; y < 8; y++)
@@ -308,10 +308,7 @@ void checkPlayerMovement( DUNGEON *dungeon )
             updateDice( dungeon );
           }
 
-          // update the status pane
-          updateStatusPane( &_dungeon );
-
-          // update display
+          // update the status pane and render the screen
           Tiny_Flip( dungeon );
 
 
@@ -325,11 +322,9 @@ void checkPlayerMovement( DUNGEON *dungeon )
             // now let the monster attack the player            
             monsterAttack( dungeon, monster );
 
-            // update the status pane
-            updateStatusPane( &_dungeon );
-
-            // update display
+            // update the status pane and render the screen
             Tiny_Flip( dungeon );
+
             // just wait a moment (for the display effect to be visible)
             _delay_ms( 100 );
           }
