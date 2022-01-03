@@ -103,7 +103,7 @@ What happens when the player wins?
 
 ## Engine Limitations
 * some objects don't look good when scaled (even with a variable threshold)
-* on-wall objects (switches, doors) aren't rendered correctly when seen from the side -> architectual measures required (e.g. doors need to be set back by one field)
+* on-wall objects (switches, doors) aren't rendered correctly when seen from the side -> architectual measures required (e.g. doors need to be set back by at least one field)
 * at the moment non-wall objects like monsters or chests are only rendered in front of the player.
 * no floor or ceiling for now (mostly because of lack of memory)
 
