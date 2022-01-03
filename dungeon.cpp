@@ -64,9 +64,10 @@ void limitDungeonPosition( const DUNGEON *dungeon, int8_t &x, int8_t &y )
 // updates the compass and the player stats
 void updateStatusPane( const DUNGEON *dungeon )
 {
+  clearTextBuffer();
+
   // display viewing direction
   uint8_t *textBuffer = getTextBuffer();
-  clearTextBuffer();
 
   // display compass
   textBuffer[POS_COMPASS] = pgm_read_byte( directionLetter + dungeon->dir );
@@ -213,7 +214,7 @@ void monsterAttack( DUNGEON *dungeon, MONSTER_STATS *monster )
     // ouch!
     swordSound();
     // invert screen
-    dungeon->displayXorEffect = 0xFF;
+    dungeon->invertStatusEffect = 0xFF;
   }
 }
 

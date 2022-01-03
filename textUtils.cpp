@@ -46,8 +46,11 @@ uint8_t displayText( uint8_t x, uint8_t y )
   if ( value != 0 )
   {
     // get the column value
-    return( pgm_read_byte( characterFont3x5 + ( ( value - '0' ) << 2 ) + ( x & 0x03) ) );
+    return( pgm_read_byte( characterFont3x5 + ( ( value - '0' ) << 2 ) + ( x & 0x03 ) ) );
   }
+
+  // value is '0'
+  return( value );
 }
 
 /*--------------------------------------------------------------*/
@@ -96,14 +99,6 @@ uint8_t displayZoomedText( uint8_t x, uint8_t y )
 void clearTextBuffer()
 {
   memset( textBuffer, 0x00, sizeof( textBuffer ) );
-#if !defined(__AVR_ATtiny85__)
-  for ( auto n = 0; n < sizeof( textBuffer ); n++ )
-  {
-    auto value = textBuffer[n];
-    Serial.write( value == 0 ? '_' : value );
-  }
-  Serial.println();
-#endif
 }
 
 /*--------------------------------------------------------------*/

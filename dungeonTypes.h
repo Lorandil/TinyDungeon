@@ -126,6 +126,7 @@ public:
   int8_t  dice;
   uint8_t displayXorEffect;
   uint8_t invertMonsterEffect;
+  uint8_t invertStatusEffect;
   uint8_t currentLevel[MAX_LEVEL_BYTES];
   MONSTER_STATS monsterStats[MAX_MONSTERS];
 

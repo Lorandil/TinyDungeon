@@ -93,7 +93,7 @@ void Tiny_Flip( DUNGEON *dungeon)
 
   uint8_t statusPaneOffset = 0; 
 
-  for ( uint8_t y = 0; y < 8; y++)
+  for ( uint8_t y = 0; y < 8; y++ )
   {
     // prepare display of row <y>
     TinyFlip_PrepareDisplayRow( y );
@@ -112,19 +112,15 @@ void Tiny_Flip( DUNGEON *dungeon)
     } // for x
 
     // display the dashboard here
-    for ( uint8_t x = 0; x < 32; x++)
+    for ( uint8_t x = 0; x < 32; x++ )
     {
-      uint8_t pixels;
+      uint8_t pixels = 0;
       if ( y | dungeon->playerHasCompass )
       {
         pixels = pgm_read_byte( statusPane + statusPaneOffset ) | displayText( x, y );
       }
-      else
-      {
-        pixels = 0;
-      }
       // send 8 vertical pixels to the display
-      TinyFlip_SendPixels( pixels );
+      TinyFlip_SendPixels( pixels ^ dungeon->invertStatusEffect );
 
       statusPaneOffset++;
     }
@@ -135,6 +131,10 @@ void Tiny_Flip( DUNGEON *dungeon)
 
   // display the whole screen
   TinyFlip_DisplayBuffer();
+
+  // disable fight effects
+  dungeon->invertMonsterEffect = 0;
+  dungeon->invertStatusEffect = 0;
 }
 
 /*--------------------------------------------------------*/
@@ -148,9 +148,12 @@ void checkPlayerMovement( DUNGEON *dungeon )
   bool playerAction = false;
 
   // remember to disable the flashing effect
-  bool disableFlashEffect = dungeon->displayXorEffect | dungeon->invertMonsterEffect;
+  bool disableFlashEffect = dungeon->displayXorEffect | dungeon->invertMonsterEffect | dungeon->invertStatusEffect;;
   dungeon->displayXorEffect = 0;
+  /*
   dungeon->invertMonsterEffect = 0;
+  dungeon->invertStatusEffect = 0;
+  */
 
   // stay in this loop until the player does anything (just increase the random counter)
   while ( !playerAction && !disableFlashEffect )
@@ -317,7 +320,7 @@ void checkPlayerMovement( DUNGEON *dungeon )
           if ( monster->hitpoints > 0 )
           {
             // just wait a moment (for the display effect to be visible)
-            _delay_ms( 100 );
+            _delay_ms( 250 );
             
             // now let the monster attack the player            
             monsterAttack( dungeon, monster );
@@ -326,7 +329,7 @@ void checkPlayerMovement( DUNGEON *dungeon )
             Tiny_Flip( dungeon );
 
             // just wait a moment (for the display effect to be visible)
-            _delay_ms( 100 );
+            //_delay_ms( 100 );
           }
           else
           {
