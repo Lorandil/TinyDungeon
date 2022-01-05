@@ -91,8 +91,8 @@ uint8_t displayZoomedText( uint8_t x, uint8_t y )
     return( value );
   }
 
-  // Please move along, there is nothing to be seen here...
-  return( 0x00 );
+  // Please move along, there is nothing to be seen here... (value is '0')
+  return( value );
 }
 
 /*--------------------------------------------------------------*/

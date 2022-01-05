@@ -51,7 +51,7 @@ void setup()
 void loop()
 {
   // zero dungeon structure
-  memset( &_dungeon, 0x00, sizeof( _dungeon ) );
+  clearDungeon( &_dungeon );
 
   // Prepare the dungeon
   _dungeon.playerX = 5; // could save 4 bytes here, if the whole level is shifted, so that the starting point is at (0,0)
@@ -75,7 +75,7 @@ void loop()
   // populate dungeon with monsters
   memcpy_P( _dungeon.monsterStats, monsterStats, sizeof( monsterStats ) );
 
-  while( 1 )
+  while( _dungeon.playerHP > 0 )
   {
     // update the status pane and render the screen
     Tiny_Flip( &_dungeon );
@@ -83,6 +83,14 @@ void loop()
     // update player's position and orientation
     checkPlayerMovement( &_dungeon );
   }
+
+  // player is dead... turn dungeon to black
+  clearDungeon( &_dungeon );
+
+  // update the status pane and render the screen
+  Tiny_Flip( &_dungeon );
+
+  while ( !isFirePressed() );
 }
 
 /*--------------------------------------------------------*/
@@ -119,8 +127,13 @@ void Tiny_Flip( DUNGEON *dungeon)
       {
         pixels = pgm_read_byte( statusPane + statusPaneOffset ) | displayText( x, y );
       }
+      // invert the 4th line (hitpoints)
+      if ( y == 4 )
+      {
+        pixels ^= dungeon->invertStatusEffect;
+      }
       // send 8 vertical pixels to the display
-      TinyFlip_SendPixels( pixels ^ dungeon->invertStatusEffect );
+      TinyFlip_SendPixels( pixels );
 
       statusPaneOffset++;
     }
@@ -311,7 +324,9 @@ void checkPlayerMovement( DUNGEON *dungeon )
             updateDice( dungeon );
           }
 
-          // update the status pane and render the screen
+          // update the status pane and render the screen (monster will be inverted)
+          Tiny_Flip( dungeon );
+          // redraw with normal monster (so that the monster appears to have flashed)
           Tiny_Flip( dungeon );
 
 

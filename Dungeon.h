@@ -4,6 +4,7 @@
 #include "dungeonTypes.h"
 #include "spritebank.h"
 
+void __attribute__ ((noinline)) clearDungeon( DUNGEON *dungeon );
 uint8_t *getCell( DUNGEON *dungeon, int8_t x, int8_t y, const int8_t distance, const int8_t offsetLR, const uint8_t orientation );
 void limitDungeonPosition( const DUNGEON *dungeon, int8_t &x, int8_t &y );
 void updateStatusPane( const DUNGEON *dungeon );

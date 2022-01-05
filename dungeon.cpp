@@ -7,6 +7,13 @@
 #include "tinyJoypadUtils.h"
 
 /*--------------------------------------------------------*/
+void clearDungeon( DUNGEON *dungeon )
+{
+  // zero dungeon structure
+  memset( dungeon, 0x00, sizeof( *dungeon ) );
+}
+
+/*--------------------------------------------------------*/
 // Returns a pointer to the cell which is 
 // - 'distance' away 
 // - in direction 'orientation'
