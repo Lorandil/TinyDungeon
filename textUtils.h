@@ -2,11 +2,6 @@
 
 #include <Arduino.h>
 
-// Video text memory:
-// - one line (of 32 characters) in standard mode,
-// - four lines (of 16 characters) in zoomed mode
-static uint8_t textBuffer[64];
-
 // convert value to decimal numbers
 void     convertValueToDigits( uint8_t value, uint8_t *digits );
 

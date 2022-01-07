@@ -188,7 +188,7 @@ MONSTER_STATS *findMonster( DUNGEON *dungeon, const uint8_t position )
 }
 
 /*--------------------------------------------------------*/
-void playerAttack( DUNGEON *dungeon, MONSTER_STATS *monster, uint8_t *cell )
+void playerAttack( DUNGEON *dungeon, MONSTER_STATS *monster )
 {
 #ifdef USE_EXTENDED_CHECKS
   if ( !monster ) 
@@ -281,4 +281,75 @@ void playerInteraction( DUNGEON *dungeon, uint8_t *cell, const uint8_t cellValue
       }
     }
   }
+}
+
+/*--------------------------------------------------------*/
+void Tiny_Flip( DUNGEON *dungeon )
+{
+  // update the status pane
+  updateStatusPane( dungeon );
+
+  uint8_t statusPaneOffset = 0; 
+
+  for ( uint8_t y = 0; y < 8; y++ )
+  {
+    // prepare display of row <y>
+    TinyFlip_PrepareDisplayRow( y );
+    
+    // the first 96 columns are used to display the dungeon
+    for ( uint8_t x = 0; x < 96; x++ )
+    {
+      uint8_t pixels = getWallPixels( dungeon, x, y );
+      pixels ^= dungeon->displayXorEffect;
+    #ifdef _SHOW_GRID_OVERLAY
+      if ( ( x & 0x01 ) && ( y < 7 ) ) { pixels |= 0x80; }
+      //if ( ( x & 0x07 ) == 0x07 ) { pixels |= 0x55; }
+    #endif      
+      // send 8 vertical pixels to the display
+      TinyFlip_SendPixels( pixels );
+    } // for x
+
+    // display the dashboard here
+    for ( uint8_t x = 0; x < 32; x++ )
+    {
+      uint8_t pixels = 0;
+      if ( y | dungeon->playerHasCompass )
+      {
+        pixels = pgm_read_byte( statusPane + statusPaneOffset ) | displayText( x, y );
+      }
+      // invert the 4th line (hitpoints)
+      if ( y == 4 )
+      {
+        pixels ^= dungeon->invertStatusEffect;
+      }
+#if 0      
+      // is the player dead?
+      if ( dungeon->playerHP <= 0 )
+      {
+        if ( x < 28 )
+        {
+          // use mask
+          uint8_t value;
+          pixels &= pgm_read_byte( joey );
+          // or pixels in
+          //pixels |= getDownScaledBitmapData( x, y, 1, &object, false );
+        }
+      }
+#endif
+      // send 8 vertical pixels to the display
+      TinyFlip_SendPixels( pixels );
+
+      statusPaneOffset++;
+    }
+    
+    // this row has been finished
+    TinyFlip_FinishDisplayRow();
+  } // for y
+
+  // display the whole screen
+  TinyFlip_DisplayBuffer();
+
+  // disable fight effects
+  dungeon->invertMonsterEffect = 0;
+  dungeon->invertStatusEffect = 0;
 }

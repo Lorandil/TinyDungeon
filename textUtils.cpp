@@ -4,6 +4,11 @@
 #include "bitTables.h"
 #include "smallFont.h"
 
+// Video text memory:
+// - one line (of 32 characters) in standard mode,
+// - four lines (of 16 characters) in zoomed mode
+static uint8_t textBuffer[64];
+
 /*--------------------------------------------------------------*/
 // Converts 'value' to 3 decimal digits
 // Not the most elegant version, but the shortest for uint8_t
