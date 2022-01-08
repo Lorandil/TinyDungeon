@@ -322,17 +322,17 @@ void Tiny_Flip( DUNGEON *dungeon )
       {
         pixels ^= dungeon->invertStatusEffect;
       }
-#if 0      
+#if 0
       // is the player dead?
       if ( dungeon->playerHP <= 0 )
       {
-        if ( x < 28 )
+        uint8_t *offsetXY = joey + y * 28 + x - 2;
+        if ( ( x >= 2 ) && ( x < 30 ) )
         {
           // use mask
-          uint8_t value;
-          pixels &= pgm_read_byte( joey );
+          pixels &= pgm_read_byte( offsetXY + 28 );
           // or pixels in
-          //pixels |= getDownScaledBitmapData( x, y, 1, &object, false );
+          pixels |= pgm_read_byte( offsetXY );
         }
       }
 #endif
