@@ -1,21 +1,9 @@
 #pragma once
 
 #include <Arduino.h>
-#include "bitmapDrawing.h"
 #include "dungeonTypes.h"
 #include "spritebank.h"
 
-void __attribute__ ((noinline)) clearDungeon( DUNGEON *dungeon );
-uint8_t *getCell( DUNGEON *dungeon, int8_t x, int8_t y, const int8_t distance, const int8_t offsetLR, const uint8_t orientation );
-void limitDungeonPosition( const DUNGEON *dungeon, int8_t &x, int8_t &y );
-void updateStatusPane( const DUNGEON *dungeon );
-void openChest( DUNGEON *dungeon, INTERACTION_INFO &info );
-void updateDice( DUNGEON *dungeon );
-MONSTER_STATS *findMonster( DUNGEON *dungeon, const uint8_t position );
-void playerAttack( DUNGEON *dungeon, MONSTER_STATS *monster );
-void monsterAttack( DUNGEON *dungeon, MONSTER_STATS *monster );
-void playerInteraction( DUNGEON *dungeon, uint8_t *cell, const uint8_t cellValue );
-void __attribute__ ((noinline)) Tiny_Flip( DUNGEON *dungeon );
 
 // simple level - 1 byte per cell
 const uint8_t Level_1[] PROGMEM = 
@@ -102,21 +90,42 @@ const SIMPLE_WALL_INFO arrayOfWallInfo[] PROGMEM = {
 };
 
 
-// list of possible non wall objects (i.e. monsters, doors, ...) (11 bytes per object)
-const NON_WALL_OBJECT objectList [] PROGMEM = {
-//  itemType    , width, verticalOffsetBits, heightBits, lineOffset, maxView, scalingThreshold, bitmap
-  { SKELETON    ,  28,         2 * 8,          5 * 8,        56,        3,      { 1, 2, 99 },   joey        },
-  { BEHOLDER    ,  32,         0 * 8,          7 * 8,        64,        3,      { 1, 2,  5 },   beholder    },
-  { BARS        ,  28,         1 * 8,          6 * 8,        56,        3,      { 1, 2,  5 },   newBars     },
-  { DOOR        ,  32,         1 * 8,          7 * 8,        64,        3,      { 1, 3, 12 },   door        },
-  { LVR_UP      ,  16,         2 * 8,          3 * 8,        32,        3,      { 1, 2,  8 },   leverUp     },
-  { LVR_DWN     ,  16,         3 * 8,          3 * 8,        32,        3,      { 1, 2,  8 },   leverDown   },
-  { CLOSED_CHEST,  24,         4 * 8,          3 * 8,        48,        2,      { 1, 3, 99 },   chestClosed },
-  { OPEN_CHEST  ,  24,         4 * 8,          3 * 8,        48,        2,      { 1, 3, 99 },   chestOpen   },
-  { FOUNTAIN    ,  12,         4 * 8,          3 * 8,        24,        2,      { 1, 2, 99 },   fountain    },
-  { RAT         ,  20,         5 * 8,          2 * 8,        40,        2,      { 1, 2, 99 },   rat         },
-};
+
 
 // direction letters for the compass ('0' + dir [0..3])
 //                                       N   E   S   W
 const char directionLetter[] PROGMEM = {';',':','<','='};
+
+// Dungeon
+class Dungeon
+{
+public:
+  DUNGEON _dungeon;
+
+  static constexpr uint8_t getLevelWidth() { return( LEVEL_WIDTH ); }
+  static constexpr uint8_t getLevelHeight() { return( LEVEL_HEIGHT ); }
+
+  void clear();
+  void init();
+
+  bool isPlayerAlive() { return( _dungeon.playerHP > 0 ); }
+
+  void gameLoop();
+  void checkPlayerMovement();
+
+  uint8_t *getCell( int8_t x, int8_t y, const int8_t distance, const int8_t offsetLR, const uint8_t orientation );
+  void limitDungeonPosition( int8_t &x, int8_t &y );
+  void updateStatusPane();
+  void openChest( INTERACTION_INFO &info );
+  void updateDice();
+  MONSTER_STATS *findMonster( const uint8_t position );
+  void playerAttack( MONSTER_STATS *monster );
+  void monsterAttack( MONSTER_STATS *monster );
+  void playerInteraction( uint8_t *cell, const uint8_t cellValue );
+  void /*__attribute__ ((noinline))*/ Tiny_Flip();
+  // bitmap drawing functions
+  uint8_t /*__attribute__ ((always_inline))*/ getWallPixels( const int8_t x, const int8_t y );
+  uint8_t getDownScaledBitmapData( int8_t x, int8_t y, 
+                                   const uint8_t distance, const NON_WALL_OBJECT *object,
+                                   bool useMask );
+};

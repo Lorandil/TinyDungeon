@@ -130,9 +130,6 @@ public:
   uint8_t currentLevel[MAX_LEVEL_BYTES];
   MONSTER_STATS monsterStats[MAX_MONSTERS];
 
-  static constexpr uint8_t getLevelWidth() { return( LEVEL_WIDTH ); }
-  static constexpr uint8_t getLevelHeight() { return( LEVEL_HEIGHT ); }
-
 #if !defined(__AVR_ATtiny85__)
   void serialPrint()
   {

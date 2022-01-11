@@ -51,6 +51,7 @@ Why not something like a 3D dungeon crawler on the TinyJoypad platform?
 
 #### Initiative
 A special D8 is thrown (ranging from 0..7). If the result is even, the player attacks first, if odd the monster attacks first.
+Might use free running timer as a random source instead...
 
 #### Attack or Run
 If it's the player's turn, the player can chose to attack by pressing the fire button or run away by moving back.
@@ -111,7 +112,7 @@ What happens when the player wins?
 * is the NON_WALL_OBJECT view distance really necessary? Wouldn't it suffice to set the threshold to 99? 
 
 ## Current Size
-Sketch uses 7938 bytes (96%) of program storage space. Maximum is 8192 bytes (254 bytes remaining).
+Sketch uses 8018 bytes (97%) of program storage space. Maximum is 8192 bytes (174 bytes remaining).
 Global variables use 377 bytes (73%) of dynamic memory, leaving 135 bytes for local variables. Maximum is 512 bytes.
 
 
