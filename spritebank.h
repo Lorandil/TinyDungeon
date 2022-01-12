@@ -383,18 +383,3 @@ const unsigned char rat [] PROGMEM = {
 	0x0f, 0x1f, 0x33, 0x4d, 0x5f, 0x7f, 0x5c, 0x08, 0x04, 0x0a, 0x00, 0x00, 0xe2, 0xe1, 0x30, 0x08, 
 	0x18, 0x0c, 0x80, 0xc0, 0xe0, 0xc0, 0x00, 0x00, 0x00, 0x00, 0x00, 0xa3, 0xe0, 0xe0, 0xf0, 0xff
 };
-
-// list of possible non wall objects (i.e. monsters, doors, ...) (11 bytes per object)
-const NON_WALL_OBJECT objectList [] PROGMEM = {
-//  itemType    , width, verticalOffsetBits, heightBits, lineOffset, maxView, scalingThreshold, bitmapData
-  { SKELETON    ,  28,         2 * 8,          5 * 8,        56,        3,      { 1, 2, 99 },   joey        },
-  { BEHOLDER    ,  32,         0 * 8,          7 * 8,        64,        3,      { 1, 2,  5 },   beholder    },
-  { BARS        ,  28,         1 * 8,          6 * 8,        56,        3,      { 1, 2,  5 },   newBars     },
-  { DOOR        ,  32,         1 * 8,          7 * 8,        64,        3,      { 1, 3, 12 },   door        },
-  { LVR_UP      ,  16,         2 * 8,          3 * 8,        32,        3,      { 1, 2,  8 },   leverUp     },
-  { LVR_DWN     ,  16,         3 * 8,          3 * 8,        32,        3,      { 1, 2,  8 },   leverDown   },
-  { CLOSED_CHEST,  24,         4 * 8,          3 * 8,        48,        2,      { 1, 3, 99 },   chestClosed },
-  { OPEN_CHEST  ,  24,         4 * 8,          3 * 8,        48,        2,      { 1, 3, 99 },   chestOpen   },
-  { FOUNTAIN    ,  12,         4 * 8,          3 * 8,        24,        2,      { 1, 2, 99 },   fountain    },
-  { RAT         ,  20,         5 * 8,          2 * 8,        40,        2,      { 1, 2, 99 },   rat         },
-};

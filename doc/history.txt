@@ -33,6 +33,11 @@ already achieved:
 * new item <Ring of Orientation> causes the screen to flash if the player is teleported or spun
 * placed Amulet of True Sight in a chest
 * placed Ring of Orientation in a chest
+* monsters have stats, so the can be defeated! The monsters' stats are saved in a global table in RAM (EEPROM if RAM gets too low)
+* added a simple combat system`
+* the player can die!
+* added a death "screen" (dark dungeon screen and skeleton displayed in the status panel)
+* combat "animations": monster gets inverted on a hit, players hitpoints are inverted on a hit
 
 next steps:
 * Check/Change: 
@@ -41,9 +46,6 @@ next steps:
   - and for healing over time
 * Add game logic: 
   - define a goal:
-  - when does the player lose? -> when the player (or the battery) dies
-  - can the player die? -> yes, HP <= 0
-  - what happens when the player dies?
   - what happens when the player wins?
   - can the player "break" the dungeon [i.e. get in a deadlock - probably yes :)]
   - are there walking monsters?
@@ -54,22 +56,16 @@ next steps:
   - how to visualize the combat?
   - how expensive (in flash bytes) is a random number generator?
   - can the player flee?
-  - where to store the monster's stats?
-    - in the dungeon bits?
-    - in a table?
-    - by the type?
 * Should the player be healed by fountains?
   - how?
   - "using" from the distance
   - walking over it?
   - how often?
 * require key to open chests/doors - use same key type for both?
-* add a fountain to restore health
 * extend object drawing to full field of view?
-* add stairs up/down
-* add monster(s)
+[* add stairs up/down]
+* add more monster(s)
 * add treasure
-* add a "combat system"
 * ...
 * add fun!
 
