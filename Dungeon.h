@@ -63,8 +63,8 @@ const NON_WALL_OBJECT objectList [10] PROGMEM = {
   { BEHOLDER    ,  32,         0 * 8,          7 * 8,        64,        3,      { 1, 2,  5 },   beholder    },  //  1
   { BARS        ,  28,         1 * 8,          6 * 8,        56,        3,      { 1, 2,  5 },   newBars     },  //  2
   { DOOR        ,  32,         1 * 8,          7 * 8,        64,        3,      { 1, 3, 12 },   door        },  //  3
-  { LVR_UP      ,  16,         2 * 8,          3 * 8,        32,        3,      { 1, 2,  8 },   leverUp     },  //  4
-  { LVR_DWN     ,  16,         3 * 8,          3 * 8,        32,        3,      { 1, 2,  8 },   leverDown   },  //  5
+  { LVR_UP      ,  16,         3 * 8,          1 * 8,        32,        3,      { 1, 2,  8 },   leverLeft   },  //  4
+  { LVR_DWN     ,  16,         3 * 8,          1 * 8,        32,        3,      { 1, 2,  8 },   leverRight  },  //  5
   { CLOSED_CHEST,  24,         4 * 8,          3 * 8,        48,        2,      { 1, 3, 99 },   chestClosed },  //  6
   { OPEN_CHEST  ,  24,         4 * 8,          3 * 8,        48,        2,      { 1, 3, 99 },   chestOpen   },  //  7
   { FOUNTAIN    ,  12,         4 * 8,          3 * 8,        24,        2,      { 1, 2, 99 },   fountain    },  //  8

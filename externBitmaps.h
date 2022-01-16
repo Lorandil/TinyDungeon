@@ -10,8 +10,10 @@ extern const uint8_t rat[] PROGMEM;
 // objects
 extern const uint8_t newBars[] PROGMEM;
 extern const uint8_t door[] PROGMEM;
-extern const uint8_t leverUp[] PROGMEM;
-extern const uint8_t leverDown[] PROGMEM;
+extern const uint8_t leverLeft[] PROGMEM;
+extern const uint8_t leverRight[] PROGMEM;
+//extern const uint8_t leverUp[] PROGMEM;
+//extern const uint8_t leverDown[] PROGMEM;
 extern const uint8_t chestClosed[] PROGMEM;
 extern const uint8_t chestOpen[] PROGMEM;
 extern const uint8_t fountain[] PROGMEM;

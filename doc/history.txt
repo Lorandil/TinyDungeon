@@ -38,6 +38,7 @@ already achieved:
 * the player can die!
 * added a death "screen" (dark dungeon screen and skeleton displayed in the status panel)
 * combat "animations": monster gets inverted on a hit, players hitpoints are inverted on a hit
+* changed dice rolling to use a free running timer (at least on ATtiny85)
 
 next steps:
 * Check/Change: 
@@ -53,9 +54,8 @@ next steps:
   - who attacks first?
   - always the player?
   - can the player upgrade his/her weapon?
-  - how to visualize the combat?
-  - how expensive (in flash bytes) is a random number generator?
   - can the player flee?
+  - defeated monsters can "drop" chests?
 * Should the player be healed by fountains?
   - how?
   - "using" from the distance
@@ -66,6 +66,7 @@ next steps:
 [* add stairs up/down]
 * add more monster(s)
 * add treasure
+* redraw wall images to have nicer look
 * ...
 * add fun!
 
