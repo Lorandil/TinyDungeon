@@ -123,7 +123,9 @@ public:
   bool    playerHasCompass;
   bool    playerHasAmulet; 
   uint8_t playerHasRing;    /* 0x00 if player has no ring, 0xFF if he/she has the ring */
+#if !defined( __AVR_ATtiny85__ )
   int8_t  dice;
+#endif  
   uint8_t displayXorEffect;
   uint8_t invertMonsterEffect;
   uint8_t invertStatusEffect;

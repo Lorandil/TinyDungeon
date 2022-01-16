@@ -2,7 +2,7 @@
 
 #include <Arduino.h>
 #include "dungeonTypes.h"
-#include "spritebank.h"
+#include "externBitmaps.h"
 
 // simple level - 1 byte per cell
 const uint8_t Level_1[] PROGMEM = 
@@ -128,7 +128,9 @@ public:
   void limitDungeonPosition( int8_t &x, int8_t &y );
   void updateStatusPane();
   void openChest( INTERACTION_INFO &info );
+  void initDice();
   void updateDice();
+  uint8_t getDice( uint8_t maxValue );
   MONSTER_STATS *findMonster( const uint8_t position );
   void playerAttack( MONSTER_STATS *monster );
   void monsterAttack( MONSTER_STATS *monster );
