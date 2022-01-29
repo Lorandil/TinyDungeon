@@ -201,7 +201,6 @@ class NON_WALL_OBJECT
   uint8_t bitmapVerticalOffsetInBits;
   uint8_t bitmapHeightInBits;
   uint8_t nextLineOffset;
-  uint8_t maxViewDistance;
   uint8_t scalingThreshold[3];
   const uint8_t *bitmapData;
 
@@ -214,7 +213,6 @@ class NON_WALL_OBJECT
     Serial.print( F("  bitmapVerticalOffsetInBytes  = ") );Serial.print( bitmapVerticalOffsetInBits );Serial.println();
     Serial.print( F("  bitmapHeightInBytes          = ") );Serial.print( bitmapHeightInBits );Serial.println();
     Serial.print( F("  nextLineOffset               = ") );Serial.println( nextLineOffset );
-    Serial.print( F("  maxViewDistance              = ") );Serial.println( maxViewDistance );
     Serial.print( F("  scalingThreshold[0]          = ") );Serial.print( scalingThreshold[1] );Serial.println();
     Serial.print( F("  scalingThreshold[1]          = ") );Serial.print( scalingThreshold[2] );Serial.println();
     Serial.print( F("  scalingThreshold[2]          = ") );Serial.print( scalingThreshold[3] );Serial.println();

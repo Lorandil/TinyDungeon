@@ -56,19 +56,19 @@ const SPECIAL_CELL_INFO specialCellFX[] PROGMEM =
   { SPINNER    , 2 + 6 * LEVEL_WIDTH,    +1  ,    0    },
 };
 
-// list of possible non wall objects (i.e. monsters, doors, ...) (11 bytes per object)
+// list of possible non wall objects (i.e. monsters, doors, ...) (10 bytes per object)
 const NON_WALL_OBJECT objectList [10] PROGMEM = {
-//  itemType    , width, verticalOffsetBits, heightBits, lineOffset, maxView, scalingThreshold, bitmapData
-  { SKELETON    ,  28,         2 * 8,          5 * 8,        56,        3,      { 1, 2, 99 },   joey        },  //  0
-  { BEHOLDER    ,  32,         0 * 8,          7 * 8,        64,        3,      { 1, 2,  5 },   beholder    },  //  1
-  { BARS        ,  28,         1 * 8,          6 * 8,        56,        3,      { 1, 2,  5 },   newBars     },  //  2
-  { DOOR        ,  32,         1 * 8,          7 * 8,        64,        3,      { 1, 3, 12 },   door        },  //  3
-  { LVR_UP      ,  16,         3 * 8,          1 * 8,        32,        3,      { 1, 2,  8 },   leverLeft   },  //  4
-  { LVR_DWN     ,  16,         3 * 8,          1 * 8,        32,        3,      { 1, 2,  8 },   leverRight  },  //  5
-  { CLOSED_CHEST,  24,         4 * 8,          3 * 8,        48,        2,      { 1, 3, 99 },   chestClosed },  //  6
-  { OPEN_CHEST  ,  24,         4 * 8,          3 * 8,        48,        2,      { 1, 3, 99 },   chestOpen   },  //  7
-  { FOUNTAIN    ,  12,         4 * 8,          3 * 8,        24,        2,      { 1, 2, 99 },   fountain    },  //  8
-  { RAT         ,  20,         5 * 8,          2 * 8,        40,        2,      { 1, 2, 99 },   rat         },  //  9
+//  itemType    , width, verticalOffsetBits, heightBits, lineOffset, scalingThreshold, bitmapData
+  { SKELETON    ,  28,         2 * 8,          5 * 8,         56,      { 1, 2, 99 },   joey        },  //  0
+  { BEHOLDER    ,  32,         0 * 8,          7 * 8,         64,      { 1, 2,  5 },   beholder    },  //  1
+  { BARS        ,  28,         1 * 8,          6 * 8,         56,      { 1, 2,  5 },   newBars     },  //  2
+  { DOOR        ,  32,         1 * 8,          7 * 8,         64,      { 1, 3, 12 },   door        },  //  3
+  { LVR_UP      ,  16,         3 * 8,          1 * 8,         32,      { 1, 2,  8 },   leverLeft   },  //  4
+  { LVR_DWN     ,  16,         3 * 8,          1 * 8,         32,      { 1, 2,  8 },   leverRight  },  //  5
+  { CLOSED_CHEST,  24,         4 * 8,          3 * 8,         48,      { 1, 3, 99 },   chestClosed },  //  6
+  { OPEN_CHEST  ,  24,         4 * 8,          3 * 8,         48,      { 1, 3, 99 },   chestOpen   },  //  7
+  { FOUNTAIN    ,  12,         4 * 8,          3 * 8,         24,      { 1, 2, 99 },   fountain    },  //  8
+  { RAT         ,  20,         5 * 8,          2 * 8,         40,      { 1, 2, 99 },   rat         },  //  9
 };// special cell effects (4 bytes per FX)
 
 // array of conditions for wall display (9 bytes per row)
