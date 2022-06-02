@@ -86,7 +86,7 @@ What happens when the player wins?
 * Can the player heal? - perhaps ;)
 
 ## Engine Features
-* realtime rendering in 96x64
+* realtime rendering in 96x64 pixels
 * realtime bitmap scaling in up to three sizes (full, half, quarter) with a variable threshold for each view distance to optimize the visuals
 * all bitmaps have a mask to keep the background from shimmering through
 * view distance is up to three tiles (depending on the object)
@@ -96,23 +96,20 @@ What happens when the player wins?
 * easily expandle scripted interactions (monsters, switches, chests, teleporters, spinners)
 * extensible design (levels, bitmaps, interactions, ...)
 * unlimited dungeon size (theoretically)
-* highly opimized for size (target system is an ANtiny85 with 512 bytes of RAM and 8kB of flash)
+* highly opimized for size (target system is an ATtiny85 with 512 bytes of RAM and 8kB of flash)
 * code compiles for ATtiny85 with xled1306 library
 * code compiles for Arduino Uno R3, Arduino Mega 2560 and many boards more using the Adafruit SSD1306 library (encapsuled in `"tinyJoypadUtils.h"`)
 * Screenshot functionality: Dump screen content to serial port as a hexdump
   [only on MCUs with serial port, so not on ATtiny85 ;)]
 
 ## Engine Limitations
-* some objects don't look good when scaled (even with a variable threshold)
+* some objects don't look good when scaled (even with the variable threshold)
 * on-wall objects (switches, doors) aren't rendered correctly when seen from the side -> architectual measures required (e.g. doors need to be set back by at least one field)
-* at the moment non-wall objects like monsters or chests are only rendered in front of the player.
+* at the moment non-wall objects like monsters, chests or doors are only rendered in front of the player.
 * no floor or ceiling for now (mostly because of lack of memory)
 
-## Optimization Potential
-* is the NON_WALL_OBJECT view distance really necessary? Wouldn't it suffice to set the threshold to 99? 
-
 ## Current Size
-Sketch uses 7890 bytes (96%) of program storage space. Maximum is 8192 bytes (302 bytes left).
+Sketch uses 7880 bytes (96%) of program storage space. Maximum is 8192 bytes (312 bytes left).
 Global variables use 376 bytes (73%) of dynamic memory, leaving 136 bytes for local variables. Maximum is 512 bytes.
 
 ## License

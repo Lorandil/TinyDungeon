@@ -64,7 +64,7 @@ next steps:
 * require key to open chests/doors - use same key type for both?
 * extend object drawing to full field of view?
 [* add stairs up/down]
-* add more monster(s)
+* add more monster(s) - perhaps a mimic looking like a closed chest?
 * add treasure
 * redraw wall images to have nicer look
 * ...

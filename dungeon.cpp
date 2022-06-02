@@ -63,9 +63,10 @@ void Dungeon::initDice()
 /*--------------------------------------------------------*/
  void Dungeon::gameLoop()
  {
-  // prepare a new..
+  // prepare a new dungeon...
   init();
 
+// it ain't over, till it's over...  
   while( isPlayerAlive() )
   {
     // update the status pane and render the screen
@@ -81,7 +82,7 @@ void Dungeon::initDice()
   // update the status pane and render the screen
   Tiny_Flip();
 
-  // let the player fell the darkness...
+  // let the player feel the darkness...
   while ( !isFirePressed() );
  }
 
@@ -104,7 +105,7 @@ void Dungeon::checkPlayerMovement()
   _dungeon.invertStatusEffect = 0;
   */
 
-  // stay in this loop until the player does anything (just increase the random counter)
+  // stay in this loop until the player does anything
   while ( !playerAction && !disableFlashEffect )
   {
     playerAction = _dungeon.displayXorEffect;
