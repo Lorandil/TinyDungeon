@@ -43,7 +43,7 @@ Why not something like a 3D dungeon crawler on the TinyJoypad platform?
 * The Compass (visible as a compass)
 * Amulet of True Sight (visible as an eye, removes fake walls)
 * Ring of Orientation (lets the screen flash when teleporting or spinning)
-* Healing Potions (granting addditional hitpoints)
+* Healing Potions (granting additional hitpoints)
 * The Armor of Faith (massively reducing damage taken)
 * The Glass Sword (killing every enemy with the first blow, then breaking)
 
@@ -90,12 +90,11 @@ What happens when the player wins?
 * realtime bitmap scaling in up to three sizes (full, half, quarter) with a variable threshold for each view distance to optimize the visuals
 * all bitmaps have a mask to keep the background from shimmering through
 * view distance is up to three tiles (depending on the object)
-* believable movement illusion when walking through tunnels (done by mirroring left and right wall bitmap every two steps)
+* believable movement illusion when walking through tunnels (done by mirroring left and right wall bitmap on every step)
 * different sound effects
 * some magic items
 * easily expandle scripted interactions (monsters, switches, chests, teleporters, spinners)
 * extensible design (levels, bitmaps, interactions, ...)
-* unlimited dungeon size (theoretically)
 * highly opimized for size (target system is an ATtiny85 with 512 bytes of RAM and 8kB of flash)
 * code compiles for ATtiny85 with xled1306 library
 * code compiles for Arduino Uno R3, Arduino Mega 2560 and many boards more using the Adafruit SSD1306 library (encapsuled in `"tinyJoypadUtils.h"`)
@@ -107,6 +106,7 @@ What happens when the player wins?
 * on-wall objects (switches, doors) aren't rendered correctly when seen from the side -> architectual measures required (e.g. doors need to be set back by at least one field)
 * at the moment non-wall objects like monsters, chests or doors are only rendered in front of the player.
 * no floor or ceiling for now (mostly because of lack of memory)
+* max. dungeon size is 256 tiles
 
 ## Current Size
 Sketch uses 7880 bytes (96%) of program storage space. Maximum is 8192 bytes (312 bytes left).
