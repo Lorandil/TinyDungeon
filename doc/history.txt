@@ -39,6 +39,7 @@ already achieved:
 * added a death "screen" (dark dungeon screen and skeleton displayed in the status panel)
 * combat "animations": monster gets inverted on a hit, players hitpoints are inverted on a hit
 * changed dice rolling to use a free running timer (at least on ATtiny85)
+* add icons for magic items (Shield of Faith, Ring of Orientation, Sword of Destiny , Amulet of True Sight)
 
 next steps:
 * Check/Change: 
