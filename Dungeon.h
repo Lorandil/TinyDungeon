@@ -123,11 +123,6 @@ const SIMPLE_WALL_INFO arrayOfWallInfo[] PROGMEM = {
 };
 
 
-// direction letters for the compass ('0' + dir [0..3])
-//                                       N   E   S   W
-const char directionLetter[] PROGMEM = {';',':','<','='};
-
-
 // Dungeon
 class Dungeon
 {

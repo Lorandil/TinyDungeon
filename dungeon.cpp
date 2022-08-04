@@ -373,7 +373,7 @@ void Dungeon::updateStatusPane()
   uint8_t *textBuffer = getTextBuffer();
 
   // display compass
-  textBuffer[POS_COMPASS] = pgm_read_byte( directionLetter + _dungeon.dir );
+  textBuffer[POS_COMPASS] = '0' + 10 +_dungeon.dir;
 
   // and the hitpoints
   convertValueToDigits( _dungeon.playerHP, textBuffer + POS_HITPOINTS );
