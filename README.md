@@ -109,8 +109,8 @@ What happens when the player wins?
 * max. dungeon size is 256 tiles
 
 ## Current Size
-Sketch uses 7720 bytes (94%) of program storage space. Maximum is 8192 bytes (472 bytes left).
-Global variables use 308 bytes 60%) of dynamic memory, leaving 204 bytes for local variables. Maximum is 512 bytes.
+Sketch uses 7812 bytes (95%) of program storage space. Maximum is 8192 bytes (380 bytes left).
+Global variables use 306 bytes (59%) of dynamic memory, leaving 206 bytes for local variables. Maximum is 512 bytes.
 
 ## License
 GNU General Public License v3.0

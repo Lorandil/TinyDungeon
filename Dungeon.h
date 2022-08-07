@@ -64,11 +64,11 @@ const INTERACTION_INFO interactionData[] PROGMEM =
 // monster stats (5 bytes per monster - must fit into RAM - or EEPROM???)
 const MONSTER_STATS monsterStats[] PROGMEM =
 {
-  // position                hp  bonusDamage   attacksFirst  treasureMask
-  {   0 +  1 * LEVEL_WIDTH,   3,     -6      ,      1       ,     0       }, // rat
-  {   3 +  1 * LEVEL_WIDTH,   6,      0      ,      0       ,  ITEM_KEY   }, // skeleton
-  {   6 +  2 * LEVEL_WIDTH,  50,     +7      ,      0       ,     0       }, // beholder
-  {   1 +  0 * LEVEL_WIDTH,  10,     -2      ,      1       ,     0       }, // mimic
+  // position                hp  bonusDamage   attacksFirst  treasureItemMask
+  {   0 +  1 * LEVEL_WIDTH,   3,     -6      ,      1       ,     0                     }, // rat
+  {   3 +  1 * LEVEL_WIDTH,   6,      0      ,      0       ,  ITEM_SWORD | ITEM_SHIELD }, // skeleton
+  {   6 +  2 * LEVEL_WIDTH,  50,     +7      ,      0       ,     0                     }, // beholder
+  {   1 +  0 * LEVEL_WIDTH,  10,     -2      ,      1       ,     0                     }, // mimic
 };
 
 const SPECIAL_CELL_INFO specialCellFX[] PROGMEM =

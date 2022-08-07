@@ -28,7 +28,7 @@ void Dungeon::init()
   //_dungeon.dir  = NORTH; // NORTH = 0!
   // prepare player stats
   _dungeon.playerHP = 10;
-  _dungeon.playerDAM = 3;
+  _dungeon.playerDamage = 3;
   //_dungeon.playerKeys = 0;  
   //_dungeon.playerHasCompass = false;
   //_dungeon.playerHasAmulett = false;
@@ -69,6 +69,12 @@ void Dungeon::initDice()
 // it ain't over, till it's over...  
   while( isPlayerAlive() )
   {
+  // sword found? -> adjust damage
+  if ( _dungeon.playerItems & ITEM_SWORD ) { _dungeon.playerDamage = 10; }
+
+  // shield found? adjust protection
+  if ( _dungeon.playerItems & ITEM_SHIELD ) { _dungeon.playerArmour = 3; }
+
     // update the status pane and render the screen
     Tiny_Flip();
 
@@ -226,7 +232,10 @@ void Dungeon::checkPlayerMovement()
             _dungeon.dir &= 0x03;
           }
           // *** BAZINGA! ***
-          _dungeon.displayXorEffect = _dungeon.playerHasRing; /* visualize by flashing if player has the <Ring of Orientation>*/
+          if ( _dungeon.playerItems & ITEM_RING )
+          {
+            _dungeon.displayXorEffect = 0xff; /* visualize by flashing if player has the <Ring of Orientation>*/
+          }
         }
       }
     }
@@ -289,6 +298,8 @@ void Dungeon::checkPlayerMovement()
             serialPrintln(F("Monster defeated!"));
             // remove the monster from the dungeon
             *cell = EMPTY;
+            // collect the treasure!
+            _dungeon.playerItems |= monster->treasureItemMask;
             // remove line from monster list?
             // maybe later... just unnecessary code!
           }
@@ -369,42 +380,71 @@ void Dungeon::openChest( INTERACTION_INFO &info )
 {
   serialPrintln( F("openChest()") );
 
+  // update player items
+  _dungeon.playerItems |= info.newItem;
+
+  // remove fake walls?
+  if ( info.newItem == ITEM_AMULET )
+  {
+    // remove all fake walls
+    uint8_t *currentCell = _dungeon.currentLevel;
+    while ( currentCell < _dungeon.currentLevel + getLevelWidth() * getLevelHeight() )
+    {
+      // fake? let's stay with the facts...
+      if ( *currentCell == FAKE_WALL ) { *currentCell = EMPTY; }
+      currentCell++;
+    }
+  }
+  
+#if !defined(__AVR_ATtiny85__)
   switch( info.newItem )
   {
     case ITEM_COMPASS:
       {
-        // a compass will be displayed
-        _dungeon.playerHasCompass = true;
         // hooray!
         serialPrintln( F("+ <Compass> found!") );
         break;
       }
     case ITEM_AMULET:
       {    
-        // fake will be removed
-        _dungeon.playerHasAmulet = true;
-        // remove all fake walls
-        uint8_t *currentCell = _dungeon.currentLevel;
-        while ( currentCell < _dungeon.currentLevel + getLevelWidth() * getLevelHeight() )
-        {
-          // fake? let's stay with the facts...
-          if ( *currentCell == FAKE_WALL ) { *currentCell = EMPTY; }
-          currentCell++;
-        }
         // hooray!
         serialPrintln( F("+ <Amulet of True Sight> found!") );
         break;
       }
     case ITEM_RING:
       {    
-        // spinning and teleporting revealed by flashing the screen
-        _dungeon.playerHasRing = 0xff;
         // hooray!
         serialPrintln( F("+ <Ring of Orientation> found!") );
         break;
       }
-  }
+    case ITEM_KEY:
+    {    
+      // hooray!
+      serialPrintln( F("+ <Key> found!") );
+      break;
+    }
+    case ITEM_SWORD:
+    {    
+      // hooray!
+      serialPrintln( F("+ <Rusty Sword found> found!") );
+      break;
+    }
+    case ITEM_SHIELD:
+    {    
+      // hooray!
+      serialPrintln( F("+ <Wooden Shield> found!") );
+      break;
+    }
+    case ITEM_VICTORY:
+    {    
+      // hooray!
+      serialPrintln( F("+ <Victory condition> found!") );
+      break;
+    }
 }
+#endif
+}
+
 
 /*--------------------------------------------------------*/
 void Dungeon::updateDice()
@@ -412,9 +452,8 @@ void Dungeon::updateDice()
 #if !defined( __AVR_ATtiny85__ )
   _dungeon.dice++; 
 #endif
-  //_dungeon.dice &= DICE_MASK;
-  //serialPrint( F("D8 = ")); serialPrintln( _dungeon.dice + 1 );
 }
+
 
 /*--------------------------------------------------------*/
 uint8_t Dungeon::getDice( uint8_t maxValue )
@@ -431,6 +470,7 @@ uint8_t Dungeon::getDice( uint8_t maxValue )
   }  
   return( value );
 }
+
 
 /*--------------------------------------------------------*/
 // Every single monster is mapped to an entry in the monsterStats table.
@@ -456,7 +496,6 @@ MONSTER_STATS *Dungeon::findMonster( const uint8_t position )
       serialPrintln(F("+ Monster found!") );
       break;
     }
-    serialPrintln(F("- nope") );
     // next monster
     monster++;
 
@@ -491,7 +530,7 @@ void Dungeon::playerAttack( MONSTER_STATS *monster )
 #endif
 
   // attack the monster (use D7 + player's damage bonus)
-  monster->hitpoints -= getDice( 0x07 ) + _dungeon.playerDAM;
+  monster->hitpoints -= getDice( 0x07 ) + _dungeon.playerDamage;
   // there should be a sound
   swordSound();
   // invert monster!
@@ -506,7 +545,7 @@ void Dungeon::playerAttack( MONSTER_STATS *monster )
 void Dungeon::monsterAttack( MONSTER_STATS *monster )
 {
   // monster retaliates
-  int8_t damage = getDice( 0x07 ) + monster->damageBonus;
+  int8_t damage = getDice( 0x07 ) + monster->damageBonus - _dungeon.playerArmour;
   if ( damage > 0 )
   {
     _dungeon.playerHP -= damage;
@@ -604,7 +643,7 @@ void Dungeon::Tiny_Flip()
     for ( uint8_t x = 0; x < 32; x++ )
     {
       pixels = 0;
-      if ( y | _dungeon.playerHasCompass )
+      if ( y | ( _dungeon.playerItems & ITEM_COMPASS ) )
       {
         pixels = pgm_read_byte( statusPane + statusPaneOffset );
         // compass present?
@@ -616,17 +655,51 @@ void Dungeon::Tiny_Flip()
           }
         }
       }
-      // invert the 4th line (hitpoints)
-      if ( y == 4 )
+
+      // special status rows
+      if ( ( x >= 1 ) && ( x <= 30 ) )
       {
-        // display HP as am unscaled bar, so max HP is 28 ;)
-        if ( ( x >= 1 ) && ( x <= 30 ) )
+        // hitpoints
+        if ( y == 4 )
         {
-          if ( x > _dungeon.playerHP + 2 ) { pixels = 0; }
-          // invert line if player is hurt
-          pixels ^= _dungeon.invertStatusEffect;
+          // display HP as am unscaled bar, so max HP is 28 ;)
+            if ( x > _dungeon.playerHP + 2 ) { pixels = 0; }
+            // invert the row if the player was hurt
+            pixels ^= _dungeon.invertStatusEffect;
         }
-      }        
+        // items: display the appropriate icons
+        if ( y == 5 )
+        {
+          if ( x >= 3 )
+          {
+            if ( x <= 8 )
+            {
+              if ( !( _dungeon.playerItems & ITEM_SWORD ) ) { pixels = 0; }
+            }
+            else if ( x <= 14 )
+            {
+              if ( !( _dungeon.playerItems & ITEM_SHIELD ) ) { pixels = 0; }
+            }
+            else if ( x <= 20 )
+            {
+              if ( !( _dungeon.playerItems & ITEM_AMULET ) ) { pixels = 0; }
+            }
+            else if ( x <= 26 )
+            {
+              if ( !( _dungeon.playerItems & ITEM_RING ) ) { pixels = 0; }
+            }
+            else if ( x <= 31 )
+            {
+              if ( !( _dungeon.playerItems & ITEM_KEY ) ) { pixels = 0; }
+            }
+          }
+        }
+        // did the player win?
+        if ( y == 6 )
+        {
+          if ( !(_dungeon.playerItems & ITEM_VICTORY ) ) { pixels = 0; }
+        }
+      }
 
       // is the player dead?
       if ( !isPlayerAlive() )

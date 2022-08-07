@@ -79,7 +79,9 @@ enum
   ITEM_AMULET  = 0x02,
   ITEM_RING    = 0x04,
   ITEM_KEY     = 0x08,
-  ITEM_POTION  = 0x10,
+  //ITEM_POTION  = 0x10,
+  ITEM_SWORD   = 0x20,
+  ITEM_SHIELD  = 0x40,
   ITEM_VICTORY = 0x80,
 };
 
@@ -97,15 +99,15 @@ class MONSTER_STATS
   // monster attacks first?
   uint8_t attacksFirst;
   // treasure (bit mask)
-  uint8_t treasureMask;
+  uint8_t treasureItemMask;
 #if !defined(__AVR_ATtiny85__)
   void serialPrint() 
   {
-    Serial.print( F("  position     = (") ); Serial.print( position % LEVEL_WIDTH ); Serial.print(F(", ")); Serial.print( position / LEVEL_WIDTH ); Serial.println(F(")"));
-    Serial.print( F("  hitpoints    = ") ); Serial.println( hitpoints );
-    Serial.print( F("  damageBonus  = ") ); Serial.println( damageBonus );
-    Serial.print( F("  attacksFirst = ") ); Serial.println( ( attacksFirst != 0 ) ? "yes" : "no" );
-    Serial.print( F("  treasureMask = ") ); Serial.println( treasureMask );
+    Serial.print( F("  position         = (") ); Serial.print( position % LEVEL_WIDTH ); Serial.print(F(", ")); Serial.print( position / LEVEL_WIDTH ); Serial.println(F(")"));
+    Serial.print( F("  hitpoints        = ") ); Serial.println( hitpoints );
+    Serial.print( F("  damageBonus      = ") ); Serial.println( damageBonus );
+    Serial.print( F("  attacksFirst     = ") ); Serial.println( ( attacksFirst != 0 ) ? "yes" : "no" );
+    Serial.print( F("  treasureItemMask = ") ); Serial.println( treasureItemMask );
     Serial.println();
   }
 #endif
@@ -120,11 +122,9 @@ public:
   int8_t  playerY;
   uint8_t dir;
   int8_t  playerHP;
-  int8_t  playerDAM;
-  int8_t  playerKeys;
-  bool    playerHasCompass;
-  bool    playerHasAmulet; 
-  uint8_t playerHasRing;    /* 0x00 if player has no ring, 0xFF if he/she has the ring */
+  int8_t  playerDamage;
+  int8_t  playerArmour;
+  uint8_t playerItems;
 #if !defined( __AVR_ATtiny85__ )
   int8_t  dice;
 #endif  
@@ -142,9 +142,11 @@ public:
     Serial.print(F(", playerY = ") );Serial.print( playerY );
     Serial.print(F(", dir = ") );Serial.print( dir );
     Serial.print(F(", HP = ") );Serial.print( playerHP );
-    Serial.print(F(", DAM = ") );Serial.print( playerDAM );
-    Serial.print(F(", Keys = ") );Serial.print( playerKeys );
-    Serial.print(F(", Compass = ") );Serial.print( playerHasCompass );
+    Serial.print(F(", DAM = ") );Serial.print( playerDamage );
+    Serial.print(F(", Armour = ") );Serial.print( playerArmour );
+    Serial.print(F(", Items = ") );printHexToSerial( playerItems, false );Serial.print(F(", "));
+    Serial.print(F(", Keys = ") );Serial.print( ( playerItems & ITEM_KEY ) != 0 );
+    Serial.print(F(", Compass = ") );Serial.print( ( playerItems & ITEM_COMPASS ) != 0 );
     Serial.print(F(", displayXorEffect = ") );Serial.print( displayXorEffect );
     Serial.println();
 
