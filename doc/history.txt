@@ -40,23 +40,28 @@ already achieved:
 * combat "animations": monster gets inverted on a hit, players hitpoints are inverted on a hit
 * changed dice rolling to use a free running timer (at least on ATtiny85)
 * add icons for magic items (Shield of Faith, Ring of Orientation, Sword of Destiny , Amulet of True Sight)
-
-next steps:
 * Check/Change: 
   - player movement control has to have a fast running loop. This will be used to create "random" numbers by counting fast
-  - required for walking monsters, too
-  - and for healing over time
+  [- required for walking monsters, too]
+  [- and for healing over time]
+* "Invented" a combat system:
+  - who attacks first? depending on monster
+  - always the player? nope
+  - can the player upgrade his/her weapon? yes!
+  - can the player flee? yes!
+  - defeated monsters can "drop" chests? maybe
+* added a second graphic set for the wall bitmaps (rough rounded stones) for a nicer look
+
+next steps:
+* remove numbers characters, player hitpoints will be visualized by a bar
+  - enables wider icons for the player's gear
+  - saves a lot of flash bytes
+  - saves RAM for text buffer
 * Add game logic: 
   - define a goal:
   - what happens when the player wins?
   - can the player "break" the dungeon [i.e. get in a deadlock - probably yes :)]
   - are there walking monsters?
-* "Invent" a combat system:
-  - who attacks first?
-  - always the player?
-  - can the player upgrade his/her weapon?
-  - can the player flee?
-  - defeated monsters can "drop" chests?
 * Should the player be healed by fountains?
   - how?
   - "using" from the distance
@@ -67,7 +72,6 @@ next steps:
 [* add stairs up/down]
 * add more monster(s) - perhaps a mimic looking like a closed chest?
 * add treasure
-* redraw wall images to have nicer look
 * ...
 * add fun!
 

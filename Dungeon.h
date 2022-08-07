@@ -65,9 +65,10 @@ const INTERACTION_INFO interactionData[] PROGMEM =
 const MONSTER_STATS monsterStats[] PROGMEM =
 {
   // position                hp  bonusDamage   attacksFirst  treasureMask
-  {   0 +  1 * LEVEL_WIDTH,   8,     -4      ,      1       ,     0       }, // rat
-  {   3 +  1 * LEVEL_WIDTH,  20,     +2      ,      0       ,  ITEM_KEY   }, // skeleton
-  {   6 +  2 * LEVEL_WIDTH, 100,    +20      ,      0       ,     0       }, // beholder
+  {   0 +  1 * LEVEL_WIDTH,   3,     -6      ,      1       ,     0       }, // rat
+  {   3 +  1 * LEVEL_WIDTH,   6,      0      ,      0       ,  ITEM_KEY   }, // skeleton
+  {   6 +  2 * LEVEL_WIDTH,  50,     +7      ,      0       ,     0       }, // beholder
+  {   1 +  0 * LEVEL_WIDTH,  10,     -2      ,      1       ,     0       }, // mimic
 };
 
 const SPECIAL_CELL_INFO specialCellFX[] PROGMEM =

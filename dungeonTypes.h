@@ -57,6 +57,8 @@ enum
   SKELETON            = 0x40 | FLAG_MONSTER | FLAG_SOLID,
   BEHOLDER            = 0x60 | FLAG_MONSTER | FLAG_SOLID,
   CLOSED_CHEST        = 0x80, // | FLAG_SOLID,
+  // a mimic is like a chest, but you may not pass through it
+  MIMIC               = CLOSED_CHEST | FLAG_SOLID,
   OPEN_CHEST          = 0xA0, // | FLAG_SOLID,
   FOUNTAIN            = 0xC0 | FLAG_SOLID,
   BARS                = 0xE0 | FLAG_SOLID,

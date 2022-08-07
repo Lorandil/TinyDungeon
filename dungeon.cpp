@@ -4,8 +4,8 @@
 #include "bitTables.h"
 #include "dungeon.h"
 #include "dungeonTypes.h"
+#include "externBitmaps.h"
 #include "soundFX.h"
-#include "textUtils.h"
 #include "tinyJoypadUtils.h"
 
 /*--------------------------------------------------------*/
@@ -27,8 +27,8 @@ void Dungeon::init()
   _dungeon.playerY = 3;
   //_dungeon.dir  = NORTH; // NORTH = 0!
   // prepare player stats
-  _dungeon.playerHP = 30;
-  _dungeon.playerDAM = 10;
+  _dungeon.playerHP = 10;
+  _dungeon.playerDAM = 3;
   //_dungeon.playerKeys = 0;  
   //_dungeon.playerHasCompass = false;
   //_dungeon.playerHasAmulett = false;
@@ -364,28 +364,6 @@ void Dungeon::limitDungeonPosition( int8_t &x, int8_t &y )
 
 
 /*--------------------------------------------------------*/
-// updates the compass and the player stats
-void Dungeon::updateStatusPane()
-{
-  clearTextBuffer();
-
-  // display viewing direction
-  uint8_t *textBuffer = getTextBuffer();
-
-  // display compass
-  textBuffer[POS_COMPASS] = '0' + 10 +_dungeon.dir;
-
-  // and the hitpoints
-  convertValueToDigits( _dungeon.playerHP, textBuffer + POS_HITPOINTS );
-
-  // and the damage
-  convertValueToDigits( _dungeon.playerDAM, textBuffer + POS_DAMAGE );
-
-  // and the number of keys
-  convertValueToDigits( _dungeon.playerKeys, textBuffer + POS_KEYS );
-}
-
-/*--------------------------------------------------------*/
 // opens a chest
 void Dungeon::openChest( INTERACTION_INFO &info )
 {
@@ -600,9 +578,6 @@ void Dungeon::playerInteraction( uint8_t *cell, const uint8_t cellValue )
 /*--------------------------------------------------------*/
 void Dungeon::Tiny_Flip()
 {
-  // update the status pane
-  updateStatusPane();
-
   uint8_t statusPaneOffset = 0; 
 
   for ( uint8_t y = 0; y < 8; y++ )
@@ -631,13 +606,27 @@ void Dungeon::Tiny_Flip()
       pixels = 0;
       if ( y | _dungeon.playerHasCompass )
       {
-        pixels = pgm_read_byte( statusPane + statusPaneOffset ) | displayText( x, y );
+        pixels = pgm_read_byte( statusPane + statusPaneOffset );
+        // compass present?
+        if ( !y )
+        {
+          if ( ( x >= 15 ) && ( x < 20 ) )
+          { 
+            pixels |= pgm_read_byte( compass + x - 15 + 5 * _dungeon.dir );
+          }
+        }
       }
       // invert the 4th line (hitpoints)
       if ( y == 4 )
       {
-        pixels ^= _dungeon.invertStatusEffect;
-      }
+        // display HP as am unscaled bar, so max HP is 28 ;)
+        if ( ( x >= 1 ) && ( x <= 30 ) )
+        {
+          if ( x > _dungeon.playerHP + 2 ) { pixels = 0; }
+          // invert line if player is hurt
+          pixels ^= _dungeon.invertStatusEffect;
+        }
+      }        
 
       // is the player dead?
       if ( !isPlayerAlive() )

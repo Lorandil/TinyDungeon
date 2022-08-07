@@ -18,6 +18,7 @@ extern const uint8_t chestClosed[] PROGMEM;
 extern const uint8_t chestOpen[] PROGMEM;
 extern const uint8_t fountain[] PROGMEM;
 extern const uint8_t statusPane[] PROGMEM;
+extern const uint8_t compass[] PROGMEM;
 
 // walls
 extern const unsigned char frontWalls_D3[] PROGMEM;
