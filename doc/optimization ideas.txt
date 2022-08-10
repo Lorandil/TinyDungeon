@@ -1,0 +1,10 @@
+Optimization ideas
+
+<flash usage>
+* store bitmaps in unused parts of other bitmaps (walls, status pane) or blank them out (like "Victory" in status pane)
+
+<handling>
+* automatically place monsters in level during startup
+
+<performance>
+* store all visible walls/items in a small array (5x3 bytes) before rendering a frame

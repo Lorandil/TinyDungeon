@@ -170,30 +170,9 @@ public:
     Serial.println();
     }
     Serial.println();
-    //hexdumpResetPositionCount();
-    //hexdumpToSerial( currentLevel, LEVEL_WIDTH * LEVEL_HEIGHT );
   }
 #endif
 };
-
-/*
-// LEVEL_HEADER
-typedef struct
-{
-  // width x height
-  int8_t width;
-  int8_t height;
-  // stairs up
-  int8_t upX;
-  int8_t upY;
-  // stairs down
-  int8_t downX;
-  int8_t downY;
-  // level number
-  int8_t levelNumber;
-  
-} LEVEL_HEADER;
-*/
 
 // NON_WALL_OBJECT
 class NON_WALL_OBJECT
@@ -264,8 +243,6 @@ public:
   uint8_t nextStatus;
   // bit coded item number for gained items, i.e. keys
   uint8_t newItem;
-  // an amount (of coins or healing)
-  uint8_t itemValue;
   // position in which the dungeon will be modified
   uint8_t modifiedPosition;
   // new status on modified position
@@ -280,7 +257,6 @@ public:
     Serial.print( F("  currentStatusMask  = ") );printHexToSerial( currentStatusMask );Serial.println();
     Serial.print( F("  nextStatus         = ") );printHexToSerial( nextStatus );Serial.println();
     Serial.print( F("  newItem            = ") );printHexToSerial( newItem );Serial.println();
-    Serial.print( F("  itemValue          = ") );Serial.println( itemValue );
     Serial.print( F("  modifiedPosition   = ") );if ( modifiedPosition == ANY_POSITION ) { Serial.println( F("ANY_POSITION") ); } else { Serial.println( modifiedPosition ); }
     Serial.print( F("  modifiedPosValue   = ") );printHexToSerial( modifiedPositionCellValue );Serial.println();
     Serial.println();

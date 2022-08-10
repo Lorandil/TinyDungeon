@@ -49,24 +49,25 @@ already achieved:
   - always the player? nope
   - can the player upgrade his/her weapon? yes!
   - can the player flee? yes!
-  - defeated monsters can "drop" chests? maybe
+  - defeated monsters can "drop" chests? no, but loot may be added to the player's items
 * added a second graphic set for the wall bitmaps (rough rounded stones) for a nicer look
+* removed numbers characters, player hitpoints are visualized as a bar
+  - enabled wider icons for the player's gear
+  - saved a lot of flash bytes and RAM
 
 next steps:
-* remove numbers characters, player hitpoints will be visualized by a bar
-  - enables wider icons for the player's gear
-  - saves a lot of flash bytes
-  - saves RAM for text buffer
 * Add game logic: 
   - define a goal:
   - what happens when the player wins?
   - can the player "break" the dungeon [i.e. get in a deadlock - probably yes :)]
   - are there walking monsters?
+  - monsters should be able to attack the player if he/she comes close (should the player automatically turn to the threat?)
 * Should the player be healed by fountains?
   - how?
   - "using" from the distance
   - walking over it?
   - how often?
+  - change fountain to water basin placed on a wall?
 * require key to open chests/doors - use same key type for both?
 * extend object drawing to full field of view?
 [* add stairs up/down]
