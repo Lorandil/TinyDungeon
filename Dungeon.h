@@ -48,11 +48,12 @@ const MONSTER_STATS monsterStats[MAX_MONSTERS] PROGMEM =
   {   3 +  1 * LEVEL_WIDTH,  SKELETON   ,  6 ,      0      ,      0       ,  ITEM_SWORD | ITEM_SHIELD }, // skeleton
   //{   6 +  2 * LEVEL_WIDTH,  BEHOLDER   , 50 ,     +7      ,      1       ,  ITEM_VICTORY             }, // beholder (end boss)
   {   6 +  2 * LEVEL_WIDTH,  BEHOLDER   , 20 ,     +2      ,      1       ,  ITEM_VICTORY             }, // beholder (end boss)
-  {   1 +  0 * LEVEL_WIDTH,  SKELETON   , 10 ,     -2      ,      0       ,     0                     }, // mimic
+  {   1 +  0 * LEVEL_WIDTH,  SKELETON   , 10 ,     -2      ,      0       ,  ITEM_SWORD | ITEM_SHIELD }, // skeleton
   {   0 +  7 * LEVEL_WIDTH,  SKELETON   , 10 ,     -2      ,      0       ,  ITEM_SWORD | ITEM_SHIELD }, // skeleton
-  {   6 +  6 * LEVEL_WIDTH,  SKELETON   , 10 ,     -2      ,      0       ,  ITEM_SWORD | ITEM_SHIELD }, // skeleton
+  {   6 +  6 * LEVEL_WIDTH,  MIMIC      , 10 ,     -2      ,      1       ,     0                     }, // mimic
 };
 
+// special cell effects (4 bytes per FX)
 const SPECIAL_CELL_INFO specialCellFX[] PROGMEM =
 {
   // cell type ,     position       , value_1, value_2
@@ -61,7 +62,7 @@ const SPECIAL_CELL_INFO specialCellFX[] PROGMEM =
 };
 
 // list of possible non wall objects (i.e. monsters, doors, ...) (10 bytes per object)
-const NON_WALL_OBJECT objectList [10] PROGMEM = {
+const NON_WALL_OBJECT objectList [11] PROGMEM = {
 //  itemType    , width, verticalOffsetBits, heightBits, lineOffset, scalingThreshold, bitmapData
   { SKELETON    ,  28,         2 * 8,          5 * 8,         56,      { 1, 2, 99 },   joey        },  //  0
   { BEHOLDER    ,  32,         0 * 8,          7 * 8,         64,      { 1, 2,  5 },   beholder    },  //  1
@@ -70,13 +71,14 @@ const NON_WALL_OBJECT objectList [10] PROGMEM = {
   { LVR_UP      ,  16,         3 * 8,          1 * 8,         32,      { 1, 2,  8 },   leverLeft   },  //  4
   { LVR_DWN     ,  16,         3 * 8,          1 * 8,         32,      { 1, 2,  8 },   leverRight  },  //  5
   { CLOSED_CHEST,  24,         4 * 8,          3 * 8,         48,      { 1, 3, 99 },   chestClosed },  //  6
-  { OPEN_CHEST  ,  24,         4 * 8,          3 * 8,         48,      { 1, 3, 99 },   chestOpen   },  //  7
-  { FOUNTAIN    ,  12,         4 * 8,          3 * 8,         24,      { 1, 2, 99 },   fountain    },  //  8
-  { RAT         ,  20,         5 * 8,          2 * 8,         40,      { 1, 2, 99 },   rat         },  //  9
-};// special cell effects (4 bytes per FX)
+  { MIMIC       ,  24,         4 * 8,          3 * 8,         48,      { 1, 3, 99 },   chestClosed },  //  7
+  { OPEN_CHEST  ,  24,         4 * 8,          3 * 8,         48,      { 1, 3, 99 },   chestOpen   },  //  8
+  { FOUNTAIN    ,  12,         4 * 8,          3 * 8,         24,      { 1, 2, 99 },   fountain    },  //  9
+  { RAT         ,  20,         5 * 8,          2 * 8,         40,      { 1, 2, 99 },   rat         },  // 10
+};
 
 // array of conditions for wall display (9 bytes per row)
-// 'WALL & ~ FLAG_SOLID' means all walls, fake or not...
+// 'WALL & ~FLAG_SOLID' means all walls, fake or not...
 const SIMPLE_WALL_INFO arrayOfWallInfo[] PROGMEM = {
   // distance 0
   { leftRightWalls,  0,  4, 0, 7, 0, -1, WALL & ~FLAG_SOLID },
@@ -102,7 +104,7 @@ const SIMPLE_WALL_INFO arrayOfWallInfo[] PROGMEM = {
   { leftRightWalls, 35, 44, 0, 7, 3, -1, WALL & ~FLAG_SOLID },
   { leftRightWalls, 51, 60, 0, 7, 3, +1, WALL & ~FLAG_SOLID },
   
-  { nullptr, 0, 0, 0, 0, 0, 0, 0 }, // 9 unused bytes.. how can I save those?
+  { NULL, 0, 0, 0, 0, 0, 0, 0 }, // 7 unused bytes.. how can I save those?
 };
 
 
