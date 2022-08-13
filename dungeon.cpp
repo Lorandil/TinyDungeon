@@ -85,11 +85,16 @@ void Dungeon::initDice()
 // it ain't over, till it's over...  
   while( isPlayerAlive() )
   {
-  // sword found? -> adjust damage
-  if ( _dungeon.playerItems & ITEM_SWORD ) { _dungeon.playerDamage = 10; }
+    // sword found? -> adjust damage
+    if ( _dungeon.playerItems & ITEM_SWORD ) { _dungeon.playerDamage = 10; }
 
-  // shield found? adjust protection
-  if ( _dungeon.playerItems & ITEM_SHIELD ) { _dungeon.playerArmour = 3; }
+    // shield found? adjust protection
+    if ( _dungeon.playerItems & ITEM_SHIELD ) { _dungeon.playerArmour = 3; }
+
+#ifdef _USE_FIELD_OF_VIEW_
+    // setup field of view according to direction
+    updateFieldOfView();
+#endif
 
     // update the status pane and render the screen
     Tiny_Flip();
@@ -113,7 +118,7 @@ void Dungeon::initDice()
 void Dungeon::checkPlayerMovement()
 {
   // get pointer to cell in front of player
-  uint8_t *cell = getCell( _dungeon.playerX, _dungeon.playerY, +1, 0, _dungeon.dir );
+  uint8_t *cell = getCellRaw( _dungeon.playerX, _dungeon.playerY, +1, 0, _dungeon.dir );
 
   // no movement yet
   bool playerHasReachedNewCell = false;
@@ -166,7 +171,7 @@ void Dungeon::checkPlayerMovement()
             _dungeon.playerX++; break;
           case SOUTH:
             _dungeon.playerY++; break;
-          //case WEST:
+          case WEST:
           default:  // this saves 4 bytes
             _dungeon.playerX--; break;
         }
@@ -182,7 +187,7 @@ void Dungeon::checkPlayerMovement()
     
     if ( isDownPressed() )
     {
-      if ( ( *( getCell( _dungeon.playerX, _dungeon.playerY, -1, 0, _dungeon.dir ) ) & FLAG_SOLID ) != FLAG_SOLID )
+      if ( ( *( getCellRaw( _dungeon.playerX, _dungeon.playerY, -1, 0, _dungeon.dir ) ) & FLAG_SOLID ) != FLAG_SOLID )
       {
         stepSound();
         stepSound();
@@ -195,7 +200,7 @@ void Dungeon::checkPlayerMovement()
             _dungeon.playerX--; break;
           case SOUTH:
             _dungeon.playerY--; break;
-          //case WEST:
+          case WEST:
           default:
             _dungeon.playerX++; break;
         }
@@ -341,13 +346,42 @@ void Dungeon::checkPlayerMovement()
 }
 
 
+#ifdef _USE_FIELD_OF_VIEW_
+/*--------------------------------------------------------*/
+// copies the current field of view for an array to speed up things
+void Dungeon::updateFieldOfView()
+{
+  uint8_t *pFieldOfView = _dungeon.fieldOfView;
+  
+  for ( uint8_t distance = 1; distance <= MAX_VIEW_DISTANCE; distance++ )
+  {
+    for ( int x = -2; x <=2; x++)
+    {
+      *pFieldOfView++ = *getCellRaw( _dungeon.playerX, _dungeon.playerY, distance, x, _dungeon.dir );
+    }
+  }
+}
+
+
+/*--------------------------------------------------------*/
+// returns the cell value of the dungeon at the current position
+// Caution: A prior call to updateFieldOfView() is required!
+uint8_t Dungeon::getCell( const int8_t distance, const int8_t offsetLR )
+{
+  // watch from x-center (and one step back, because viewDistance ranges from 1..3)
+  const uint8_t *pFieldOfView = _dungeon.fieldOfView - 5 + 2;
+  return( pFieldOfView[ offsetLR + distance * 5] );
+}
+#endif
+
+
 /*--------------------------------------------------------*/
 // Returns a pointer to the cell which is 
 // - 'distance' away 
 // - in direction 'orientation'
 // - from position 'x', 'y'
 // This function supports a wrap-around, so endless corridors are possible :)
-uint8_t *Dungeon::getCell( int8_t x, int8_t y, const int8_t distance, const int8_t offsetLR, const uint8_t orientation )
+uint8_t *Dungeon::getCellRaw( int8_t x, int8_t y, const int8_t distance, const int8_t offsetLR, const uint8_t orientation )
 {
   switch( orientation )
   {

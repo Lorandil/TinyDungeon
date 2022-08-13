@@ -9,6 +9,7 @@
 const uint8_t LEVEL_WIDTH = 16;
 const uint8_t LEVEL_HEIGHT = 16;
 const uint16_t MAX_LEVEL_BYTES = LEVEL_WIDTH * LEVEL_HEIGHT;
+const uint8_t MAX_VIEW_DISTANCE = 3;
 
 const uint8_t MAX_MONSTERS = 6;
 
@@ -127,6 +128,9 @@ public:
   uint8_t invertMonsterEffect;
   uint8_t invertStatusEffect;
   uint8_t currentLevel[MAX_LEVEL_BYTES];
+#ifdef _USE_FIELD_OF_VIEW_
+  uint8_t fieldOfView[5 * MAX_VIEW_DISTANCE];
+#endif
   MONSTER_STATS monsterStats[MAX_MONSTERS];
 
 #if !defined(__AVR_ATtiny85__)

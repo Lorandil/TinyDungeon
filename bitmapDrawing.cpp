@@ -1,5 +1,5 @@
 #include "bitTables.h"
-#include "dungeon.h"
+#include "Dungeon.h"
 #include "monsterBitmaps.h"
 #include "objectBitmaps.h"
 #include "wallBitmaps.h"
@@ -14,7 +14,7 @@ uint8_t Dungeon::getWallPixels( const int8_t x, const int8_t y )
   const SIMPLE_WALL_INFO *wallInfoPtr = arrayOfWallInfo;
 
   // all objects are visible
-  int8_t maxObjectDistance = 3;
+  int8_t maxObjectDistance = MAX_VIEW_DISTANCE;
 
   // iterate through the whole list (at least as long as it's necessary)
   while( true )
@@ -29,7 +29,11 @@ uint8_t Dungeon::getWallPixels( const int8_t x, const int8_t y )
     if ( ( x >= wallInfo.startPosX ) && ( x <= wallInfo.endPosX ) )
     {
       // is there a wall object?
-      if ( ( *( getCell( _dungeon.playerX, _dungeon.playerY, wallInfo.viewDistance, wallInfo.leftRightOffset, _dungeon.dir ) ) & WALL_MASK ) == wallInfo.objectMask )
+    #ifdef _USE_FIELD_OF_VIEW_
+      if ( ( getCell( wallInfo.viewDistance, wallInfo.leftRightOffset ) & WALL_MASK ) == wallInfo.objectMask )
+    #else
+      if ( ( *( getCellRaw( _dungeon.playerX, _dungeon.playerY, wallInfo.viewDistance, wallInfo.leftRightOffset, _dungeon.dir ) ) & WALL_MASK ) == wallInfo.objectMask )
+    #endif
       {
         // is there wall information for this vertical position
         if ( ( y >= wallInfo.startPosY ) && ( y <= wallInfo.endPosY ) )
@@ -67,7 +71,11 @@ uint8_t Dungeon::getWallPixels( const int8_t x, const int8_t y )
       // non wall objects will only be rendered if directly in front of the player (for now!)
       if ( ( x >= WINDOW_CENTER_X - objectWidth ) && ( x < WINDOW_CENTER_X + objectWidth ) )
       {
-        if ( ( *( getCell( _dungeon.playerX, _dungeon.playerY, distance, 0, _dungeon.dir ) ) & OBJECT_MASK ) == object.itemType )
+      #ifdef _USE_FIELD_OF_VIEW_
+        if ( ( getCell( distance, 0 ) & OBJECT_MASK ) == object.itemType )
+      #else
+        if ( ( *( getCellRaw( _dungeon.playerX, _dungeon.playerY, distance, 0, _dungeon.dir ) ) & OBJECT_MASK ) == object.itemType )
+      #endif
         {
           objectWidth = WINDOW_CENTER_X - objectWidth;
           uint8_t posX = x - objectWidth;

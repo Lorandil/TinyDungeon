@@ -102,7 +102,7 @@ const SIMPLE_WALL_INFO arrayOfWallInfo[] PROGMEM = {
   { leftRightWalls, 35, 44, 0, 7, 3, -1, WALL & ~FLAG_SOLID },
   { leftRightWalls, 51, 60, 0, 7, 3, +1, WALL & ~FLAG_SOLID },
   
-  { NULL,            0,  0, 0, 0, 0,  0,    0 }, // 7 unused bytes.. how can I save those?
+  { nullptr, 0, 0, 0, 0, 0, 0, 0 }, // 9 unused bytes.. how can I save those?
 };
 
 
@@ -123,7 +123,11 @@ public:
   void gameLoop();
   void checkPlayerMovement();
 
-  uint8_t *getCell( int8_t x, int8_t y, const int8_t distance, const int8_t offsetLR, const uint8_t orientation );
+#ifdef _USE_FIELD_OF_VIEW_
+  void updateFieldOfView();
+  uint8_t getCell( const int8_t distance, const int8_t offsetLR );
+#endif
+  uint8_t *getCellRaw( int8_t x, int8_t y, const int8_t distance, const int8_t offsetLR, const uint8_t orientation );
   void limitDungeonPosition( int8_t &x, int8_t &y );
   void updateStatusPane();
   void openChest( INTERACTION_INFO &info );
