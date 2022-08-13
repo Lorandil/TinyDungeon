@@ -10,25 +10,12 @@ const uint8_t LEVEL_WIDTH = 16;
 const uint8_t LEVEL_HEIGHT = 16;
 const uint16_t MAX_LEVEL_BYTES = LEVEL_WIDTH * LEVEL_HEIGHT;
 
-const uint8_t MAX_MONSTERS = 8;
-const uint8_t MONSTER_INDEX_MASK = ( MAX_MONSTERS - 1 );
+const uint8_t MAX_MONSTERS = 6;
 
 const uint8_t WINDOW_SIZE_X   = 96;
 const uint8_t WINDOW_CENTER_X = WINDOW_SIZE_X / 2; /* = 48 */
 const uint8_t WINDOW_SIZE_Y   = 64;
 const uint8_t WINDOW_CENTER_Y = WINDOW_SIZE_Y / 2; /* = 32 */
-
-// this position is true for every cell
-const uint8_t ANY_POSITION = 0xff;
-
-// text positions
-const uint8_t POS_COMPASS     = 0 * 8 + 4;
-const uint8_t POS_HITPOINTS   = 4 * 8 + 5;
-const uint8_t POS_DAMAGE      = 5 * 8 + 5;
-const uint8_t POS_KEYS        = 6 * 8 + 5;
-
-// we will be using an old fashioned D8 (counting from 0 to 7)
-const uint8_t DICE_MASK  = 0x07;
 
 // possible item types
 enum
@@ -87,11 +74,18 @@ enum
 
 
 // monster stats
+#if !defined(__AVR_ATtiny85__)
 class MONSTER_STATS
 {
   public:
+#else
+struct MONSTER_STATS
+{
+#endif
   // monster position (byte offset from level start)
   uint8_t position;
+  // monster type
+  uint8_t monsterType;
   // hit points
   int8_t  hitpoints;
   // damage (additional to 1D8)
@@ -104,6 +98,7 @@ class MONSTER_STATS
   void serialPrint() 
   {
     Serial.print( F("  position         = (") ); Serial.print( position % LEVEL_WIDTH ); Serial.print(F(", ")); Serial.print( position / LEVEL_WIDTH ); Serial.println(F(")"));
+    Serial.print( F("  monsterType      = ") ); printHexToSerial( monsterType, false );
     Serial.print( F("  hitpoints        = ") ); Serial.println( hitpoints );
     Serial.print( F("  damageBonus      = ") ); Serial.println( damageBonus );
     Serial.print( F("  attacksFirst     = ") ); Serial.println( ( attacksFirst != 0 ) ? "yes" : "no" );
@@ -252,12 +247,12 @@ public:
   void serialPrint() 
   {
     Serial.println( F("INTERACTION_INFO") );
-    Serial.print( F("  currentPosition    = ") );if ( currentPosition == ANY_POSITION ) { Serial.println( F("ANY_POSITION") ); } else { Serial.println( currentPosition ); }
+    Serial.print( F("  currentPosition    = ") );Serial.println( currentPosition );
     Serial.print( F("  currentStatus      = ") );printHexToSerial( currentStatus );Serial.println();
     Serial.print( F("  currentStatusMask  = ") );printHexToSerial( currentStatusMask );Serial.println();
     Serial.print( F("  nextStatus         = ") );printHexToSerial( nextStatus );Serial.println();
     Serial.print( F("  newItem            = ") );printHexToSerial( newItem );Serial.println();
-    Serial.print( F("  modifiedPosition   = ") );if ( modifiedPosition == ANY_POSITION ) { Serial.println( F("ANY_POSITION") ); } else { Serial.println( modifiedPosition ); }
+    Serial.print( F("  modifiedPosition   = ") );Serial.println( modifiedPosition );
     Serial.print( F("  modifiedPosValue   = ") );printHexToSerial( modifiedPositionCellValue );Serial.println();
     Serial.println();
   }

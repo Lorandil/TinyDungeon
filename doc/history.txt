@@ -54,27 +54,34 @@ already achieved:
 * removed numbers characters, player hitpoints are visualized as a bar
   - enabled wider icons for the player's gear
   - saved a lot of flash bytes and RAM
+* monsters can attack first
 
 next steps:
-* Add game logic: 
-  - define a goal:
-  - what happens when the player wins?
-  - can the player "break" the dungeon [i.e. get in a deadlock - probably yes :)]
-  - are there walking monsters?
-  - monsters should be able to attack the player if he/she comes close (should the player automatically turn to the threat?)
-* Should the player be healed by fountains?
-  - how?
-  - "using" from the distance
-  - walking over it?
-  - how often?
-  - change fountain to water basin placed on a wall?
-* require key to open chests/doors - use same key type for both?
-* extend object drawing to full field of view?
-[* add stairs up/down]
-* add more monster(s) - perhaps a mimic looking like a closed chest?
-* add treasure
-* ...
-* add fun!
+
+Combat System
+  * are there walking monsters? nope
+  * monsters should be able to attack the player if he/she comes close (should the player automatically turn to the threat?)
+  * add more monster(s) - perhaps a mimic looking like a closed chest?
+
+Game Logic
+  * define a goal (defeat the boss (beholder?) )
+  * what happens when the player wins? - Just some text lame message?
+  * can the player "break" the dungeon [i.e. get in a deadlock - probably yes :)]
+  * Should the player be healed by fountains?
+    - how?
+    - "using" from the distance
+    - walking over it?
+    - how often?
+    - change fountain to water basin placed on a wall?
+  * require key to open chests/doors - use same key type for both?
+
+Graphics Engine
+  * extend object drawing to full field of view?
+  * fix problem with left/right walls in the distance
+ [* add stairs up/down]
+  * add treasure
+  * ...
+  * add fun!
 
 perhaps:
 ? use just left walls and mirror them for right:
@@ -91,5 +98,4 @@ final steps:
 
 goal
 * 4 levels(?) or one larger level (save space for stairs graphics)
-* fun
 * save to EEPROM?

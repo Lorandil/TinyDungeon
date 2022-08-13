@@ -95,7 +95,7 @@ bool wasDownPressed();
 uint16_t getAnalogValueX();
 uint16_t getAnalogValueY();
 
-void _variableDelay_us( uint8_t delayValue );
+void __attribute__ ((noinline)) _variableDelay_us( uint8_t delayValue );
 void Sound( const uint8_t freq, const uint8_t dur );
 
 // functions to simplify display handling between ATtiny85 and Ardafruit_SSD1306

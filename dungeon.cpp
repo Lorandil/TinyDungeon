@@ -29,20 +29,36 @@ void Dungeon::init()
   // prepare player stats
   _dungeon.playerHP = 10;
   _dungeon.playerDamage = 3;
-  //_dungeon.playerKeys = 0;  
-  //_dungeon.playerHasCompass = false;
-  //_dungeon.playerHasAmulett = false;
   //_dungeon.displayXorEffect = 0;
 
-  // Prepare first level
-  //LEVEL_HEADER *header = (LEVEL_HEADER *)Level_1;
-  //_dungeon.levelWidth = LEVEL_WIDTH;
-  //_dungeon.levelHeight = LEVEL_HEIGHT;
   // copy the level data to RAM
-  memcpy_P( _dungeon.currentLevel, Level_1 /*+ sizeof( LEVEL_HEADER )*/, getLevelWidth() * getLevelHeight() );
+  memcpy_P( _dungeon.currentLevel, Level_1, getLevelWidth() * getLevelHeight() );
 
   // populate dungeon with monsters
   memcpy_P( _dungeon.monsterStats, monsterStats, sizeof( monsterStats ) );
+
+  serialPrint("sizeof( MONSTER_STATS ) = ");
+  serialPrintln( sizeof( MONSTER_STATS ) );
+  serialPrint("sizeof( _dungeon.monsterStats ) = ");
+  serialPrintln( sizeof( _dungeon.monsterStats ) );
+  serialPrint("sizeof( monsterStats ) = ");
+  serialPrintln( sizeof( monsterStats ) );
+
+  MONSTER_STATS *pMonsterStats = _dungeon.monsterStats;
+
+  for ( uint8_t n = 0; n < MAX_MONSTERS; n++ )
+  {
+    _dungeon.currentLevel[pMonsterStats->position] = pMonsterStats->monsterType;
+  #if !defined( __AVR_ATtiny85__ )
+    serialPrint("+ placing monster ");  printHexToSerial( pMonsterStats->monsterType, false );
+    serialPrint(" at position ");  serialPrintln( pMonsterStats->position ); 
+  #endif
+    pMonsterStats++;
+  }  
+  //while( pMonsterStats->monsterType != 0 );
+  #if !defined( __AVR_ATtiny85__ )
+    _dungeon.serialPrint();
+  #endif
 
   // initialize timer/counter
   initDice();
@@ -261,36 +277,43 @@ void Dungeon::checkPlayerMovement()
 
 
           /////////////////////////////////////////////
-          // player attacks monster
-          playerAttack( monster );
-
-          // wait for fire button to be released (random number generation!)
-          while ( isFirePressed() )
+          // does the monster attack first?
+          if ( monster->attacksFirst )
           {
-            updateDice();
+            // now let the monster attack the player
+            monsterAttack( monster );
+          }          
+
+          /////////////////////////////////////////////
+          // player attacks monster (if he/she is still alive)
+          if ( _dungeon.playerHP > 0 )
+          {
+            playerAttack( monster );
+
+            // wait for fire button to be released (random number generation!)
+            while ( isFirePressed() )
+            {
+              updateDice();
+            }
+
+            // update the status pane and render the screen (monster will be inverted)
+            Tiny_Flip();
+            // redraw with normal monster (so that the monster appears to have flashed)
+            Tiny_Flip();
           }
-
-          // update the status pane and render the screen (monster will be inverted)
-          Tiny_Flip();
-          // redraw with normal monster (so that the monster appears to have flashed)
-          Tiny_Flip();
-
 
           /////////////////////////////////////////////
           // is the monster still alive?
           if ( monster->hitpoints > 0 )
           {
-            // just wait a moment (for the display effect to be visible)
-            _delay_ms( 250 );
-            
-            // now let the monster attack the player            
-            monsterAttack( monster );
-
-            // update the status pane and render the screen
-            Tiny_Flip();
-
-            // just wait a moment (for the display effect to be visible)
-            //_delay_ms( 100 );
+            if ( !monster->attacksFirst )
+            {
+              // just wait a moment (for the display effect to be visible)
+              _variableDelay_us( 250 );
+              
+              // now let the monster attack the player
+              monsterAttack( monster );
+            }
           }
           else
           {
@@ -300,8 +323,6 @@ void Dungeon::checkPlayerMovement()
             *cell = EMPTY;
             // collect the treasure!
             _dungeon.playerItems |= monster->treasureItemMask;
-            // remove line from monster list?
-            // maybe later... just unnecessary code!
           }
 
         #ifdef USE_SERIAL_PRINT
@@ -521,6 +542,9 @@ MONSTER_STATS *Dungeon::findMonster( const uint8_t position )
 /*--------------------------------------------------------*/
 void Dungeon::playerAttack( MONSTER_STATS *monster )
 {
+  // just some logging
+  serialPrintln(F("-> playerAttack"));
+
 #ifdef USE_EXTENDED_CHECKS
   if ( !monster ) 
   { 
@@ -539,11 +563,17 @@ void Dungeon::playerAttack( MONSTER_STATS *monster )
 #ifdef USE_SERIAL_PRINT
   monster->serialPrint();
 #endif
+
+  // just some logging
+  serialPrintln(F("<- playerAttack"));
 }
 
 /*--------------------------------------------------------*/
 void Dungeon::monsterAttack( MONSTER_STATS *monster )
 {
+  // just some logging
+  serialPrintln(F("-> monsterAttack()"));
+
   // monster retaliates
   int8_t damage = getDice( 0x07 ) + monster->damageBonus - _dungeon.playerArmour;
   if ( damage > 0 )
@@ -554,6 +584,16 @@ void Dungeon::monsterAttack( MONSTER_STATS *monster )
     // invert screen
     _dungeon.invertStatusEffect = 0xFF;
   }
+
+#ifdef USE_SERIAL_PRINT
+  Serial.print(F("  Player's hitpoints : ")); Serial.println( _dungeon.playerHP );
+#endif
+
+    // update the status pane and render the screen
+    Tiny_Flip();
+
+  // just some logging
+  serialPrintln(F("<- monsterAttack()"));
 }
 
 /*--------------------------------------------------------*/
@@ -566,9 +606,7 @@ void Dungeon::playerInteraction( uint8_t *cell, const uint8_t cellValue )
     memcpy_P( &interactionInfo, interactionData + n, sizeof( INTERACTION_INFO ) );
 
     // does this info cover the current position?
-    if (    ( cell == _dungeon.currentLevel + interactionInfo.currentPosition )
-        //|| ( interactionInfo.currentPosition == ANY_POSITION )
-      )
+    if ( cell == _dungeon.currentLevel + interactionInfo.currentPosition )
     {
       // is the status correct?
       if ( ( cellValue & interactionInfo.currentStatusMask ) == interactionInfo.currentStatus )

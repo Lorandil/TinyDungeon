@@ -145,7 +145,7 @@ uint16_t getAnalogValueY()
 }
 
 /*-------------------------------------------------------*/
-void _variableDelay_us( uint8_t delayValue )
+void __attribute__ ((noinline)) _variableDelay_us( uint8_t delayValue )
 {
   while ( delayValue-- != 0 )
   {

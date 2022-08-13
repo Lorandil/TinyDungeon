@@ -10,12 +10,12 @@ const uint8_t Level_1[] PROGMEM =
   // plain level data
 /*             0            1            2            3            4            5            6            7            8            9           10           11           12           13           14           15              */
 /*  0 */     WALL     ,     0      ,   WALL     ,   WALL     ,   WALL     ,   WALL     ,  FAKE_WALL ,   WALL     ,     0      ,     0      ,     0      ,     0      ,     0      ,     0      ,     0      ,     0      , /*  0 */ 
-/*  1 */      RAT     ,     0      ,   BARS     , SKELETON   ,   WALL     ,     0      ,CLOSED_CHEST,   WALL     ,     0      ,     0      ,     0      ,     0      ,     0      ,     0      ,     0      ,     0      , /*  1 */
-/*  2 */       0      ,     0      ,   WALL     ,CLOSED_CHEST,   WALL     ,  FOUNTAIN  ,  BEHOLDER  ,   WALL     ,     0      ,     0      ,     0      ,     0      ,     0      ,     0      ,     0      ,     0      , /*  2 */
+/*  1 */       0      ,     0      ,   BARS     ,     0      ,   WALL     ,     0      ,CLOSED_CHEST,   WALL     ,     0      ,     0      ,     0      ,     0      ,     0      ,     0      ,     0      ,     0      , /*  1 */
+/*  2 */       0      ,     0      ,   WALL     ,CLOSED_CHEST,   WALL     ,  FOUNTAIN  ,     0      ,   WALL     ,     0      ,     0      ,     0      ,     0      ,     0      ,     0      ,     0      ,     0      , /*  2 */
 /*  3 */       0      ,     0      ,   WALL     ,   WALL     ,   WALL     ,     0      ,     0      ,   WALL     ,   WALL     ,   WALL     ,   WALL     ,   WALL     ,   WALL     ,   WALL     ,     0      ,     0      , /*  3 */
 /*  4 */       0      ,     0      ,     0      , WALL|DOOR  ,     0      ,/*TELEP.*/0 ,     0      ,   WALL     ,     0      ,     0      ,     0      ,     0      ,     0      ,   WALL     ,     0      ,     0      , /*  4 */
 /*  5 */     WALL     ,   WALL     ,     0      ,   WALL     ,   WALL     ,     0      ,     0      ,   WALL     ,     0      ,   WALL     ,     0      ,   WALL     ,     0      ,   WALL     ,     0      ,     0      , /*  5 */
-/*  6 */   SKELETON   ,     0      ,/*SPINNER*/0,     0      ,     0      ,     0      ,     0      ,     0      ,     0      ,     0      ,     0      ,     0      ,     0      ,   WALL     ,     0      ,     0      , /*  6 */
+/*  6 */       0      ,     0      ,/*SPINNER*/0,     0      ,     0      ,     0      ,     0      ,     0      ,     0      ,     0      ,     0      ,     0      ,     0      ,   WALL     ,     0      ,     0      , /*  6 */
 /*  7 */     WALL     ,   WALL     ,   WALL     ,   WALL     ,   WALL     ,CLOSED_CHEST,     0      ,   WALL     ,     0      ,   WALL     ,     0      ,   WALL     ,     0      ,   WALL     ,     0      ,     0      , /*  7 */
 /*  8 */       0      ,     0      ,     0      ,     0      ,     0      ,     0      ,     0      ,   WALL     ,     0      ,     0      ,     0      ,     0      ,     0      ,   WALL     ,     0      ,     0      , /*  8 */ 
 /*  9 */       0      ,     0      ,     0      ,     0      ,     0      ,     0      ,     0      ,   WALL     ,   WALL     ,   WALL     ,   WALL     ,   WALL     ,   WALL     ,   WALL     ,     0      ,     0      , /*  9 */
@@ -40,14 +40,17 @@ const INTERACTION_INFO interactionData[] PROGMEM =
   { 6 +  1 * LEVEL_WIDTH        ,    CLOSED_CHEST , OBJECT_MASK     , OPEN_CHEST  , ITEM_AMULET     , 6 + 1 * LEVEL_WIDTH  ,  OPEN_CHEST   },
 };
 
-// monster stats (5 bytes per monster - must fit into RAM - or EEPROM???)
-const MONSTER_STATS monsterStats[] PROGMEM =
+// monster stats (6 bytes per monster - must fit into RAM - or EEPROM???)
+const MONSTER_STATS monsterStats[MAX_MONSTERS] PROGMEM =
 {
-  // position                hp  bonusDamage   attacksFirst  treasureItemMask
-  {   0 +  1 * LEVEL_WIDTH,   3,     -6      ,      1       ,     0                     }, // rat
-  {   3 +  1 * LEVEL_WIDTH,   6,      0      ,      0       ,  ITEM_SWORD | ITEM_SHIELD }, // skeleton
-  {   6 +  2 * LEVEL_WIDTH,  50,     +7      ,      0       ,  ITEM_VICTORY             }, // beholder (end boss)
-  {   1 +  0 * LEVEL_WIDTH,  10,     -2      ,      1       ,     0                     }, // mimic
+  // position                monsterType  hp  bonusDamage   attacksFirst  treasureItemMask
+  {   0 +  1 * LEVEL_WIDTH,  RAT        ,  3 ,     -6      ,      1       ,     0                     }, // rat
+  {   3 +  1 * LEVEL_WIDTH,  SKELETON   ,  6 ,      0      ,      0       ,  ITEM_SWORD | ITEM_SHIELD }, // skeleton
+  //{   6 +  2 * LEVEL_WIDTH,  BEHOLDER   , 50 ,     +7      ,      1       ,  ITEM_VICTORY             }, // beholder (end boss)
+  {   6 +  2 * LEVEL_WIDTH,  BEHOLDER   , 20 ,     +2      ,      1       ,  ITEM_VICTORY             }, // beholder (end boss)
+  {   1 +  0 * LEVEL_WIDTH,  SKELETON   , 10 ,     -2      ,      0       ,     0                     }, // mimic
+  {   0 +  7 * LEVEL_WIDTH,  SKELETON   , 10 ,     -2      ,      0       ,  ITEM_SWORD | ITEM_SHIELD }, // skeleton
+  {   6 +  6 * LEVEL_WIDTH,  SKELETON   , 10 ,     -2      ,      0       ,  ITEM_SWORD | ITEM_SHIELD }, // skeleton
 };
 
 const SPECIAL_CELL_INFO specialCellFX[] PROGMEM =
@@ -96,8 +99,8 @@ const SIMPLE_WALL_INFO arrayOfWallInfo[] PROGMEM = {
   { frontWalls_D3,  36, 58, 3, 4, 3,  0, WALL & ~FLAG_SOLID },
   { frontWalls_D3,  59, 83, 3, 4, 3, +1, WALL & ~FLAG_SOLID },
   { frontWalls_D3,  84, 95, 3, 4, 3, +2, WALL & ~FLAG_SOLID },
-  { leftRightWalls, 35, 47, 0, 7, 3, -1, WALL & ~FLAG_SOLID },
-  { leftRightWalls, 48, 60, 0, 7, 3, +1, WALL & ~FLAG_SOLID },
+  { leftRightWalls, 35, 44, 0, 7, 3, -1, WALL & ~FLAG_SOLID },
+  { leftRightWalls, 51, 60, 0, 7, 3, +1, WALL & ~FLAG_SOLID },
   
   { NULL,            0,  0, 0, 0, 0,  0,    0 }, // 7 unused bytes.. how can I save those?
 };
