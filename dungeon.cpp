@@ -23,9 +23,9 @@ void Dungeon::init()
   clear();
 
   // Prepare the dungeon
-  _dungeon.playerX = 5; // could save 4 bytes here, if the whole level is shifted, so that the starting point is at (0,0)
-  _dungeon.playerY = 3;
-  //_dungeon.dir  = NORTH; // NORTH = 0!
+  _dungeon.playerX = 1; // could save 4 bytes here, if the whole level is shifted, so that the starting point is at (0,0)
+  _dungeon.playerY = 1;
+  _dungeon.dir  = EAST;
   // prepare player stats
   _dungeon.playerHP = 10;
   _dungeon.playerDamage = 3;
