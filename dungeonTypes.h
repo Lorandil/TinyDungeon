@@ -154,17 +154,19 @@ public:
       for( uint8_t x = 0; x < LEVEL_WIDTH; x++ )
       {
         uint8_t cellValue = currentLevel[y * LEVEL_WIDTH + x];
-        Serial.print( ( cellValue & FLAG_SOLID )                ? F("s")  : F("-") );
-        Serial.print( ( cellValue & WALL_MASK ) == FAKE_WALL    ? F("W")  : F("-") );
-        Serial.print( ( cellValue == SKELETON                   ? F("S")  : F("-") ) );
-        Serial.print( ( cellValue == BEHOLDER                   ? F("B")  : F("-") ) );
-        Serial.print( ( cellValue == RAT                        ? F("R")  : F("-") ) );
-        Serial.print( ( cellValue & OBJECT_MASK ) == DOOR       ? F("D")  : F("-") );
-        Serial.print( ( cellValue & OBJECT_MASK ) == BARS       ? F("#")  : F("-") );
-        Serial.print( ( cellValue & OBJECT_MASK ) == LVR_UP     ? F("u")
-                                                                : ( cellValue & OBJECT_MASK ) == LVR_DWN ? F("d")
-                                                                                                         : F("-") );
-        Serial.print( F("   ") );
+        char text[3] = "..";
+        if ( ( cellValue & WALL_MASK ) == FAKE_WALL ) { memcpy( text, "W ", 2 ); }
+        else if ( cellValue == SKELETON ) { memcpy( text, "sk", 2 ); }
+        else if ( cellValue == BEHOLDER ) { memcpy( text, "bh", 2 ); }
+        else if ( cellValue == RAT ) { memcpy( text, "rt", 2 ); }
+        else if ( cellValue == MIMIC ) { memcpy( text, "mi", 2 ); }
+        else if ( ( cellValue & OBJECT_MASK ) == DOOR ) { memcpy( text, "D ", 2 ); }
+        else if ( ( cellValue & OBJECT_MASK ) == BARS ) { memcpy( text, "# ", 2 ); }
+        else if ( ( cellValue & OBJECT_MASK ) == LVR_UP ) { memcpy( text, "Lu", 2 ); }
+        else if ( ( cellValue & OBJECT_MASK ) == LVR_DWN ) { memcpy( text, "Ld", 2 ); }
+        else if ( ( cellValue & OBJECT_MASK ) == FOUNTAIN ) { memcpy( text, "F ", 2 ); }
+        Serial.print( text );
+        Serial.print( F(" ") );
       }
     Serial.println();
     }
