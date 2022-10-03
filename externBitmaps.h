@@ -24,4 +24,11 @@ extern const uint8_t compass[] PROGMEM;
 extern const unsigned char frontWalls_D3[] PROGMEM;
 extern const unsigned char frontWalls_D2[] PROGMEM;
 extern const unsigned char frontWalls_D1[] PROGMEM;
-extern const unsigned char leftRightWalls[] PROGMEM;
+#if 1
+  extern const unsigned char leftRightWalls_D0[] PROGMEM;
+  extern const unsigned char leftRightWalls_D1[] PROGMEM;
+  extern const unsigned char leftRightWalls_D2[] PROGMEM;
+  extern const unsigned char leftRightWalls_D3[] PROGMEM;
+#else
+  extern const unsigned char leftRightWalls[] PROGMEM;
+#endif

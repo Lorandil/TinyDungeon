@@ -57,11 +57,15 @@ already achieved:
 * monsters can attack first
 
 next steps:
+* monsters should attack player on approaching (if they attack first)
+
+* change compass from letters to arrows?
 
 Combat System
   * are there walking monsters? nope
   * monsters should be able to attack the player if he/she comes close (should the player automatically turn to the threat?)
   * add more monster(s) - perhaps a mimic looking like a closed chest?
+  * monster attacks should play a sound
 
 Game Logic
   * define a goal (defeat the boss (beholder?) )

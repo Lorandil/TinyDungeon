@@ -120,6 +120,9 @@ void Dungeon::checkPlayerMovement()
   // get pointer to cell in front of player
   uint8_t *cell = getCellRaw( _dungeon.playerX, _dungeon.playerY, +1, 0, _dungeon.dir );
 
+  // check if there is a monster in front of the player
+  // ...  
+
   // no movement yet
   bool playerHasReachedNewCell = false;
   bool playerAction = false;
@@ -277,7 +280,8 @@ void Dungeon::checkPlayerMovement()
         if ( cellValue & FLAG_MONSTER )
         {
           /////////////////////////////////////////////
-          // find the monster...
+          // find the monster... 
+          // (cell - _dungeon.currentLevel) is the offset from the level begin ;)
           MONSTER_STATS *monster = findMonster( cell - _dungeon.currentLevel );
 
 

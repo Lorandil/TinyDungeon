@@ -16,6 +16,8 @@ uint8_t Dungeon::getWallPixels( const int8_t x, const int8_t y )
   // all objects are visible
   int8_t maxObjectDistance = MAX_VIEW_DISTANCE;
 
+  uint8_t index = 0;
+
   // iterate through the whole list (at least as long as it's necessary)
   while( true )
   {
@@ -38,16 +40,41 @@ uint8_t Dungeon::getWallPixels( const int8_t x, const int8_t y )
         // is there wall information for this vertical position
         if ( ( y >= wallInfo.startPosY ) && ( y <= wallInfo.endPosY ) )
         {
-          // mirror walls on odd fields
-          uint8_t offsetX = ( ( _dungeon.playerX + _dungeon.playerY ) & 0x01 ) ? ( WINDOW_SIZE_X - 1 ) - x : x;
+          uint8_t offsetX;
+
+          // is the bitmap smaller than the screen?
+          bool smallBitmap = ( wallInfo.width < WINDOW_SIZE_X );
+          bool mirror = ( ( _dungeon.playerX + _dungeon.playerY ) & 0x01 );
+
+          if ( smallBitmap )
+          {
+            // positions are to be considered relative to the bitmap
+            int8_t posX = x - wallInfo.startPosX;
+
+            if ( mirror )
+            {
+              offsetX = wallInfo.width - 1 - posX - wallInfo.relPos;
+            }
+            else
+            {
+              offsetX = posX + wallInfo.relPos;
+            }
+          }
+          else
+          {
+            // mirror walls on odd fields
+            offsetX = mirror ? ( WINDOW_SIZE_X - 1 ) - x : x;
+          }
+
           // get wall pixels (shave off the empty rows)
-          pixels = pgm_read_byte( wallInfo.wallBitmap + ( y - wallInfo.startPosY ) * WINDOW_SIZE_X + offsetX );
+          pixels = pgm_read_byte( wallInfo.wallBitmap + ( y - wallInfo.startPosY ) * wallInfo.width + offsetX );
         }
         else
         {
           // nope, just nothing
           pixels = 0;
         }
+        if ( y == 0 ) { Serial.print( x ); Serial.print(": "); Serial.println( index ); }
         // objects behind walls are not visible, but doors or switches might be placed *on* walls
         maxObjectDistance = wallInfo.viewDistance;
         // that's it!
@@ -56,6 +83,7 @@ uint8_t Dungeon::getWallPixels( const int8_t x, const int8_t y )
     }
     // move to next entry
     wallInfoPtr++;
+    index++;
   }
 
   NON_WALL_OBJECT object;
@@ -132,18 +160,6 @@ uint8_t Dungeon::getDownScaledBitmapData( int8_t x,                      // alre
     // correct y position by start offset
     y -= startOffsetY;
     
-  #if 0
-    if ( ( x == 0 ) && !useMask )
-    {
-      Serial.print(F("x = "));Serial.print( x );Serial.print(F(", y = "));Serial.print( y );
-      Serial.print(F(", distance = "));Serial.print( distance );
-      //Serial.print(F(", scaleFactor = "));Serial.print( scaleFactor ); Serial.print(F(", threshold = "));Serial.print( threshold );
-      //Serial.print(F(", startOffsetY = "));Serial.print( startOffsetY ); Serial.print(F(", endOffsetY = "));Serial.print( endOffsetY );
-      Serial.print(F(", bitmapVerticalOffsetInBits = "));Serial.print( object->bitmapVerticalOffsetInBits );
-      Serial.println();
-    }
-  #endif
-
     // get associated bit mask
     uint8_t bitMask = pgm_read_byte( bitMaskFromScalingFactor + scaleFactor );
 
@@ -167,15 +183,6 @@ uint8_t Dungeon::getDownScaledBitmapData( int8_t x,                      // alre
         // calculate start address
         uint8_t row = ( bitNo - startBitNo ) / 8;
         const uint8_t *data = bitmapData + row * object->nextLineOffset + x;
-    #if 0
-      if ( ( x == 0 ) && !useMask )
-      {
-        Serial.print(F("y = "));Serial.print( y ); Serial.print(F(", bitNo = "));Serial.print( bitNo );
-        Serial.print(F(", startBitNo = "));Serial.print( startBitNo ); Serial.print(F(", endBitNo = "));Serial.print( endBitNo );
-        Serial.print(F(", row = "));Serial.print( row );
-        Serial.println();
-      }
-    #endif
         
         // go over the columns - all required bits always are in one row
         for ( uint8_t col = 0; col < scaleFactor; col++ )

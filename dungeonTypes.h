@@ -75,14 +75,10 @@ enum
 
 
 // monster stats
-#if !defined(__AVR_ATtiny85__)
 class MONSTER_STATS
 {
   public:
-#else
-struct MONSTER_STATS
-{
-#endif
+
   // monster position (byte offset from level start)
   uint8_t position;
   // monster type
@@ -226,6 +222,10 @@ class SIMPLE_WALL_INFO
   int8_t   viewDistance;
   // offset to left or right
   int8_t   leftRightOffset;
+  // relative offset from left screen edge
+  int8_t   relPos;
+  // width off the bitmap/offset to the next line
+  int8_t   width;
   // object selector, e.g. WALL
   uint8_t  objectMask;
 };
