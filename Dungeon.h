@@ -107,6 +107,8 @@ const SIMPLE_WALL_INFO arrayOfWallInfo[] PROGMEM = {
   { frontWalls_D2    ,  71   ,  95 ,   2   ,  5  ,     2   ,     +1    ,   0  ,  96  , WALL & ~FLAG_SOLID }, //  9
   { leftRightWalls_D2,  25   ,  34 ,   2   ,  5  ,     2   ,     -1    ,   0  ,  20  , WALL & ~FLAG_SOLID }, // 10
   { leftRightWalls_D2,  61   ,  70 ,   2   ,  5  ,     2   ,     +1    ,  10  ,  20  , WALL & ~FLAG_SOLID }, // 11
+  { leftRightWalls_D2,   3   ,  12 ,   2   ,  5  ,     2   ,     -2    ,   0  ,  20  , WALL & ~FLAG_SOLID }, //
+  { leftRightWalls_D2,  83   ,  92 ,   2   ,  5  ,     2   ,     +2    ,  10  ,  20  , WALL & ~FLAG_SOLID }, //
   
   // distance 3
   { frontWalls_D3    ,   0   ,  11 ,   3   ,  4  ,     3   ,     -2    ,   0  ,  96  , WALL & ~FLAG_SOLID }, // 12
@@ -116,6 +118,8 @@ const SIMPLE_WALL_INFO arrayOfWallInfo[] PROGMEM = {
   { frontWalls_D3    ,  84   ,  95 ,   3   ,  4  ,     3   ,     +2    ,   0  ,  96  , WALL & ~FLAG_SOLID }, // 16
   { leftRightWalls_D3,  35   ,  44 ,   3   ,  4  ,     3   ,     -1    ,   0  ,  20  , WALL & ~FLAG_SOLID }, // 17
   { leftRightWalls_D3,  51   ,  60 ,   3   ,  4  ,     3   ,     +1    ,  10  ,  20  , WALL & ~FLAG_SOLID }, // 18
+  { leftRightWalls_D3,  12   ,  21 ,   3   ,  4  ,     3   ,     -2    ,   0  ,  20  , WALL & ~FLAG_SOLID }, //
+  { leftRightWalls_D3,  74   ,  83 ,   3   ,  4  ,     3   ,     +2    ,  10  ,  20  , WALL & ~FLAG_SOLID }, //
 #else
   // distance 0
   { leftRightWalls   ,   0   ,   4 ,   0   ,  7  ,     0   ,     -1    ,   0  ,  96  , WALL & ~FLAG_SOLID }, //  0

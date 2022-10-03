@@ -16,8 +16,6 @@ uint8_t Dungeon::getWallPixels( const int8_t x, const int8_t y )
   // all objects are visible
   int8_t maxObjectDistance = MAX_VIEW_DISTANCE;
 
-  uint8_t index = 0;
-
   // iterate through the whole list (at least as long as it's necessary)
   while( true )
   {
@@ -75,7 +73,6 @@ uint8_t Dungeon::getWallPixels( const int8_t x, const int8_t y )
           // nope, just nothing
           pixels = 0;
         }
-        if ( y == 0 ) { Serial.print( x ); Serial.print(": "); Serial.print( index ); Serial.print(" mirror = "); Serial.println( mirror ); }
         // objects behind walls are not visible, but doors or switches might be placed *on* walls
         maxObjectDistance = wallInfo.viewDistance;
         // that's it!
@@ -84,7 +81,6 @@ uint8_t Dungeon::getWallPixels( const int8_t x, const int8_t y )
     }
     // move to next entry
     wallInfoPtr++;
-    index++;
   }
 
   NON_WALL_OBJECT object;
