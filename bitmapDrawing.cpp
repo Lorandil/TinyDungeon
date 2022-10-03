@@ -30,6 +30,8 @@ uint8_t Dungeon::getWallPixels( const int8_t x, const int8_t y )
     // check conditions
     if ( ( x >= wallInfo.startPosX ) && ( x <= wallInfo.endPosX ) )
     {
+      bool mirror = ( ( _dungeon.playerX + _dungeon.playerY ) & 0x01 );
+
       // is there a wall object?
     #ifdef _USE_FIELD_OF_VIEW_
       if ( ( getCell( wallInfo.viewDistance, wallInfo.leftRightOffset ) & WALL_MASK ) == wallInfo.objectMask )
@@ -44,7 +46,6 @@ uint8_t Dungeon::getWallPixels( const int8_t x, const int8_t y )
 
           // is the bitmap smaller than the screen?
           bool smallBitmap = ( wallInfo.width < WINDOW_SIZE_X );
-          bool mirror = ( ( _dungeon.playerX + _dungeon.playerY ) & 0x01 );
 
           if ( smallBitmap )
           {
@@ -74,7 +75,7 @@ uint8_t Dungeon::getWallPixels( const int8_t x, const int8_t y )
           // nope, just nothing
           pixels = 0;
         }
-        if ( y == 0 ) { Serial.print( x ); Serial.print(": "); Serial.println( index ); }
+        if ( y == 0 ) { Serial.print( x ); Serial.print(": "); Serial.print( index ); Serial.print(" mirror = "); Serial.println( mirror ); }
         // objects behind walls are not visible, but doors or switches might be placed *on* walls
         maxObjectDistance = wallInfo.viewDistance;
         // that's it!
