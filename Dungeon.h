@@ -89,66 +89,38 @@ const NON_WALL_OBJECT objectList [11] PROGMEM = {
 const SIMPLE_WALL_INFO arrayOfWallInfo[] PROGMEM = {
 
   // *wallBitmap     , startX, endX, startY, endY, distance, l/r offset, relPos, width, objectMask
-#if 1
   // distance 0
-  { leftRightWalls_D0,   0   ,   4 ,   0   ,  7  ,     0   ,     -1    ,   0  ,  10  , WALL & ~FLAG_SOLID }, //  0
-  { leftRightWalls_D0,  91   ,  95 ,   0   ,  7  ,     0   ,     +1    ,   5  ,  10  , WALL & ~FLAG_SOLID }, //  1
-
-  // distance 1
-  { frontWalls_D1    ,   0   ,   4 ,   0   ,  7  ,     1   ,     -1    ,   0  ,  96  , WALL & ~FLAG_SOLID }, //  2
-  { frontWalls_D1    ,   5   ,  90 ,   0   ,  7  ,     1   ,      0    ,   0  ,  96  , WALL & ~FLAG_SOLID }, //  3
-  { frontWalls_D1    ,  91   ,  95 ,   0   ,  7  ,     1   ,     +1    ,   0  ,  96  , WALL & ~FLAG_SOLID }, //  4
-  { leftRightWalls_D1,   5   ,  24 ,   0   ,  7  ,     1   ,     -1    ,   0  ,  40  , WALL & ~FLAG_SOLID }, //  5
-  { leftRightWalls_D1,  71   ,  90 ,   0   ,  7  ,     1   ,     +1    ,  20  ,  40  , WALL & ~FLAG_SOLID }, //  6
-  
-  // distance 2
-  { frontWalls_D2    ,   0   ,  24 ,   2   ,  5  ,     2   ,     -1    ,   0  ,  96  , WALL & ~FLAG_SOLID }, //  7
-  { frontWalls_D2    ,  25   ,  70 ,   2   ,  5  ,     2   ,      0    ,   0  ,  96  , WALL & ~FLAG_SOLID }, //  8
-  { frontWalls_D2    ,  71   ,  95 ,   2   ,  5  ,     2   ,     +1    ,   0  ,  96  , WALL & ~FLAG_SOLID }, //  9
-  { leftRightWalls_D2,  25   ,  34 ,   2   ,  5  ,     2   ,     -1    ,   0  ,  20  , WALL & ~FLAG_SOLID }, // 10
-  { leftRightWalls_D2,  61   ,  70 ,   2   ,  5  ,     2   ,     +1    ,  10  ,  20  , WALL & ~FLAG_SOLID }, // 11
-  { leftRightWalls_D2,   3   ,  12 ,   2   ,  5  ,     2   ,     -2    ,   0  ,  20  , WALL & ~FLAG_SOLID }, //
-  { leftRightWalls_D2,  83   ,  92 ,   2   ,  5  ,     2   ,     +2    ,  10  ,  20  , WALL & ~FLAG_SOLID }, //
+  { leftRightWalls_D0    ,   0   ,   4 ,   0   ,  7  ,     0   ,     -1    ,   0  ,  10  , WALL & ~FLAG_SOLID }, //  0
+  { leftRightWalls_D0    ,  91   ,  95 ,   0   ,  7  ,     0   ,     +1    ,   5  ,  10  , WALL & ~FLAG_SOLID }, //  1
+					     
+  // distance 1	         
+  { frontWalls_D1        ,   0   ,   4 ,   0   ,  7  ,     1   ,     -1    ,   0  ,  96  , WALL & ~FLAG_SOLID }, //  2
+  { frontWalls_D1        ,   5   ,  90 ,   0   ,  7  ,     1   ,      0    ,   0  ,  96  , WALL & ~FLAG_SOLID }, //  3
+  { frontWalls_D1        ,  91   ,  95 ,   0   ,  7  ,     1   ,     +1    ,   0  ,  96  , WALL & ~FLAG_SOLID }, //  4
+  { leftRightWalls_D1    ,   5   ,  24 ,   0   ,  7  ,     1   ,     -1    ,   0  ,  40  , WALL & ~FLAG_SOLID }, //  5
+  { leftRightWalls_D1    ,  71   ,  90 ,   0   ,  7  ,     1   ,     +1    ,  20  ,  40  , WALL & ~FLAG_SOLID }, //  6
+					     
+  // distance 2	         
+  { frontWalls_D2        ,   0   ,  24 ,   2   ,  5  ,     2   ,     -1    ,   0  ,  96  , WALL & ~FLAG_SOLID }, //  7
+  { frontWalls_D2        ,  25   ,  70 ,   2   ,  5  ,     2   ,      0    ,   0  ,  96  , WALL & ~FLAG_SOLID }, //  8
+  { frontWalls_D2        ,  71   ,  95 ,   2   ,  5  ,     2   ,     +1    ,   0  ,  96  , WALL & ~FLAG_SOLID }, //  9
+  { leftRightWalls_D2    ,  25   ,  34 ,   2   ,  5  ,     2   ,     -1    ,   0  ,  20  , WALL & ~FLAG_SOLID }, // 10
+  { leftRightWalls_D2    ,  61   ,  70 ,   2   ,  5  ,     2   ,     +1    ,  10  ,  20  , WALL & ~FLAG_SOLID }, // 11
+  { distLeftRightWalls_D2,   0   ,  23 ,   2   ,  5  ,     2   ,     -2    ,   0  ,  48  , WALL & ~FLAG_SOLID }, // 12
+  { distLeftRightWalls_D2,  72   ,  95 ,   2   ,  5  ,     2   ,     +2    ,  24  ,  48  , WALL & ~FLAG_SOLID }, // 13
   
   // distance 3
-  { frontWalls_D3    ,   0   ,  11 ,   3   ,  4  ,     3   ,     -2    ,   0  ,  96  , WALL & ~FLAG_SOLID }, // 12
-  { frontWalls_D3    ,  12   ,  35 ,   3   ,  4  ,     3   ,     -1    ,   0  ,  96  , WALL & ~FLAG_SOLID }, // 13
-  { frontWalls_D3    ,  36   ,  58 ,   3   ,  4  ,     3   ,      0    ,   0  ,  96  , WALL & ~FLAG_SOLID }, // 14
-  { frontWalls_D3    ,  59   ,  83 ,   3   ,  4  ,     3   ,     +1    ,   0  ,  96  , WALL & ~FLAG_SOLID }, // 15
-  { frontWalls_D3    ,  84   ,  95 ,   3   ,  4  ,     3   ,     +2    ,   0  ,  96  , WALL & ~FLAG_SOLID }, // 16
-  { leftRightWalls_D3,  35   ,  44 ,   3   ,  4  ,     3   ,     -1    ,   0  ,  20  , WALL & ~FLAG_SOLID }, // 17
-  { leftRightWalls_D3,  51   ,  60 ,   3   ,  4  ,     3   ,     +1    ,  10  ,  20  , WALL & ~FLAG_SOLID }, // 18
-  { leftRightWalls_D3,  12   ,  21 ,   3   ,  4  ,     3   ,     -2    ,   0  ,  20  , WALL & ~FLAG_SOLID }, //
-  { leftRightWalls_D3,  74   ,  83 ,   3   ,  4  ,     3   ,     +2    ,  10  ,  20  , WALL & ~FLAG_SOLID }, //
-#else
-  // distance 0
-  { leftRightWalls   ,   0   ,   4 ,   0   ,  7  ,     0   ,     -1    ,   0  ,  96  , WALL & ~FLAG_SOLID }, //  0
-  { leftRightWalls   ,  91   ,  95 ,   0   ,  7  ,     0   ,     +1    ,   0  ,  96  , WALL & ~FLAG_SOLID }, //  1
+  { frontWalls_D3        ,   0   ,  11 ,   3   ,  4  ,     3   ,     -2    ,   0  ,  96  , WALL & ~FLAG_SOLID }, // 14
+  { frontWalls_D3        ,  12   ,  35 ,   3   ,  4  ,     3   ,     -1    ,   0  ,  96  , WALL & ~FLAG_SOLID }, // 15
+  { frontWalls_D3        ,  36   ,  58 ,   3   ,  4  ,     3   ,      0    ,   0  ,  96  , WALL & ~FLAG_SOLID }, // 16
+  { frontWalls_D3        ,  59   ,  83 ,   3   ,  4  ,     3   ,     +1    ,   0  ,  96  , WALL & ~FLAG_SOLID }, // 17
+  { frontWalls_D3        ,  84   ,  95 ,   3   ,  4  ,     3   ,     +2    ,   0  ,  96  , WALL & ~FLAG_SOLID }, // 18
+  { leftRightWalls_D3    ,  35   ,  44 ,   3   ,  4  ,     3   ,     -1    ,   0  ,  20  , WALL & ~FLAG_SOLID }, // 19
+  { leftRightWalls_D3    ,  51   ,  60 ,   3   ,  4  ,     3   ,     +1    ,  10  ,  20  , WALL & ~FLAG_SOLID }, // 20
+  { distLeftRightWalls_D3,  24   ,  35 ,   3   ,  4  ,     2   ,     -2    ,   0  ,  24  , WALL & ~FLAG_SOLID }, // 21
+  { distLeftRightWalls_D3,  60   ,  71 ,   3   ,  4  ,     2   ,     +2    ,  12  ,  24  , WALL & ~FLAG_SOLID }, // 22
 
-  // distance 1
-  { frontWalls_D1    ,   0   ,   4 ,   0   ,  7  ,     1   ,     -1    ,   0  ,  96  , WALL & ~FLAG_SOLID }, //  2
-  { frontWalls_D1    ,   5   ,  90 ,   0   ,  7  ,     1   ,      0    ,   0  ,  96  , WALL & ~FLAG_SOLID }, //  3
-  { frontWalls_D1    ,  91   ,  95 ,   0   ,  7  ,     1   ,     +1    ,   0  ,  96  , WALL & ~FLAG_SOLID }, //  4
-  { leftRightWalls   ,   5   ,  24 ,   0   ,  7  ,     1   ,     -1    ,   0  ,  96  , WALL & ~FLAG_SOLID }, //  5
-  { leftRightWalls   ,  71   ,  90 ,   0   ,  7  ,     1   ,     +1    ,   0  ,  96  , WALL & ~FLAG_SOLID }, //  6
-
-  // distance 2
-  { frontWalls_D2    ,   0   ,  24 ,   2   ,  5  ,     2   ,     -1    ,   0  ,  96  , WALL & ~FLAG_SOLID }, //  7
-  { frontWalls_D2    ,  25   ,  70 ,   2   ,  5  ,     2   ,      0    ,   0  ,  96  , WALL & ~FLAG_SOLID }, //  8
-  { frontWalls_D2    ,  71   ,  95 ,   2   ,  5  ,     2   ,     +1    ,   0  ,  96  , WALL & ~FLAG_SOLID }, //  9
-  { leftRightWalls   ,  25   ,  34 ,   0   ,  7  ,     2   ,     -1    ,   0  ,  96  , WALL & ~FLAG_SOLID }, // 10
-  { leftRightWalls   ,  61   ,  70 ,   0   ,  7  ,     2   ,     +1    ,   0  ,  96  , WALL & ~FLAG_SOLID }, // 11
-
-  // distance 3         
-  { frontWalls_D3    ,   0   ,  11 ,   3   ,  4  ,     3   ,     -2    ,   0  ,  96  , WALL & ~FLAG_SOLID }, // 12
-  { frontWalls_D3    ,  12   ,  35 ,   3   ,  4  ,     3   ,     -1    ,   0  ,  96  , WALL & ~FLAG_SOLID }, // 13
-  { frontWalls_D3    ,  36   ,  58 ,   3   ,  4  ,     3   ,      0    ,   0  ,  96  , WALL & ~FLAG_SOLID }, // 14
-  { frontWalls_D3    ,  59   ,  83 ,   3   ,  4  ,     3   ,     +1    ,   0  ,  96  , WALL & ~FLAG_SOLID }, // 15
-  { frontWalls_D3    ,  84   ,  95 ,   3   ,  4  ,     3   ,     +2    ,   0  ,  96  , WALL & ~FLAG_SOLID }, // 16
-  { leftRightWalls   ,  35   ,  44 ,   0   ,  7  ,     3   ,     -1    ,   0  ,  96  , WALL & ~FLAG_SOLID }, // 17
-  { leftRightWalls   ,  51   ,  60 ,   0   ,  7  ,     3   ,     +1    ,   0  ,  96  , WALL & ~FLAG_SOLID }, // 18
-#endif
-  { NULL             ,   0   ,   0 ,   0   ,  0  ,     0   ,      0    ,   0  ,   0  , 0                  }, // 9 unused bytes.. how can I save those?
+  { NULL                 ,   0   ,   0 ,   0   ,  0  ,     0   ,      0    ,   0  ,   0  , 0                  }, // 9 unused bytes.. how can I save those?
 };
 
 
