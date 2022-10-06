@@ -117,8 +117,8 @@ const SIMPLE_WALL_INFO arrayOfWallInfo[] PROGMEM = {
   { frontWalls_D3        ,  84   ,  95 ,   3   ,  4  ,     3   ,     +2    ,   0  ,  96  , WALL & ~FLAG_SOLID }, // 18
   { leftRightWalls_D3    ,  35   ,  44 ,   3   ,  4  ,     3   ,     -1    ,   0  ,  20  , WALL & ~FLAG_SOLID }, // 19
   { leftRightWalls_D3    ,  51   ,  60 ,   3   ,  4  ,     3   ,     +1    ,  10  ,  20  , WALL & ~FLAG_SOLID }, // 20
-  { distLeftRightWalls_D3,  24   ,  35 ,   3   ,  4  ,     2   ,     -2    ,   0  ,  24  , WALL & ~FLAG_SOLID }, // 21
-  { distLeftRightWalls_D3,  60   ,  71 ,   3   ,  4  ,     2   ,     +2    ,  12  ,  24  , WALL & ~FLAG_SOLID }, // 22
+  { distLeftRightWalls_D3,  24   ,  35 ,   3   ,  4  ,     3   ,     -2    ,   0  ,  24  , WALL & ~FLAG_SOLID }, // 21
+  { distLeftRightWalls_D3,  60   ,  71 ,   3   ,  4  ,     3   ,     +2    ,  12  ,  24  , WALL & ~FLAG_SOLID }, // 22
 
   { NULL                 ,   0   ,   0 ,   0   ,  0  ,     0   ,      0    ,   0  ,   0  , 0                  }, // 9 unused bytes.. how can I save those?
 };
