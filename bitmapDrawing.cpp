@@ -32,13 +32,16 @@ uint8_t Dungeon::getWallPixels( const int8_t x, const int8_t y )
 
       // is there a wall object?
     #ifdef _USE_FIELD_OF_VIEW_
-      if ( ( getCell( wallInfo.viewDistance, wallInfo.leftRightOffset ) & WALL_MASK ) == wallInfo.objectMask )
+      if ( ( getCell( wallInfo.viewDistance, wallInfo.leftRightOffset ) & WALL_MASK ) == ( WALL & ~FLAG_SOLID ) )
     #else
-      if ( ( *( getCellRaw( _dungeon.playerX, _dungeon.playerY, wallInfo.viewDistance, wallInfo.leftRightOffset, _dungeon.dir ) ) & WALL_MASK ) == wallInfo.objectMask )
+      if ( ( *( getCellRaw( _dungeon.playerX, _dungeon.playerY, wallInfo.viewDistance, wallInfo.leftRightOffset, _dungeon.dir ) ) & WALL_MASK ) == ( WALL & ~FLAG_SOLID ) )
     #endif
       {
+        // split combined positions into start and end
+        int8_t startPosY = wallInfo.posStartEndY / 16;
+
         // is there wall information for this vertical position
-        if ( ( y >= wallInfo.startPosY ) && ( y <= wallInfo.endPosY ) )
+        if ( ( y >= startPosY ) && ( y <= wallInfo.posStartEndY & 0x0f ) )
         {
           uint8_t offsetX;
 
@@ -66,7 +69,7 @@ uint8_t Dungeon::getWallPixels( const int8_t x, const int8_t y )
           }
 
           // get wall pixels (shave off the empty rows)
-          pixels = pgm_read_byte( wallInfo.wallBitmap + ( y - wallInfo.startPosY ) * wallInfo.width + offsetX );
+          pixels = pgm_read_byte( wallInfo.wallBitmap + ( y - startPosY ) * wallInfo.width + offsetX );
         }
         else
         {

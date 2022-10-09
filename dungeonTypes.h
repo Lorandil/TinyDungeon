@@ -215,9 +215,11 @@ class SIMPLE_WALL_INFO
   // screen end position for this bitmap
   int8_t   endPosX;
   // vertical start position in bytes
-  int8_t   startPosY;
+  //int8_t   startPosY;
   // vertical end position in bytes
-  int8_t   endPosY;
+  //int8_t   endPosY;
+  // start and end position for Y
+  int8_t posStartEndY;
   // view distance of this object
   int8_t   viewDistance;
   // offset to left or right
@@ -227,7 +229,7 @@ class SIMPLE_WALL_INFO
   // width off the bitmap/offset to the next line
   int8_t   width;
   // object selector, e.g. WALL
-  uint8_t  objectMask;
+  //uint8_t  objectMask;
 };
 
 // interaction information

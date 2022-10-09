@@ -82,45 +82,45 @@ const NON_WALL_OBJECT objectList [11] PROGMEM = {
   { RAT         ,  20,         5 * 8,          2 * 8,         40,      { 1, 2, 99 },   rat         },  // 10
 };
 
-// array of conditions for wall display (11 bytes per row)
+// array of conditions for wall display (9 bytes per row)
 // 'WALL & ~FLAG_SOLID' means all walls, fake or not...
 // CAUTION: The entries must be ordered from min. distance(0) to max. distance (3)
 // Otherwise display errors will occur
 const SIMPLE_WALL_INFO arrayOfWallInfo[] PROGMEM = {
 
-  // *wallBitmap     , startX, endX, startY, endY, distance, l/r offset, relPos, width, objectMask
+  // *wallBitmap         , startX, endX, posStartEndY, distance, l/r offset,relPos, width /*, objectMask */
   // distance 0
-  { leftRightWalls_D0    ,   0   ,   4 ,   0   ,  7  ,     0   ,     -1    ,   0  ,  10  , WALL & ~FLAG_SOLID }, //  0
-  { leftRightWalls_D0    ,  91   ,  95 ,   0   ,  7  ,     0   ,     +1    ,   5  ,  10  , WALL & ~FLAG_SOLID }, //  1
-					     
-  // distance 1	         
-  { frontWalls_D1        ,   0   ,   4 ,   0   ,  7  ,     1   ,     -1    ,   0  ,  96  , WALL & ~FLAG_SOLID }, //  2
-  { frontWalls_D1        ,   5   ,  90 ,   0   ,  7  ,     1   ,      0    ,   0  ,  96  , WALL & ~FLAG_SOLID }, //  3
-  { frontWalls_D1        ,  91   ,  95 ,   0   ,  7  ,     1   ,     +1    ,   0  ,  96  , WALL & ~FLAG_SOLID }, //  4
-  { leftRightWalls_D1    ,   5   ,  24 ,   0   ,  7  ,     1   ,     -1    ,   0  ,  40  , WALL & ~FLAG_SOLID }, //  5
-  { leftRightWalls_D1    ,  71   ,  90 ,   0   ,  7  ,     1   ,     +1    ,  20  ,  40  , WALL & ~FLAG_SOLID }, //  6
-					     
-  // distance 2	         
-  { frontWalls_D2        ,   0   ,  24 ,   2   ,  5  ,     2   ,     -1    ,   0  ,  96  , WALL & ~FLAG_SOLID }, //  7
-  { frontWalls_D2        ,  25   ,  70 ,   2   ,  5  ,     2   ,      0    ,   0  ,  96  , WALL & ~FLAG_SOLID }, //  8
-  { frontWalls_D2        ,  71   ,  95 ,   2   ,  5  ,     2   ,     +1    ,   0  ,  96  , WALL & ~FLAG_SOLID }, //  9
-  { leftRightWalls_D2    ,  25   ,  34 ,   2   ,  5  ,     2   ,     -1    ,   0  ,  20  , WALL & ~FLAG_SOLID }, // 10
-  { leftRightWalls_D2    ,  61   ,  70 ,   2   ,  5  ,     2   ,     +1    ,  10  ,  20  , WALL & ~FLAG_SOLID }, // 11
-  { distLeftRightWalls_D2,   0   ,  23 ,   2   ,  5  ,     2   ,     -2    ,   0  ,  48  , WALL & ~FLAG_SOLID }, // 12
-  { distLeftRightWalls_D2,  72   ,  95 ,   2   ,  5  ,     2   ,     +2    ,  24  ,  48  , WALL & ~FLAG_SOLID }, // 13
-  
-  // distance 3
-  { frontWalls_D3        ,   0   ,  11 ,   3   ,  4  ,     3   ,     -2    ,   0  ,  96  , WALL & ~FLAG_SOLID }, // 14
-  { frontWalls_D3        ,  12   ,  35 ,   3   ,  4  ,     3   ,     -1    ,   0  ,  96  , WALL & ~FLAG_SOLID }, // 15
-  { frontWalls_D3        ,  36   ,  58 ,   3   ,  4  ,     3   ,      0    ,   0  ,  96  , WALL & ~FLAG_SOLID }, // 16
-  { frontWalls_D3        ,  59   ,  83 ,   3   ,  4  ,     3   ,     +1    ,   0  ,  96  , WALL & ~FLAG_SOLID }, // 17
-  { frontWalls_D3        ,  84   ,  95 ,   3   ,  4  ,     3   ,     +2    ,   0  ,  96  , WALL & ~FLAG_SOLID }, // 18
-  { leftRightWalls_D3    ,  35   ,  44 ,   3   ,  4  ,     3   ,     -1    ,   0  ,  20  , WALL & ~FLAG_SOLID }, // 19
-  { leftRightWalls_D3    ,  51   ,  60 ,   3   ,  4  ,     3   ,     +1    ,  10  ,  20  , WALL & ~FLAG_SOLID }, // 20
-  { distLeftRightWalls_D3,  24   ,  35 ,   3   ,  4  ,     3   ,     -2    ,   0  ,  24  , WALL & ~FLAG_SOLID }, // 21
-  { distLeftRightWalls_D3,  60   ,  71 ,   3   ,  4  ,     3   ,     +2    ,  12  ,  24  , WALL & ~FLAG_SOLID }, // 22
-
-  { NULL                 ,   0   ,   0 ,   0   ,  0  ,     0   ,      0    ,   0  ,   0  , 0                  }, // 9 unused bytes.. how can I save those?
+  { leftRightWalls_D0    ,   0   ,   4 ,   0x07      ,     0   ,     -1    ,   0  ,  10   /*, WALL & ~FLAG_SOLID */ }, //  0
+  { leftRightWalls_D0    ,  91   ,  95 ,   0x07      ,     0   ,     +1    ,   5  ,  10   /*, WALL & ~FLAG_SOLID */ }, //  1
+																						  /*                     */ 
+  // distance 1	                                                                          /*                     */ 
+  { frontWalls_D1        ,   0   ,   4 ,   0x07      ,     1   ,     -1    ,   0  ,  96   /*, WALL & ~FLAG_SOLID */ }, //  2
+  { frontWalls_D1        ,   5   ,  90 ,   0x07      ,     1   ,      0    ,   0  ,  96   /*, WALL & ~FLAG_SOLID */ }, //  3
+  { frontWalls_D1        ,  91   ,  95 ,   0x07      ,     1   ,     +1    ,   0  ,  96   /*, WALL & ~FLAG_SOLID */ }, //  4
+  { leftRightWalls_D1    ,   5   ,  24 ,   0x07      ,     1   ,     -1    ,   0  ,  40   /*, WALL & ~FLAG_SOLID */ }, //  5
+  { leftRightWalls_D1    ,  71   ,  90 ,   0x07      ,     1   ,     +1    ,  20  ,  40   /*, WALL & ~FLAG_SOLID */ }, //  6
+																						  /*                     */ 
+  // distance 2	                                                                          /*                     */ 
+  { frontWalls_D2        ,   0   ,  24 ,   0x25      ,     2   ,     -1    ,   0  ,  96   /*, WALL & ~FLAG_SOLID */ }, //  7
+  { frontWalls_D2        ,  25   ,  70 ,   0x25      ,     2   ,      0    ,   0  ,  96   /*, WALL & ~FLAG_SOLID */ }, //  8
+  { frontWalls_D2        ,  71   ,  95 ,   0x25      ,     2   ,     +1    ,   0  ,  96   /*, WALL & ~FLAG_SOLID */ }, //  9
+  { leftRightWalls_D2    ,  25   ,  34 ,   0x25      ,     2   ,     -1    ,   0  ,  20   /*, WALL & ~FLAG_SOLID */ }, // 10
+  { leftRightWalls_D2    ,  61   ,  70 ,   0x25      ,     2   ,     +1    ,  10  ,  20   /*, WALL & ~FLAG_SOLID */ }, // 11
+  { distLeftRightWalls_D2,   0   ,  23 ,   0x25      ,     2   ,     -2    ,   0  ,  48   /*, WALL & ~FLAG_SOLID */ }, // 12
+  { distLeftRightWalls_D2,  72   ,  95 ,   0x25      ,     2   ,     +2    ,  24  ,  48   /*, WALL & ~FLAG_SOLID */ }, // 13
+																						  /*                     */ 
+  // distance 3                                                                           /*                     */ 
+  { frontWalls_D3        ,   0   ,  11 ,   0x34      ,     3   ,     -2    ,   0  ,  96   /*, WALL & ~FLAG_SOLID */ }, // 14
+  { frontWalls_D3        ,  12   ,  35 ,   0x34      ,     3   ,     -1    ,   0  ,  96   /*, WALL & ~FLAG_SOLID */ }, // 15
+  { frontWalls_D3        ,  36   ,  58 ,   0x34      ,     3   ,      0    ,   0  ,  96   /*, WALL & ~FLAG_SOLID */ }, // 16
+  { frontWalls_D3        ,  59   ,  83 ,   0x34      ,     3   ,     +1    ,   0  ,  96   /*, WALL & ~FLAG_SOLID */ }, // 17
+  { frontWalls_D3        ,  84   ,  95 ,   0x34      ,     3   ,     +2    ,   0  ,  96   /*, WALL & ~FLAG_SOLID */ }, // 18
+  { leftRightWalls_D3    ,  35   ,  44 ,   0x34      ,     3   ,     -1    ,   0  ,  20   /*, WALL & ~FLAG_SOLID */ }, // 19
+  { leftRightWalls_D3    ,  51   ,  60 ,   0x34      ,     3   ,     +1    ,  10  ,  20   /*, WALL & ~FLAG_SOLID */ }, // 20
+  { distLeftRightWalls_D3,  24   ,  35 ,   0x34      ,     3   ,     -2    ,   0  ,  24   /*, WALL & ~FLAG_SOLID */ }, // 21
+  { distLeftRightWalls_D3,  60   ,  71 ,   0x34      ,     3   ,     +2    ,  12  ,  24   /*, WALL & ~FLAG_SOLID */ }, // 22
+																						  /*                     */ 
+  { NULL                 ,   0   ,   0 ,   0x00      ,     0   ,      0    ,   0  ,   0   /*, 0                  */ }, // 7 unused bytes.. how can I save those?
 };
 
 
