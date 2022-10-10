@@ -21,16 +21,12 @@ extern const uint8_t statusPane[] PROGMEM;
 extern const uint8_t compass[] PROGMEM;
 
 // walls
-extern const unsigned char frontWalls_D3[] PROGMEM;
-extern const unsigned char frontWalls_D2[] PROGMEM;
 extern const unsigned char frontWalls_D1[] PROGMEM;
-#if 1
-  extern const unsigned char leftRightWalls_D0[] PROGMEM;
-  extern const unsigned char leftRightWalls_D1[] PROGMEM;
-  extern const unsigned char leftRightWalls_D2[] PROGMEM;
-  extern const unsigned char leftRightWalls_D3[] PROGMEM;
-  extern const unsigned char distLeftRightWalls_D2[] PROGMEM;
-  extern const unsigned char distLeftRightWalls_D3[] PROGMEM;
-#else
-  extern const unsigned char leftRightWalls[] PROGMEM;
-#endif
+extern const unsigned char smallFrontWalls_D2 [] PROGMEM;
+extern const unsigned char frontWalls_D3[] PROGMEM;
+extern const unsigned char leftRightWalls_D0[] PROGMEM;
+extern const unsigned char leftRightWalls_D1[] PROGMEM;
+extern const unsigned char leftRightWalls_D2[] PROGMEM;
+extern const unsigned char leftRightWalls_D3[] PROGMEM;
+extern const unsigned char distLeftRightWalls_D2[] PROGMEM;
+extern const unsigned char distLeftRightWalls_D3[] PROGMEM;

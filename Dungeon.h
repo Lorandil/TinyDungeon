@@ -101,9 +101,9 @@ const SIMPLE_WALL_INFO arrayOfWallInfo[] PROGMEM = {
   { leftRightWalls_D1    ,  71   ,  90 ,   0x07      ,     1   ,     +1    ,  20  ,  40   /*, WALL & ~FLAG_SOLID */ }, //  6
 																						  /*                     */ 
   // distance 2	                                                                          /*                     */ 
-  { frontWalls_D2        ,   0   ,  24 ,   0x25      ,     2   ,     -1    ,   0  ,  96   /*, WALL & ~FLAG_SOLID */ }, //  7
-  { frontWalls_D2        ,  25   ,  70 ,   0x25      ,     2   ,      0    ,   0  ,  96   /*, WALL & ~FLAG_SOLID */ }, //  8
-  { frontWalls_D2        ,  71   ,  95 ,   0x25      ,     2   ,     +1    ,   0  ,  96   /*, WALL & ~FLAG_SOLID */ }, //  9
+  { smallFrontWalls_D2   ,   0   ,  24 ,   0x25      ,     2   ,     -1    ,  21  ,  46   /*, WALL & ~FLAG_SOLID */ }, //  7
+  { smallFrontWalls_D2   ,  25   ,  70 ,   0x25      ,     2   ,      0    ,   0  ,  46   /*, WALL & ~FLAG_SOLID */ }, //  8
+  { smallFrontWalls_D2   ,  71   ,  95 ,   0x25      ,     2   ,     +1    ,   0  ,  46   /*, WALL & ~FLAG_SOLID */ }, //  9
   { leftRightWalls_D2    ,  25   ,  34 ,   0x25      ,     2   ,     -1    ,   0  ,  20   /*, WALL & ~FLAG_SOLID */ }, // 10
   { leftRightWalls_D2    ,  61   ,  70 ,   0x25      ,     2   ,     +1    ,  10  ,  20   /*, WALL & ~FLAG_SOLID */ }, // 11
   { distLeftRightWalls_D2,   0   ,  23 ,   0x25      ,     2   ,     -2    ,   0  ,  48   /*, WALL & ~FLAG_SOLID */ }, // 12
