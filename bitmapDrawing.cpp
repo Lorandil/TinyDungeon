@@ -39,9 +39,10 @@ uint8_t Dungeon::getWallPixels( const int8_t x, const int8_t y )
       {
         // split combined positions into start and end
         int8_t startPosY = wallInfo.posStartEndY / 16;
+        int8_t endPosY = wallInfo.posStartEndY & 0x0f;
 
         // is there wall information for this vertical position
-        if ( ( y >= startPosY ) && ( y <= wallInfo.posStartEndY & 0x0f ) )
+        if ( ( y >= startPosY ) && ( y <= endPosY ) )
         {
           uint8_t offsetX;
 
