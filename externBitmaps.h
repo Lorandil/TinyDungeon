@@ -12,8 +12,6 @@ extern const uint8_t newBars[] PROGMEM;
 extern const uint8_t door[] PROGMEM;
 extern const uint8_t leverLeft[] PROGMEM;
 extern const uint8_t leverRight[] PROGMEM;
-//extern const uint8_t leverUp[] PROGMEM;
-//extern const uint8_t leverDown[] PROGMEM;
 extern const uint8_t chestClosed[] PROGMEM;
 extern const uint8_t chestOpen[] PROGMEM;
 extern const uint8_t fountain[] PROGMEM;
@@ -23,7 +21,8 @@ extern const uint8_t compass[] PROGMEM;
 // walls
 extern const unsigned char frontWalls_D1[] PROGMEM;
 extern const unsigned char smallFrontWalls_D2 [] PROGMEM;
-extern const unsigned char frontWalls_D3[] PROGMEM;
+extern const unsigned char smallFrontWalls_D3 [] PROGMEM;
+//extern const unsigned char frontWalls_D3[] PROGMEM;
 extern const unsigned char leftRightWalls_D0[] PROGMEM;
 extern const unsigned char leftRightWalls_D1[] PROGMEM;
 extern const unsigned char leftRightWalls_D2[] PROGMEM;
