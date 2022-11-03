@@ -20,7 +20,7 @@ const uint8_t Level_1[] PROGMEM =
 /*  8 */       0      ,     0      ,     0      ,     0      ,     0      ,     0      ,   WALL     ,     0      ,   WALL     ,     0      ,   WALL     ,     0      ,   WALL     ,     0      ,   WALL     ,     0      , /*  8 */
 /*  9 */       0      ,     0      ,     0      ,     0      ,     0      ,     0      ,   WALL     ,     0      ,     0      ,     0      ,     0      ,     0      ,   WALL     ,     0      ,   WALL     ,   WALL     , /*  9 */
 /* 10 */       0      ,     0      ,     0      ,     0      ,     0      ,     0      ,   WALL     ,     0      ,   WALL     ,     0      ,   WALL     ,     0      ,   WALL     ,     0      ,     0      ,   WALL     , /* 10 */
-/* 11 */       0      ,     0      ,     0      ,     0      ,     0      ,     0      ,   WALL     ,     0      ,     0      ,     0      ,     0      ,     0      ,   WALL     ,   WALL     ,     0      ,   WALL     , /* 11 */
+/* 11 */     WALL     ,   WALL     ,     0      ,   WALL     ,   WALL     ,   WALL     ,   WALL     ,     0      ,     0      ,     0      ,     0      ,     0      ,   WALL     ,   WALL     ,     0      ,   WALL     , /* 11 */
 /* 12 */       0      ,     0      ,     0      ,     0      ,     0      ,     0      ,     0      ,     0      ,   WALL     ,     0      ,   WALL     ,     0      ,     0      , WALL|DOOR  ,     0      ,   WALL     , /* 12 */
 /* 13 */       0      ,     0      ,     0      ,     0      ,     0      ,     0      ,   WALL     ,     0      ,     0      ,     0      ,     0      ,     0      ,   WALL     ,   WALL     ,   WALL     ,   WALL     , /* 13 */
 /* 14 */       0      ,     0      ,     0      ,     0      ,     0      ,     0      ,   WALL     ,     0      ,   WALL     ,     0      ,   WALL     ,     0      ,   WALL     ,     0      ,     0      ,     0      , /* 14 */
@@ -87,7 +87,7 @@ const NON_WALL_OBJECT objectList [11] PROGMEM = {
 // CAUTION: The entries must be ordered from min. distance(0) to max. distance (3)
 // Otherwise display errors will occur
 const SIMPLE_WALL_INFO arrayOfWallInfo[] PROGMEM = {
-
+#if 0
   // *wallBitmap         , startX, endX, posStartEndY, distance, l/r offset,relPos, width /*, objectMask */
   // distance 0
   { leftRightWalls_D0    ,   0   ,   4 ,   0x07      ,     0   ,     -1    ,   0  ,  10   /*, WALL & ~FLAG_SOLID */ }, //  0
@@ -119,6 +119,43 @@ const SIMPLE_WALL_INFO arrayOfWallInfo[] PROGMEM = {
   { leftRightWalls_D3    ,  51   ,  60 ,   0x34      ,     3   ,     +1    ,  10  ,  20   /*, WALL & ~FLAG_SOLID */ }, // 20
   { distLeftRightWalls_D3,  24   ,  35 ,   0x34      ,     3   ,     -2    ,   0  ,  24   /*, WALL & ~FLAG_SOLID */ }, // 21
   { distLeftRightWalls_D3,  60   ,  71 ,   0x34      ,     3   ,     +2    ,  12  ,  24   /*, WALL & ~FLAG_SOLID */ }, // 22
+#else
+  // distance 0
+  { leftRightWalls_D0    ,   0   ,   3 ,   0x07      ,     0   ,     -1    ,   0  ,   8   /*, WALL & ~FLAG_SOLID */ }, //  5
+  { leftRightWalls_D0    ,  92   ,  95 ,   0x07      ,     0   ,     +1    ,   4  ,   8   /*, WALL & ~FLAG_SOLID */ }, //  5
+
+  // distance 1	                                                                          /*                     */ 
+  { smallFrontWall_D1    ,   0   ,   3 ,   0x07      ,     1   ,      0    ,  84  ,  88   /*, WALL & ~FLAG_SOLID */ }, //  3
+  { smallFrontWall_D1    ,   4   ,  91 ,   0x07      ,     1   ,      0    ,   0  ,  88   /*, WALL & ~FLAG_SOLID */ }, //  3
+  { smallFrontWall_D1    ,  92   ,  95 ,   0x07      ,     1   ,      0    ,   0  ,  88   /*, WALL & ~FLAG_SOLID */ }, //  3
+  
+  { leftRightWalls_D0_v2 ,   0   ,  23 ,   0x07      ,     1   ,     -1    ,   0  ,  96   /*, WALL & ~FLAG_SOLID */ }, //  5
+  { leftRightWalls_D0_v2 ,  72   ,  95 ,   0x07      ,     1   ,     +1    ,   0  ,  96   /*, WALL & ~FLAG_SOLID */ }, //  5
+
+  // distance 2	                                                                          /*                     */ 
+  { smallFrontWall_D2    ,   0   ,  25 ,   0x25      ,     2   ,     -1    ,  18  ,  44   /*, WALL & ~FLAG_SOLID */ }, //  7
+  { smallFrontWall_D2    ,  26   ,  69 ,   0x25      ,     2   ,      0    ,   0  ,  44   /*, WALL & ~FLAG_SOLID */ }, //  7
+  { smallFrontWall_D2    ,  70   ,  95 ,   0x25      ,     2   ,     -1    ,   0  ,  44   /*, WALL & ~FLAG_SOLID */ }, //  7
+
+  { leftRightWalls_D0_v2 ,  24   ,  35 ,   0x07      ,     2   ,     -1    ,   0  ,  96   /*, WALL & ~FLAG_SOLID */ }, //  5
+  { leftRightWalls_D0_v2 ,  60   ,  71 ,   0x07      ,     2   ,     +1    ,   0  ,  96   /*, WALL & ~FLAG_SOLID */ }, //  5
+
+  { leftRightWalls_D1_v2,    0   ,  12 ,   0x07      ,     2   ,     -2    ,   0  ,  96   /*, WALL & ~FLAG_SOLID */ }, // 12
+  { leftRightWalls_D1_v2,   84   ,  95 ,   0x07      ,     2   ,     +2    ,   0  ,  96   /*, WALL & ~FLAG_SOLID */ }, // 13
+																						  /*                     */ 
+  // distance 3                                                                           /*                     */ 
+  { smallFrontWall_D3    ,   0   ,  14 ,   0x34      ,     3   ,     -2    ,   7  ,  22   /*, WALL & ~FLAG_SOLID */ }, // 14
+  { smallFrontWall_D3    ,  15   ,  36 ,   0x34      ,     3   ,     -1    ,   0  ,  22   /*, WALL & ~FLAG_SOLID */ }, // 15
+  { smallFrontWall_D3    ,  37   ,  58 ,   0x34      ,     3   ,      0    ,   0  ,  22   /*, WALL & ~FLAG_SOLID */ }, // 16
+  { smallFrontWall_D3    ,  59   ,  80 ,   0x34      ,     3   ,     +1    ,   0  ,  22   /*, WALL & ~FLAG_SOLID */ }, // 17
+  { smallFrontWall_D3    ,  81   ,  95 ,   0x34      ,     3   ,     +2    ,   0  ,  22   /*, WALL & ~FLAG_SOLID */ }, // 18
+
+  { leftRightWalls_D0_v2 ,  36   ,  41 ,   0x07      ,     3   ,     -1    ,   0  ,  96   /*, WALL & ~FLAG_SOLID */ }, // 19
+  { leftRightWalls_D0_v2 ,  54   ,  59 ,   0x07      ,     3   ,     +1    ,   0  ,  96   /*, WALL & ~FLAG_SOLID */ }, // 20
+
+  { leftRightWalls_D1_v2 ,  13   ,  29 ,   0x07      ,     3   ,     -2    ,   0  ,  96   /*, WALL & ~FLAG_SOLID */ }, // 21
+  { leftRightWalls_D1_v2 ,  66   ,  83 ,   0x07      ,     3   ,     +2    ,   0  ,  96   /*, WALL & ~FLAG_SOLID */ }, // 22
+#endif
 																						  /*                     */ 
   { NULL                 ,   0   ,   0 ,   0x00      ,     0   ,      0    ,   0  ,   0   /*, 0                  */ }, // 7 unused bytes.. how can I save those?
 };

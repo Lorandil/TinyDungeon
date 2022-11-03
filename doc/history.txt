@@ -95,6 +95,8 @@ perhaps:
   - or use mirror table (nibble based?)
   - estimation: will save 300 bytes?
 
+  - create darkness effect (disable every 2nd pixel) when no torch is lit?  
+
 final steps:
 ? add floor graphics
 ? use only one bitmap for all front walls using downscaling <- is this really still necessary, it's just 576 bytes?! 
