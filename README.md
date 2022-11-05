@@ -16,7 +16,7 @@ Why not something like a 3D dungeon crawler on the TinyJoypad platform?
 ## Game Features
 * 3D graphics (ok, pseudo 3D)
 * Large dungeon size of 16x16 tiles
-* Three different monster types
+* Four different monster types
 * Treasure chests
 * Teleporters
 * Spinners
@@ -25,6 +25,19 @@ Why not something like a 3D dungeon crawler on the TinyJoypad platform?
 * Bars
 * Switches
 * Sound effects
+
+## Technical Details
+It soon became clear, that regarding the very limited flash capacity of the ATtiny85, a data driven approach was required. All walls, monsters and encounters/events are organized in tables which makes the game easy to extend, yet saving a lot of space.
+
+### Flash Memory Requirements for the Graphics Data
+* all walls require ~1600 bytes
+* monsters require ~900 bytes
+* the status window requires 256 bytes
+* the compass requires 20 bytes
+* other objects require ~1200 bytes
+This sums up to nearly 4000 bytes - meaning half the flash memory is used to store the game's graphics!
+
+
 
 ## First Screenshots
 #### The player has found the compass!
@@ -90,7 +103,7 @@ What happens when the player wins?
 * realtime bitmap scaling in up to three sizes (full, half, quarter) with a variable threshold for each view distance to optimize the visuals
 * all bitmaps have a mask to keep the background from shimmering through
 * view distance is up to three tiles (depending on the object)
-* believable movement illusion when walking through tunnels (done by mirroring left and right wall bitmap on every step)
+* convincing movement illusion when walking through tunnels (done by mirroring left and right wall bitmap on every step)
 * different sound effects
 * some magic items
 * easily expandle scripted interactions (monsters, switches, chests, teleporters, spinners)
@@ -103,7 +116,7 @@ What happens when the player wins?
 
 ## Engine Limitations
 * some objects don't look good when scaled (even with the variable threshold)
-* on-wall objects (switches, doors) aren't rendered correctly when seen from the side -> architectual measures required (e.g. doors need to be set back by at least one field)
+* on-wall objects (switches, doors) aren't rendered correctly when seen from the side -> architectural measures required (e.g. doors need to be set back by at least one field)
 * at the moment non-wall objects like monsters, chests or doors are only rendered in front of the player.
 * no floor or ceiling for now (mostly because of lack of memory)
 * max. dungeon size is 256 tiles
