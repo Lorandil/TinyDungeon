@@ -17,6 +17,7 @@ Optimization ideas
 
 <graphics>
 * outer left/right walls look bad - should be reworked ;)
+* use darkening effect by dithering - should there be a torch?
 
 <convenience>
 * automatically place monsters in level during startup
