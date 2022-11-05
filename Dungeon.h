@@ -87,77 +87,39 @@ const NON_WALL_OBJECT objectList [11] PROGMEM = {
 // CAUTION: The entries must be ordered from min. distance(0) to max. distance (3)
 // Otherwise display errors will occur
 const SIMPLE_WALL_INFO arrayOfWallInfo[] PROGMEM = {
-#if 0
-  // *wallBitmap         , startX, endX, posStartEndY, distance, l/r offset,relPos, width /*, objectMask */
-  // distance 0
-  { leftRightWalls_D0    ,   0   ,   4 ,   0x07      ,     0   ,     -1    ,   0  ,  10   /*, WALL & ~FLAG_SOLID */ }, //  0
-  { leftRightWalls_D0    ,  91   ,  95 ,   0x07      ,     0   ,     +1    ,   5  ,  10   /*, WALL & ~FLAG_SOLID */ }, //  1
-																						  /*                     */ 
-  // distance 1	                                                                          /*                     */ 
-  { frontWalls_D1        ,   0   ,   4 ,   0x07      ,     1   ,     -1    ,   0  ,  96   /*, WALL & ~FLAG_SOLID */ }, //  2
-  { frontWalls_D1        ,   5   ,  90 ,   0x07      ,     1   ,      0    ,   0  ,  96   /*, WALL & ~FLAG_SOLID */ }, //  3
-  { frontWalls_D1        ,  91   ,  95 ,   0x07      ,     1   ,     +1    ,   0  ,  96   /*, WALL & ~FLAG_SOLID */ }, //  4
-  { leftRightWalls_D1    ,   5   ,  24 ,   0x07      ,     1   ,     -1    ,   0  ,  40   /*, WALL & ~FLAG_SOLID */ }, //  5
-  { leftRightWalls_D1    ,  71   ,  90 ,   0x07      ,     1   ,     +1    ,  20  ,  40   /*, WALL & ~FLAG_SOLID */ }, //  6
-																						  /*                     */ 
-  // distance 2	                                                                          /*                     */ 
-  { smallFrontWalls_D2   ,   0   ,  24 ,   0x25      ,     2   ,     -1    ,  21  ,  46   /*, WALL & ~FLAG_SOLID */ }, //  7
-  { smallFrontWalls_D2   ,  25   ,  70 ,   0x25      ,     2   ,      0    ,   0  ,  46   /*, WALL & ~FLAG_SOLID */ }, //  8
-  { smallFrontWalls_D2   ,  71   ,  95 ,   0x25      ,     2   ,     +1    ,   0  ,  46   /*, WALL & ~FLAG_SOLID */ }, //  9
-  { leftRightWalls_D2    ,  25   ,  34 ,   0x25      ,     2   ,     -1    ,   0  ,  20   /*, WALL & ~FLAG_SOLID */ }, // 10
-  { leftRightWalls_D2    ,  61   ,  70 ,   0x25      ,     2   ,     +1    ,  10  ,  20   /*, WALL & ~FLAG_SOLID */ }, // 11
-  { distLeftRightWalls_D2,   0   ,  23 ,   0x25      ,     2   ,     -2    ,   0  ,  48   /*, WALL & ~FLAG_SOLID */ }, // 12
-  { distLeftRightWalls_D2,  72   ,  95 ,   0x25      ,     2   ,     +2    ,  24  ,  48   /*, WALL & ~FLAG_SOLID */ }, // 13
-																						  /*                     */ 
-  // distance 3                                                                           /*                     */ 
-  { smallFrontWalls_D3   ,   0   ,  11 ,   0x34      ,     3   ,     -2    ,  12  ,  24   /*, WALL & ~FLAG_SOLID */ }, // 14
-  { smallFrontWalls_D3   ,  12   ,  35 ,   0x34      ,     3   ,     -1    ,   0  ,  24   /*, WALL & ~FLAG_SOLID */ }, // 15
-  { smallFrontWalls_D3   ,  36   ,  59 ,   0x34      ,     3   ,      0    ,   0  ,  24   /*, WALL & ~FLAG_SOLID */ }, // 16
-  { smallFrontWalls_D3   ,  60   ,  83 ,   0x34      ,     3   ,     +1    ,   0  ,  24   /*, WALL & ~FLAG_SOLID */ }, // 17
-  { smallFrontWalls_D3   ,  84   ,  95 ,   0x34      ,     3   ,     +2    ,   0  ,  24   /*, WALL & ~FLAG_SOLID */ }, // 18
-  { leftRightWalls_D3    ,  35   ,  44 ,   0x34      ,     3   ,     -1    ,   0  ,  20   /*, WALL & ~FLAG_SOLID */ }, // 19
-  { leftRightWalls_D3    ,  51   ,  60 ,   0x34      ,     3   ,     +1    ,  10  ,  20   /*, WALL & ~FLAG_SOLID */ }, // 20
-  { distLeftRightWalls_D3,  24   ,  35 ,   0x34      ,     3   ,     -2    ,   0  ,  24   /*, WALL & ~FLAG_SOLID */ }, // 21
-  { distLeftRightWalls_D3,  60   ,  71 ,   0x34      ,     3   ,     +2    ,  12  ,  24   /*, WALL & ~FLAG_SOLID */ }, // 22
-#else
-  // distance 0
-  { leftRightWalls_D0    ,   0   ,   3 ,   0x07      ,     0   ,     -1    ,   0  ,   8   /*, WALL & ~FLAG_SOLID */ }, //  5
-  { leftRightWalls_D0    ,  92   ,  95 ,   0x07      ,     0   ,     +1    ,   4  ,   8   /*, WALL & ~FLAG_SOLID */ }, //  5
+  // *wallBitmap           , startX, endX, posStartEndY, distance, l/r offset,relPos, width
+  // distance 0            
+  { leftRightWalls_D0      ,   0   ,   3 ,   0x07      ,     0   ,     -1    ,   0  ,   8 }, //  0
+  { leftRightWalls_D0      ,  92   ,  95 ,   0x07      ,     0   ,     +1    ,   4  ,   8 }, //  1
+																						  
+  // distance 1	                                                                          
+  { smallFrontWall_D1      ,   0   ,   3 ,   0x07      ,     1   ,     -1    ,  84  ,  88 }, //  2
+  { smallFrontWall_D1      ,   4   ,  91 ,   0x07      ,     1   ,      0    ,   0  ,  88 }, //  3
+  { smallFrontWall_D1      ,  92   ,  95 ,   0x07      ,     1   ,     +1    ,   0  ,  88 }, //  4
+  { leftRightWalls_D1      ,   4   ,  25 ,   0x07      ,     1   ,     -1    ,   0  ,  44 }, //  5
+  { leftRightWalls_D1      ,  70   ,  91 ,   0x07      ,     1   ,     +1    ,  22  ,  44 }, //  6
+																						  
+  // distance 2	                                                                          
+  { smallFrontWall_D2      ,   0   ,  25 ,   0x25      ,     2   ,     -1    ,  18  ,  44 }, //  7
+  { smallFrontWall_D2      ,  26   ,  69 ,   0x25      ,     2   ,      0    ,   0  ,  44 }, //  8
+  { smallFrontWall_D2      ,  70   ,  95 ,   0x25      ,     2   ,     +1    ,   0  ,  44 }, //  9
+  { leftRightWalls_D2      ,  26   ,  36 ,   0x25      ,     2   ,     -1    ,   0  ,  22 }, // 10
+  { leftRightWalls_D2      ,  59   ,  69 ,   0x25      ,     2   ,     +1    ,  11  ,  22 }, // 11
+  { outerLeftRightWalls_D2 ,   0   ,  14 ,   0x25      ,     2   ,     -2    ,   0  ,  30 }, // 12
+  { outerLeftRightWalls_D2 ,  81   ,  95 ,   0x25      ,     2   ,     +2    ,  15  ,  30 }, // 13
 
-  // distance 1	                                                                          /*                     */ 
-  { smallFrontWall_D1    ,   0   ,   3 ,   0x07      ,     1   ,      0    ,  84  ,  88   /*, WALL & ~FLAG_SOLID */ }, //  3
-  { smallFrontWall_D1    ,   4   ,  91 ,   0x07      ,     1   ,      0    ,   0  ,  88   /*, WALL & ~FLAG_SOLID */ }, //  3
-  { smallFrontWall_D1    ,  92   ,  95 ,   0x07      ,     1   ,      0    ,   0  ,  88   /*, WALL & ~FLAG_SOLID */ }, //  3
-  
-  { leftRightWalls_D0_v2 ,   0   ,  23 ,   0x07      ,     1   ,     -1    ,   0  ,  96   /*, WALL & ~FLAG_SOLID */ }, //  5
-  { leftRightWalls_D0_v2 ,  72   ,  95 ,   0x07      ,     1   ,     +1    ,   0  ,  96   /*, WALL & ~FLAG_SOLID */ }, //  5
+  // distance 3
+  { smallFrontWall_D3      ,   0   ,  14 ,   0x34      ,     3   ,     -2    ,   7  ,  22 }, // 14
+  { smallFrontWall_D3      ,  15   ,  36 ,   0x34      ,     3   ,     -1    ,   0  ,  22 }, // 15
+  { smallFrontWall_D3      ,  37   ,  58 ,   0x34      ,     3   ,      0    ,   0  ,  22 }, // 16
+  { smallFrontWall_D3      ,  59   ,  80 ,   0x34      ,     3   ,     +1    ,   0  ,  22 }, // 17
+  { smallFrontWall_D3      ,  81   ,  95 ,   0x34      ,     3   ,     +2    ,   0  ,  22 }, // 18
+  { leftRightWalls_D3      ,  37   ,  41 ,   0x34      ,     3   ,     -1    ,   0  ,  10 }, // 19
+  { leftRightWalls_D3      ,  54   ,  58 ,   0x34      ,     3   ,     +1    ,   5  ,  10 }, // 20
+  { outerLeftRightWalls_D3 ,  15   ,  29 ,   0x34      ,     3   ,     -2    ,   0  ,  30 }, // 21
+  { outerLeftRightWalls_D3 ,  66   ,  80 ,   0x34      ,     3   ,     +2    ,  15  ,  30 }, // 22
 
-  // distance 2	                                                                          /*                     */ 
-  { smallFrontWall_D2    ,   0   ,  25 ,   0x25      ,     2   ,     -1    ,  18  ,  44   /*, WALL & ~FLAG_SOLID */ }, //  7
-  { smallFrontWall_D2    ,  26   ,  69 ,   0x25      ,     2   ,      0    ,   0  ,  44   /*, WALL & ~FLAG_SOLID */ }, //  7
-  { smallFrontWall_D2    ,  70   ,  95 ,   0x25      ,     2   ,     -1    ,   0  ,  44   /*, WALL & ~FLAG_SOLID */ }, //  7
-
-  { leftRightWalls_D0_v2 ,  24   ,  35 ,   0x07      ,     2   ,     -1    ,   0  ,  96   /*, WALL & ~FLAG_SOLID */ }, //  5
-  { leftRightWalls_D0_v2 ,  60   ,  71 ,   0x07      ,     2   ,     +1    ,   0  ,  96   /*, WALL & ~FLAG_SOLID */ }, //  5
-
-  { leftRightWalls_D1_v2,    0   ,  12 ,   0x07      ,     2   ,     -2    ,   0  ,  96   /*, WALL & ~FLAG_SOLID */ }, // 12
-  { leftRightWalls_D1_v2,   84   ,  95 ,   0x07      ,     2   ,     +2    ,   0  ,  96   /*, WALL & ~FLAG_SOLID */ }, // 13
-																						  /*                     */ 
-  // distance 3                                                                           /*                     */ 
-  { smallFrontWall_D3    ,   0   ,  14 ,   0x34      ,     3   ,     -2    ,   7  ,  22   /*, WALL & ~FLAG_SOLID */ }, // 14
-  { smallFrontWall_D3    ,  15   ,  36 ,   0x34      ,     3   ,     -1    ,   0  ,  22   /*, WALL & ~FLAG_SOLID */ }, // 15
-  { smallFrontWall_D3    ,  37   ,  58 ,   0x34      ,     3   ,      0    ,   0  ,  22   /*, WALL & ~FLAG_SOLID */ }, // 16
-  { smallFrontWall_D3    ,  59   ,  80 ,   0x34      ,     3   ,     +1    ,   0  ,  22   /*, WALL & ~FLAG_SOLID */ }, // 17
-  { smallFrontWall_D3    ,  81   ,  95 ,   0x34      ,     3   ,     +2    ,   0  ,  22   /*, WALL & ~FLAG_SOLID */ }, // 18
-
-  { leftRightWalls_D0_v2 ,  36   ,  41 ,   0x07      ,     3   ,     -1    ,   0  ,  96   /*, WALL & ~FLAG_SOLID */ }, // 19
-  { leftRightWalls_D0_v2 ,  54   ,  59 ,   0x07      ,     3   ,     +1    ,   0  ,  96   /*, WALL & ~FLAG_SOLID */ }, // 20
-
-  { leftRightWalls_D1_v2 ,  13   ,  29 ,   0x07      ,     3   ,     -2    ,   0  ,  96   /*, WALL & ~FLAG_SOLID */ }, // 21
-  { leftRightWalls_D1_v2 ,  66   ,  83 ,   0x07      ,     3   ,     +2    ,   0  ,  96   /*, WALL & ~FLAG_SOLID */ }, // 22
-#endif
-																						  /*                     */ 
-  { NULL                 ,   0   ,   0 ,   0x00      ,     0   ,      0    ,   0  ,   0   /*, 0                  */ }, // 7 unused bytes.. how can I save those?
+  { NULL                   ,   0   ,   0 ,   0x00      ,     0   ,      0    ,   0  ,   0 }, // 7 unused bytes.. how can I save those?
 };
 
 

@@ -16,6 +16,8 @@ uint8_t Dungeon::getWallPixels( const int8_t x, const int8_t y )
   // all objects are visible
   int8_t maxObjectDistance = MAX_VIEW_DISTANCE;
 
+  //int8_t objectNo = -1;
+
   // iterate through the whole list (at least as long as it's necessary)
   while( true )
   {
@@ -24,6 +26,8 @@ uint8_t Dungeon::getWallPixels( const int8_t x, const int8_t y )
 
     // end of list reached?
     if ( wallInfo.wallBitmap == nullptr ) { break; }
+    
+    //objectNo++;
 
     // check conditions
     if ( ( x >= wallInfo.startPosX ) && ( x <= wallInfo.endPosX ) )
@@ -37,6 +41,8 @@ uint8_t Dungeon::getWallPixels( const int8_t x, const int8_t y )
       if ( ( *( getCellRaw( _dungeon.playerX, _dungeon.playerY, wallInfo.viewDistance, wallInfo.leftRightOffset, _dungeon.dir ) ) & WALL_MASK ) == ( WALL & ~FLAG_SOLID ) )
     #endif
       {
+        //if ( y == 0 ) { Serial.print( F("column = ") ); Serial.print( x ); Serial.print( F(" -> objectNo = ") ); Serial.println( objectNo ); }
+
         // split combined positions into start and end
         int8_t startPosY = wallInfo.posStartEndY / 16;
         int8_t endPosY = wallInfo.posStartEndY & 0x0f;

@@ -26,8 +26,5 @@ extern const unsigned char leftRightWalls_D0[] PROGMEM;
 extern const unsigned char leftRightWalls_D1[] PROGMEM;
 extern const unsigned char leftRightWalls_D2[] PROGMEM;
 extern const unsigned char leftRightWalls_D3[] PROGMEM;
-extern const unsigned char distLeftRightWalls_D2[] PROGMEM;
-extern const unsigned char distLeftRightWalls_D3[] PROGMEM;
-
-extern const unsigned char leftRightWalls_D0_v2 [] PROGMEM;
-extern const unsigned char leftRightWalls_D1_v2 [] PROGMEM;
+extern const unsigned char outerLeftRightWalls_D2 [] PROGMEM;
+extern const unsigned char outerLeftRightWalls_D3 [] PROGMEM;
