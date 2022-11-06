@@ -177,7 +177,8 @@ void InitDisplay()
   // Address 0x3D for 128x64
   if( !display.begin(SSD1306_SWITCHCAPVCC, 0x3C)) 
   { 
-    Serial.println(F("SSD1306 allocation failed")); for(;;);
+    // extended the error message
+    Serial.println(F("SSD1306 allocation failed - 1024 bytes for frame buffer required!")); for(;;);
   }
 #endif
 }

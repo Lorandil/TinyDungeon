@@ -37,11 +37,11 @@ void Dungeon::init()
   // populate dungeon with monsters
   memcpy_P( _dungeon.monsterStats, monsterStats, sizeof( monsterStats ) );
 
-  serialPrint("sizeof( MONSTER_STATS ) = ");
+  serialPrint( F("sizeof( MONSTER_STATS ) = ") );
   serialPrintln( sizeof( MONSTER_STATS ) );
-  serialPrint("sizeof( _dungeon.monsterStats ) = ");
+  serialPrint( F("sizeof( _dungeon.monsterStats ) = ") );
   serialPrintln( sizeof( _dungeon.monsterStats ) );
-  serialPrint("sizeof( monsterStats ) = ");
+  serialPrint( F("sizeof( monsterStats ) = ") );
   serialPrintln( sizeof( monsterStats ) );
 
   MONSTER_STATS *pMonsterStats = _dungeon.monsterStats;
@@ -50,8 +50,8 @@ void Dungeon::init()
   {
     _dungeon.currentLevel[pMonsterStats->position] = pMonsterStats->monsterType;
   #if !defined( __AVR_ATtiny85__ )
-    serialPrint("+ placing monster ");  printHexToSerial( pMonsterStats->monsterType, false );
-    serialPrint(" at position ");  serialPrintln( pMonsterStats->position ); 
+    serialPrint( F("+ placing monster ") );  printHexToSerial( pMonsterStats->monsterType, false );
+    serialPrint( F(" at position ") );  serialPrintln( pMonsterStats->position ); 
   #endif
     pMonsterStats++;
   }  

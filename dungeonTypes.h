@@ -132,17 +132,17 @@ public:
 #if !defined(__AVR_ATtiny85__)
   void serialPrint()
   {
-    Serial.println(F("DUNGEON") );
-    Serial.print(F("  playerX = ") );Serial.print( playerX );
-    Serial.print(F(", playerY = ") );Serial.print( playerY );
-    Serial.print(F(", dir = ") );Serial.print( dir );
-    Serial.print(F(", HP = ") );Serial.print( playerHP );
-    Serial.print(F(", DAM = ") );Serial.print( playerDamage );
-    Serial.print(F(", Armour = ") );Serial.print( playerArmour );
-    Serial.print(F(", Items = ") );printHexToSerial( playerItems, false );Serial.print(F(", "));
-    Serial.print(F(", Keys = ") );Serial.print( ( playerItems & ITEM_KEY ) != 0 );
-    Serial.print(F(", Compass = ") );Serial.print( ( playerItems & ITEM_COMPASS ) != 0 );
-    Serial.print(F(", displayXorEffect = ") );Serial.print( displayXorEffect );
+    Serial.println( F("DUNGEON") );
+    Serial.print( F("  playerX = ") );Serial.print( playerX );
+    Serial.print( F(", playerY = ") );Serial.print( playerY );
+    Serial.print( F(", dir = ") );Serial.print( dir );
+    Serial.print( F(", HP = ") );Serial.print( playerHP );
+    Serial.print( F(", DAM = ") );Serial.print( playerDamage );
+    Serial.print( F(", Armour = ") );Serial.print( playerArmour );
+    Serial.print( F(", Items = ") );printHexToSerial( playerItems, false );Serial.print( F(", "));
+    Serial.print( F(", Keys = ") );Serial.print( ( playerItems & ITEM_KEY ) != 0 );
+    Serial.print( F(", Compass = ") );Serial.print( ( playerItems & ITEM_COMPASS ) != 0 );
+    Serial.print( F(", displayXorEffect = ") );Serial.print( displayXorEffect );
     Serial.println();
 
     for ( uint8_t y = 0; y < LEVEL_HEIGHT; y++ )
@@ -151,16 +151,16 @@ public:
       {
         uint8_t cellValue = currentLevel[y * LEVEL_WIDTH + x];
         char text[3] = "..";
-        if ( ( cellValue & WALL_MASK ) == FAKE_WALL ) { memcpy( text, "W ", 2 ); }
-        else if ( cellValue == SKELETON ) { memcpy( text, "sk", 2 ); }
-        else if ( cellValue == BEHOLDER ) { memcpy( text, "bh", 2 ); }
-        else if ( cellValue == RAT ) { memcpy( text, "rt", 2 ); }
-        else if ( cellValue == MIMIC ) { memcpy( text, "mi", 2 ); }
-        else if ( ( cellValue & OBJECT_MASK ) == DOOR ) { memcpy( text, "D ", 2 ); }
-        else if ( ( cellValue & OBJECT_MASK ) == BARS ) { memcpy( text, "# ", 2 ); }
-        else if ( ( cellValue & OBJECT_MASK ) == LVR_UP ) { memcpy( text, "Lu", 2 ); }
-        else if ( ( cellValue & OBJECT_MASK ) == LVR_DWN ) { memcpy( text, "Ld", 2 ); }
-        else if ( ( cellValue & OBJECT_MASK ) == FOUNTAIN ) { memcpy( text, "F ", 2 ); }
+        if ( ( cellValue & WALL_MASK ) == FAKE_WALL ) { memcpy_P( text, F("W "), 2 ); }
+        else if ( cellValue == SKELETON ) { memcpy_P( text, F("sk"), 2 ); }
+        else if ( cellValue == BEHOLDER ) { memcpy_P( text, F("bh"), 2 ); }
+        else if ( cellValue == RAT ) { memcpy_P( text, F("rt"), 2 ); }
+        else if ( cellValue == MIMIC ) { memcpy_P( text, F("mi"), 2 ); }
+        else if ( ( cellValue & OBJECT_MASK ) == DOOR ) { memcpy_P( text, F("D "), 2 ); }
+        else if ( ( cellValue & OBJECT_MASK ) == BARS ) { memcpy_P( text, F("# "), 2 ); }
+        else if ( ( cellValue & OBJECT_MASK ) == LVR_UP ) { memcpy_P( text, F("Lu"), 2 ); }
+        else if ( ( cellValue & OBJECT_MASK ) == LVR_DWN ) { memcpy_P( text, F("Ld"), 2 ); }
+        else if ( ( cellValue & OBJECT_MASK ) == FOUNTAIN ) { memcpy_P( text, F("F "), 2 ); }
         Serial.print( text );
         Serial.print( F(" ") );
       }
@@ -214,10 +214,6 @@ class SIMPLE_WALL_INFO
   int8_t   startPosX;
   // screen end position for this bitmap
   int8_t   endPosX;
-  // vertical start position in bytes
-  //int8_t   startPosY;
-  // vertical end position in bytes
-  //int8_t   endPosY;
   // start and end position for Y
   int8_t posStartEndY;
   // view distance of this object
@@ -228,8 +224,6 @@ class SIMPLE_WALL_INFO
   int8_t   relPos;
   // width off the bitmap/offset to the next line
   int8_t   width;
-  // object selector, e.g. WALL
-  //uint8_t  objectMask;
 };
 
 // interaction information
@@ -284,7 +278,6 @@ public:
   void serialPrint() 
   {
     Serial.print( F("  specialFX    = ") );if ( specialFX == TELEPORTER ) { Serial.println( F("TELEPORTER") ); } else { Serial.println( F("SPINNER") ); }
-    //Serial.print( F("  position     = (") );Serial.print( position % LEVEL_WIDTH ); Serial.print( F(", ") );Serial.print( position / LEVEL_WIDTH );Serial.println( F(")"));
     Serial.print( F("  value        = (") );Serial.print( value_1 ); Serial.print( F(", ") );Serial.print( value_2 );Serial.println( F(")"));
     Serial.println();
   }

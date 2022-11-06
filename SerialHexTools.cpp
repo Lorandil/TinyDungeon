@@ -16,15 +16,15 @@ void printHexToSerial( uint8_t value, bool addComma )
 {
   static uint8_t count = 0;
 
-  Serial.print("0x"); 
+  Serial.print( F("0x") );
   if ( value < 0x10 )
   {
-    Serial.print("0");
+    Serial.print( F("0") );
   }
   Serial.print( value, HEX );
   if ( addComma )
   {
-    Serial.print(", ");
+    Serial.print( F(", ") );
   }
 
   // increase count
