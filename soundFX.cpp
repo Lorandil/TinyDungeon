@@ -1,7 +1,9 @@
 #include "soundFX.h"
 
-// required for _delay_us()
-#include <ssd1306xled.h>
+#if defined(__AVR_ATtiny85__)
+  // required for _delay_us()
+  #include <util/delay.h>
+#endif
 
 /*--------------------------------------------------------*/
 void stepSound()
