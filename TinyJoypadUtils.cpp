@@ -10,7 +10,9 @@
 #include <Arduino.h>
 #include "tinyJoypadUtils.h"
 
-#if !defined(__AVR_ATtiny85__)
+#if defined(__AVR_ATtiny85__)
+  #include <ssd1306xled.h>
+#else
   // include Adafruit library and immediately create an object
   #include <Adafruit_SSD1306.h>
   Adafruit_SSD1306 display( 128, 64, &Wire, -1 );
