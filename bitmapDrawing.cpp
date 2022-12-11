@@ -77,6 +77,22 @@ uint8_t Dungeon::getWallPixels( const int8_t x, const int8_t y )
 
           // get wall pixels (shave off the empty rows)
           pixels = pgm_read_byte( wallInfo.wallBitmap + ( y - startPosY ) * wallInfo.width + offsetX );
+
+        #ifdef _ENABLE_SHADING_
+          switch ( wallInfo.viewDistance )
+          {
+            case 0:
+            case 1:
+              break;
+            case 2:
+              if ( x & 1 ) { pixels &= 0x55; }
+              else { pixels &= 0xaa; }
+              break;
+            default:
+              if ( x & 1 ) { pixels &= 055; }
+              else { pixels &= 0x00; }
+          }
+        #endif
         }
         else
         {
@@ -119,6 +135,24 @@ uint8_t Dungeon::getWallPixels( const int8_t x, const int8_t y )
           pixels &= mask;
           // and overlay scaled bitmap
           uint8_t scaledBitmap = getDownScaledBitmapData( posX, y, distance, &object, false );
+
+        #ifdef _ENABLE_SHADING_
+          // shading effect to pronounce the distance of an object
+          switch ( distance )
+          {
+            case 0:
+            case 1:
+              break;
+            case 2:
+              if ( x & 1 ) { scaledBitmap &= 0x55; }
+              else { scaledBitmap &= 0xaa; }
+              break;
+            default:
+              if ( x & 1 ) { scaledBitmap &= 055; }
+              else { scaledBitmap &= 0x00; }
+          }
+        #endif
+
           if ( distance == 1 )
           {
             // invert monster?!

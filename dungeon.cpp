@@ -698,7 +698,7 @@ void Dungeon::Tiny_Flip()
   for ( uint8_t y = 0; y < 8; y++ )
   {
     // prepare display of row <y>
-    TinyFlip_PrepareDisplayRow( y );
+    PrepareDisplayRow( y );
     
     uint8_t pixels;
 
@@ -709,10 +709,10 @@ void Dungeon::Tiny_Flip()
       pixels ^= _dungeon.displayXorEffect;
     #ifdef _SHOW_GRID_OVERLAY
       if ( ( x & 0x01 ) && ( y < 7 ) ) { pixels |= 0x80; }
-      //if ( ( x & 0x07 ) == 0x07 ) { pixels |= 0x55; }
     #endif      
+
       // send 8 vertical pixels to the display
-      TinyFlip_SendPixels( pixels );
+      SendPixels( pixels );
     } // for x
 
     // display the dashboard here
@@ -797,17 +797,17 @@ void Dungeon::Tiny_Flip()
       }
 
       // send 8 vertical pixels to the display
-      TinyFlip_SendPixels( pixels );
+      SendPixels( pixels );
 
       statusPaneOffset++;
     }
     
     // this row has been finished
-    TinyFlip_FinishDisplayRow();
+    FinishDisplayRow();
   } // for y
 
   // display the whole screen
-  TinyFlip_DisplayBuffer();
+  DisplayBuffer();
 
   // disable fight effects
   _dungeon.invertMonsterEffect = 0;

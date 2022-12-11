@@ -42,26 +42,8 @@
   #undef USE_EXTENDED_CHECKS
   #undef USE_SERIAL_PRINT
 #else
-  #if defined(__AVR_ATmega2560__)
+  #if defined(__AVR_ATmega2560__) || defined(__AVR_ATmega32U4__) || defined(__AVR_ATmega328P__) || defined(_VARIANT_ARDUINO_ZERO_)
     // Arduino Mega 2560 (and compatible)
-    #define LEFT_RIGHT_BUTTON A0
-    #define UP_DOWN_BUTTON    A3
-    #define FIRE_BUTTON       A1
-    #define SOUND_PIN         12
-  #elif defined(__AVR_ATmega32U4__)
-    // Arduino Leonardo (and compatible)
-    #define LEFT_RIGHT_BUTTON A0
-    #define UP_DOWN_BUTTON    A3
-    #define FIRE_BUTTON       A1
-    #define SOUND_PIN         12
-  #elif defined(__AVR_ATmega328P__)
-    // Arduino UNO R3 (and compatible)
-    #define LEFT_RIGHT_BUTTON A0
-    #define UP_DOWN_BUTTON    A3
-    #define FIRE_BUTTON       A1
-    #define SOUND_PIN         12
-  #elif defined(_VARIANT_ARDUINO_ZERO_)
-    // Arduino Zero
     #define LEFT_RIGHT_BUTTON A0
     #define UP_DOWN_BUTTON    A3
     #define FIRE_BUTTON       A1
