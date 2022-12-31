@@ -3,8 +3,17 @@ Longest Journey - mit Teleporter zwei Felder zurück
 ---------------
 
 W W W W W
-.<<<. . .   
+.<<<. . .   - abschaltbar per Schalter
 W W W W W
+
+oder mit Umgehung:
+
+W W W W W W W
+. . .<<<. . .   - mit Fakewalls oder schaltbaren Mauern
+W W f W f W W
+  W . . . W
+  W W W W W  
+
 
 
 Death Snare ggf. mit (abschaltbarem) Teleporter und/oder Spinner

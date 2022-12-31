@@ -48,14 +48,17 @@ void Dungeon::init()
 
   for ( uint8_t n = 0; n < MAX_MONSTERS; n++ )
   {
-    _dungeon.currentLevel[pMonsterStats->position] = pMonsterStats->monsterType;
-  #if !defined( __AVR_ATtiny85__ )
-    serialPrint( F("+ placing monster ") );  printHexToSerial( pMonsterStats->monsterType, false );
-    serialPrint( F(" at position ") );  serialPrintln( pMonsterStats->position ); 
-  #endif
+    if ( pMonsterStats->monsterType ) // TODO: Line becomes obsolete if MAX_MONSTER is set to correct size
+    {
+      _dungeon.currentLevel[pMonsterStats->position] = pMonsterStats->monsterType;
+    #if !defined( __AVR_ATtiny85__ )
+      serialPrint( F("+ placing monster ") );  printHexToSerial( pMonsterStats->monsterType, false );
+      serialPrint( F(" at position ") );  serialPrintln( pMonsterStats->position ); 
+    #endif
+    }
     pMonsterStats++;
   }  
-  //while( pMonsterStats->monsterType != 0 );
+
   #if !defined( __AVR_ATtiny85__ )
     _dungeon.serialPrint();
   #endif
