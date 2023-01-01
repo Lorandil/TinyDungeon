@@ -1,5 +1,5 @@
 #include "bitTables.h"
-#include "Dungeon.h"
+#include "dungeon.h"
 #include "monsterBitmaps.h"
 #include "objectBitmaps.h"
 #include "wallBitmaps.h"
