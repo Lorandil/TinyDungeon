@@ -1,6 +1,6 @@
 //   >>>>>  T-I-N-Y  D-U-N-G-E-O-N v0.5 for ATTINY85  GPLv3 <<<<
 //						Tinyjoypad rev2 compatible
-//                   Programmer: Sven B 2021
+//                   Programmer: Sven B 2021-2023
 //              Contact EMAIL: Lorandil@gmx.de
 
 //  Tiny Dungeon is free software: you can redistribute it and/or modify

@@ -342,6 +342,17 @@ void Dungeon::checkPlayerMovement()
           Serial.print(F("*cell = ")); printHexToSerial( cellValue ); Serial.println();
         #endif
         }
+        // is there a door?        
+        else if ( cellValue == ( DOOR | FLAG_SOLID ) )
+        {
+          if ( _dungeon.playerItems & ITEM_KEY )
+          {
+            // open the door...
+            *cell = EMPTY;
+            // and the key is gone, too
+            _dungeon.playerItems &= ~ITEM_KEY;
+          }
+        }
         else
         {
           // let's see if there is some scripted interaction...

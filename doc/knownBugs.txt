@@ -1,0 +1,7 @@
+Open Issues
+* teleporters and spinners cannot be removed/enabled
+* the fountain doesn't work (victory item not given)
+
+Fixed Issues
++ Opening doors doesn't consume a key
++ Doors open without a key
