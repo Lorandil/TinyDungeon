@@ -23,7 +23,7 @@ const uint8_t Level_1[] PROGMEM =
 /* 12 */  WALL|LVR_UP ,   WALL     ,     0      ,   BARS     ,   BARS     ,     0      ,   WALL     ,CLOSED_CHEST,   WALL     ,     0      ,     0      , WALL|DOOR  ,     0      ,     0      ,     0      ,   WALL     , /* 12 */
 /* 13 */       0      ,     0      ,     0      ,   WALL     ,   WALL     ,     0      ,     0      ,/*TELEP.*/ 0,     0      ,     0      ,   WALL     ,   WALL     ,     0      ,     0      ,     0      ,   WALL     , /* 13 */
 /* 14 */     WALL     ,     0      ,     0      ,     0      ,   WALL     ,     0      ,   WALL     ,     0      ,   WALL     ,     0      ,   WALL     ,/*SKELETN*/0,     0      ,     0      ,     0      ,     0      , /* 14 */
-/* 15 */     WALL     , WALL|LVR_UP,   WALL     ,WALL|LVR_UP ,   WALL     ,     0      ,     0      ,/*TELEP.*/ 0,     0      ,     0      ,   WALL     ,WALL|LVR_UP ,   WALL     ,     0      ,     0      ,     0      , /* 15 */
+/* 15 */     WALL     , WALL|LVR_UP,   WALL     ,WALL|LVR_UP ,   WALL     ,     0      ,     0      ,/*TELEP.*/ 0,     0      ,     0      ,   WALL     ,WALL|LVR_UP ,   WALL     ,   WALL     ,   WALL     ,     0      , /* 15 */
 /*             0            1            2            3            4            5            6            7            8            9           10           11           12           13           14           15              */
 };
 
@@ -53,15 +53,15 @@ const INTERACTION_INFO interactionData[] PROGMEM =
 
   {  0 + 12 * LEVEL_WIDTH        ,    LVR_UP       , OBJECT_MASK     , LVR_DWN     ,     0           ,  3 + 12 * LEVEL_WIDTH  ,      0        },
   {  0 + 12 * LEVEL_WIDTH        ,    LVR_DWN      , OBJECT_MASK     , LVR_UP      ,     0           ,  4 + 12 * LEVEL_WIDTH  ,    BARS       },
-  {  7 + 12 * LEVEL_WIDTH        ,    CLOSED_CHEST , OBJECT_MASK     , OPEN_CHEST  , ITEM_KEY        ,  7 + 12 * LEVEL_WIDTH  ,  OPEN_CHEST   },
+  {  7 + 12 * LEVEL_WIDTH        ,    CLOSED_CHEST , OBJECT_MASK     , OPEN_CHEST  ,ITEM_KEY|ITEM_COMPASS,  7 + 12 * LEVEL_WIDTH  ,  OPEN_CHEST   },
   { 11 + 12 * LEVEL_WIDTH        ,    DOOR         , OBJECT_MASK     ,    0        ,     0           , 11 + 12 * LEVEL_WIDTH  ,      0        },
 
   {  1 + 15 * LEVEL_WIDTH        ,    LVR_UP       , OBJECT_MASK     , LVR_DWN     ,     0           ,  3 + 12 * LEVEL_WIDTH  ,    BARS       },
   {  1 + 15 * LEVEL_WIDTH        ,    LVR_DWN      , OBJECT_MASK     , LVR_UP      ,     0           ,  4 + 12 * LEVEL_WIDTH  ,      0        },
   {  3 + 15 * LEVEL_WIDTH        ,    LVR_UP       , OBJECT_MASK     , LVR_DWN     ,     0           ,  3 + 12 * LEVEL_WIDTH  ,      0        },
   {  3 + 15 * LEVEL_WIDTH        ,    LVR_DWN      , OBJECT_MASK     , LVR_UP      ,     0           ,  4 + 12 * LEVEL_WIDTH  ,    BARS       },
-  { 11 + 15 * LEVEL_WIDTH        ,    LVR_UP       , OBJECT_MASK     , LVR_DWN     ,     0           ,  7 + 13 * LEVEL_WIDTH  ,      0        },
-  { 11 + 15 * LEVEL_WIDTH        ,    LVR_DWN      , OBJECT_MASK     , LVR_UP      ,     0           ,  7 + 13 * LEVEL_WIDTH  ,    BARS       },
+  { 11 + 15 * LEVEL_WIDTH        ,    LVR_UP       , OBJECT_MASK     , LVR_DWN     ,     0           , 13 +  7 * LEVEL_WIDTH  ,      0        },
+  { 11 + 15 * LEVEL_WIDTH        ,    LVR_DWN      , OBJECT_MASK     , LVR_UP      ,     0           , 13 +  7 * LEVEL_WIDTH  ,    BARS       },
 };
 
 // monster stats (6 bytes per monster - must fit into RAM - or EEPROM???)
@@ -85,8 +85,8 @@ const MONSTER_STATS monsterStats[] PROGMEM =
 const SPECIAL_CELL_INFO specialCellFX[] PROGMEM =
 {
   // cell type ,     position       , value_1, value_2
-  { TELEPORTER , 5 + 4 * LEVEL_WIDTH,     6  ,    4    },
-  { SPINNER    , 2 + 5 * LEVEL_WIDTH,    +1  ,    0    },
+  //{ TELEPORTER , 5 + 4 * LEVEL_WIDTH,     6  ,    4    },
+  //{ SPINNER    , 2 + 5 * LEVEL_WIDTH,    +1  ,    0    },
 };
 
 // list of possible non wall objects (i.e. monsters, doors, ...) (10 bytes per object)

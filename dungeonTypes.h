@@ -67,7 +67,7 @@ enum
   ITEM_AMULET  = 0x02,
   ITEM_RING    = 0x04,
   ITEM_KEY     = 0x08,
-  //ITEM_POTION  = 0x10,
+  ITEM_POTION  = 0x10,
   ITEM_SWORD   = 0x20,
   ITEM_SHIELD  = 0x40,
   ITEM_VICTORY = 0x80,
