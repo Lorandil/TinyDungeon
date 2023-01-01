@@ -46,7 +46,22 @@ const INTERACTION_INFO interactionData[] PROGMEM =
   {  8 +  6 * LEVEL_WIDTH        ,    CLOSED_CHEST , OBJECT_MASK     , OPEN_CHEST  , ITEM_RING       ,  8 +  6 * LEVEL_WIDTH  ,  OPEN_CHEST   },
   { 14 +  6 * LEVEL_WIDTH        ,    CLOSED_CHEST , OBJECT_MASK     , OPEN_CHEST  , ITEM_AMULET     , 14 +  6 * LEVEL_WIDTH  ,  OPEN_CHEST   },
 
-  { 3 +  4 * LEVEL_WIDTH        ,    DOOR         , OBJECT_MASK     ,    0        ,     0           , 3 + 4 * LEVEL_WIDTH  ,      0        },
+  {  7 +  7 * LEVEL_WIDTH        ,    LVR_UP       , OBJECT_MASK     , LVR_DWN     ,     0           ,  7 + 15 * LEVEL_WIDTH  ,   /*TBD*/ 0   },
+  {  7 +  7 * LEVEL_WIDTH        ,    LVR_DWN      , OBJECT_MASK     , LVR_UP      ,     0           ,  7 + 15 * LEVEL_WIDTH  ,   /*TBD*/ 0   },
+
+  {  3 + 10 * LEVEL_WIDTH        ,    CLOSED_CHEST , OBJECT_MASK     , OPEN_CHEST  , /*TBD*/ 0       ,  3 +  10 * LEVEL_WIDTH  ,  OPEN_CHEST  },
+
+  {  0 + 12 * LEVEL_WIDTH        ,    LVR_UP       , OBJECT_MASK     , LVR_DWN     ,     0           ,  3 + 12 * LEVEL_WIDTH  ,      0        },
+  {  0 + 12 * LEVEL_WIDTH        ,    LVR_DWN      , OBJECT_MASK     , LVR_UP      ,     0           ,  4 + 12 * LEVEL_WIDTH  ,    BARS       },
+  {  7 + 12 * LEVEL_WIDTH        ,    CLOSED_CHEST , OBJECT_MASK     , OPEN_CHEST  , ITEM_KEY        ,  7 + 12 * LEVEL_WIDTH  ,  OPEN_CHEST   },
+  { 11 + 12 * LEVEL_WIDTH        ,    DOOR         , OBJECT_MASK     ,    0        ,     0           , 11 + 12 * LEVEL_WIDTH  ,      0        },
+
+  {  1 + 15 * LEVEL_WIDTH        ,    LVR_UP       , OBJECT_MASK     , LVR_DWN     ,     0           ,  3 + 12 * LEVEL_WIDTH  ,    BARS       },
+  {  1 + 15 * LEVEL_WIDTH        ,    LVR_DWN      , OBJECT_MASK     , LVR_UP      ,     0           ,  4 + 12 * LEVEL_WIDTH  ,      0        },
+  {  3 + 15 * LEVEL_WIDTH        ,    LVR_UP       , OBJECT_MASK     , LVR_DWN     ,     0           ,  3 + 12 * LEVEL_WIDTH  ,      0        },
+  {  3 + 15 * LEVEL_WIDTH        ,    LVR_DWN      , OBJECT_MASK     , LVR_UP      ,     0           ,  4 + 12 * LEVEL_WIDTH  ,    BARS       },
+  { 11 + 15 * LEVEL_WIDTH        ,    LVR_UP       , OBJECT_MASK     , LVR_DWN     ,     0           ,  7 + 13 * LEVEL_WIDTH  ,      0        },
+  { 11 + 15 * LEVEL_WIDTH        ,    LVR_DWN      , OBJECT_MASK     , LVR_UP      ,     0           ,  7 + 13 * LEVEL_WIDTH  ,    BARS       },
 };
 
 // monster stats (6 bytes per monster - must fit into RAM - or EEPROM???)
