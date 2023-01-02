@@ -11,7 +11,7 @@ const uint8_t LEVEL_HEIGHT = 16;
 const uint16_t MAX_LEVEL_BYTES = LEVEL_WIDTH * LEVEL_HEIGHT;
 const uint8_t MAX_VIEW_DISTANCE = 3;
 
-const uint8_t MAX_MONSTERS = 6;
+const uint8_t MAX_MONSTERS = 7;
 
 const uint8_t WINDOW_SIZE_X   = 96;
 const uint8_t WINDOW_CENTER_X = WINDOW_SIZE_X / 2; /* = 48 */
@@ -234,8 +234,6 @@ public:
   uint8_t currentPosition;
   // required status of this position
   uint8_t currentStatus;
-  // required mask
-  uint8_t currentStatusMask;
   // new status if true
   uint8_t nextStatus;
   // bit coded item number for gained items, i.e. keys
@@ -251,7 +249,6 @@ public:
     Serial.println( F("INTERACTION_INFO") );
     Serial.print( F("  currentPosition    = ") );Serial.println( currentPosition );
     Serial.print( F("  currentStatus      = ") );printHexToSerial( currentStatus );Serial.println();
-    Serial.print( F("  currentStatusMask  = ") );printHexToSerial( currentStatusMask );Serial.println();
     Serial.print( F("  nextStatus         = ") );printHexToSerial( nextStatus );Serial.println();
     Serial.print( F("  newItem            = ") );printHexToSerial( newItem );Serial.println();
     Serial.print( F("  modifiedPosition   = ") );Serial.println( modifiedPosition );

@@ -48,7 +48,7 @@ void Dungeon::init()
 
   for ( uint8_t n = 0; n < MAX_MONSTERS; n++ )
   {
-    if ( pMonsterStats->monsterType ) // TODO: Line becomes obsolete if MAX_MONSTER is set to correct size
+    //if ( pMonsterStats->monsterType ) // TODO: Line becomes obsolete if MAX_MONSTER is set to correct size
     {
       _dungeon.currentLevel[pMonsterStats->position] = pMonsterStats->monsterType;
     #if !defined( __AVR_ATtiny85__ )
@@ -342,17 +342,6 @@ void Dungeon::checkPlayerMovement()
           Serial.print(F("*cell = ")); printHexToSerial( cellValue ); Serial.println();
         #endif
         }
-        // is there a door?        
-        else if ( cellValue == ( DOOR | FLAG_SOLID ) )
-        {
-          if ( _dungeon.playerItems & ITEM_KEY )
-          {
-            // open the door...
-            *cell = EMPTY;
-            // and the key is gone, too
-            _dungeon.playerItems &= ~ITEM_KEY;
-          }
-        }
         else
         {
           // let's see if there is some scripted interaction...
@@ -630,7 +619,9 @@ void Dungeon::monsterAttack( MONSTER_STATS *monster )
   int8_t damage = getDice( 0x07 ) + monster->damageBonus - _dungeon.playerArmour;
   if ( damage > 0 )
   {
+#ifndef _GODMODE_
     _dungeon.playerHP -= damage;
+#endif
     // ouch!
     swordSound();
     // invert screen
@@ -661,7 +652,7 @@ void Dungeon::playerInteraction( uint8_t *cell, const uint8_t cellValue )
     if ( cell == _dungeon.currentLevel + interactionInfo.currentPosition )
     {
       // is the status correct?
-      if ( ( cellValue & interactionInfo.currentStatusMask ) == interactionInfo.currentStatus )
+      if ( ( cellValue & OBJECT_MASK ) == interactionInfo.currentStatus )
       {
       #ifdef USE_SERIAL_PRINT
         Serial.print(F("+ Matching entry found <"));Serial.print( n );Serial.println(F(">"));
@@ -675,11 +666,31 @@ void Dungeon::playerInteraction( uint8_t *cell, const uint8_t cellValue )
         // special handling for special types
         switch ( cellValue )
         {
+        // a closed chest?
         case CLOSED_CHEST:
           {
             // plunder the chest!
             openChest( interactionInfo );
             break;
+          }
+          
+        // is there a door?        
+        case DOOR | FLAG_SOLID:
+          {
+            if ( _dungeon.playerItems & ITEM_KEY )
+            {
+              // open the door...
+              *cell = EMPTY;
+              // and the key is gone, too
+              _dungeon.playerItems &= ~ITEM_KEY;
+            }
+            break;
+          }
+
+        default:
+          {
+            // just grab the item!
+            _dungeon.playerItems |= interactionInfo.newItem;
           }
         }
 
@@ -739,9 +750,9 @@ void Dungeon::Tiny_Flip()
         // compass present?
         if ( !y )
         {
-          if ( ( x >= 15 ) && ( x < 20 ) )
+          if ( ( x >= 14 ) && ( x < 19 ) )
           { 
-            pixels |= pgm_read_byte( compass + x - 15 + 5 * _dungeon.dir );
+            pixels |= pgm_read_byte( compass + x - 14 + 5 * _dungeon.dir );
           }
         }
       }
@@ -760,25 +771,25 @@ void Dungeon::Tiny_Flip()
         // items: display the appropriate icons
         if ( y == 5 )
         {
-          if ( x >= 3 )
+          if ( x >= 2 )
           {
-            if ( x <= 8 )
+            if ( x <= 7 )
             {
               if ( !( _dungeon.playerItems & ITEM_SWORD ) ) { pixels = 0; }
             }
-            else if ( x <= 14 )
+            else if ( x <= 13 )
             {
               if ( !( _dungeon.playerItems & ITEM_SHIELD ) ) { pixels = 0; }
             }
-            else if ( x <= 20 )
+            else if ( x <= 19 )
             {
               if ( !( _dungeon.playerItems & ITEM_AMULET ) ) { pixels = 0; }
             }
-            else if ( x <= 26 )
+            else if ( x <= 25 )
             {
               if ( !( _dungeon.playerItems & ITEM_RING ) ) { pixels = 0; }
             }
-            else if ( x <= 31 )
+            else if ( x <= 30 )
             {
               if ( !( _dungeon.playerItems & ITEM_KEY ) ) { pixels = 0; }
             }

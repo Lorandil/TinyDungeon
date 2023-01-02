@@ -1,7 +1,10 @@
 Open Issues
 * teleporters and spinners cannot be removed/enabled
 * the fountain doesn't work (victory item not given)
+* non wall items are only rendered in the center line of view, 
+  requiring architectural measures to prevent the player from noticing too easily
+* interaction can only affect one cell    
 
 Fixed Issues
-+ Opening doors doesn't consume a key
-+ Doors open without a key
++ opening doors doesn't consume a key
++ doors open without a key

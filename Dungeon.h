@@ -4,6 +4,9 @@
 #include "dungeonTypes.h"
 #include "externBitmaps.h"
 
+// uncomment this line to make the player invincible
+#define _GODMODE_
+
 // simple level - 1 byte per cell
 const uint8_t Level_1[] PROGMEM = 
 {
@@ -30,56 +33,51 @@ const uint8_t Level_1[] PROGMEM =
 // interaction data (8 bytes per event)
 const INTERACTION_INFO interactionData[] PROGMEM =
 {
-  // currentPos                    currentStatus    currentStatusMask  nextStatus     newItem              modifiedPos        modifiedPosCellValue
-  {  4 +  0 * LEVEL_WIDTH        ,    LVR_UP       , OBJECT_MASK     , LVR_DWN     ,     0           ,  5 +  1 * LEVEL_WIDTH  ,      0        },
+  // currentPos                    currentStatus     nextStatus     newItem              modifiedPos        modifiedPosCellValue
+  {  4 +  0 * LEVEL_WIDTH        ,    LVR_UP       , LVR_DWN     ,     0           ,  5 +  1 * LEVEL_WIDTH  ,      0        },
 
-  {  7 +  0 * LEVEL_WIDTH        ,    LVR_UP       , OBJECT_MASK     , LVR_DWN     ,     0           ,  2 +  1 * LEVEL_WIDTH  ,  /*TBD*/ 0    },
-  {  7 +  0 * LEVEL_WIDTH        ,    LVR_DWN      , OBJECT_MASK     , LVR_UP      ,     0           ,  2 +  1 * LEVEL_WIDTH  ,  /*TBD*/ 0    },
+  {  7 +  0 * LEVEL_WIDTH        ,    LVR_UP       , LVR_DWN     ,     0           ,  2 +  1 * LEVEL_WIDTH  ,  /*TBD*/ 0    },
+  {  7 +  0 * LEVEL_WIDTH        ,    LVR_DWN      , LVR_UP      ,     0           ,  2 +  1 * LEVEL_WIDTH  ,  /*TBD*/ 0    },
 
-  {  4 +  1 * LEVEL_WIDTH        ,    CLOSED_CHEST , OBJECT_MASK     , OPEN_CHEST  , ITEM_COMPASS    ,  4 +  1 * LEVEL_WIDTH  ,  OPEN_CHEST   },
+  {  4 +  1 * LEVEL_WIDTH        ,    CLOSED_CHEST , OPEN_CHEST  , ITEM_COMPASS    ,  4 +  1 * LEVEL_WIDTH  ,  OPEN_CHEST   },
 
-  { 12 +  2 * LEVEL_WIDTH        ,    FOUNTAIN     , OBJECT_MASK     , FOUNTAIN    , ITEM_VICTORY    , 12 +  2 * LEVEL_WIDTH  ,    FOUNTAIN   },
+  { 12 +  2 * LEVEL_WIDTH        ,    FOUNTAIN     , FOUNTAIN    , ITEM_VICTORY    , 12 +  2 * LEVEL_WIDTH  ,    FOUNTAIN   },
 
-  {  0 +  4 * LEVEL_WIDTH        ,    LVR_UP       , OBJECT_MASK     , LVR_DWN     ,     0           ,  2 +  1 * LEVEL_WIDTH  ,      0        },
-  {  0 +  4 * LEVEL_WIDTH        ,    LVR_DWN      , OBJECT_MASK     , LVR_UP      ,     0           ,  2 +  1 * LEVEL_WIDTH  ,     BARS      },
+  {  0 +  4 * LEVEL_WIDTH        ,    LVR_UP       , LVR_DWN     ,     0           ,  2 +  1 * LEVEL_WIDTH  ,      0        },
+  {  0 +  4 * LEVEL_WIDTH        ,    LVR_DWN      , LVR_UP      ,     0           ,  2 +  1 * LEVEL_WIDTH  ,     BARS      },
 
-  {  8 +  6 * LEVEL_WIDTH        ,    CLOSED_CHEST , OBJECT_MASK     , OPEN_CHEST  , ITEM_RING       ,  8 +  6 * LEVEL_WIDTH  ,  OPEN_CHEST   },
-  { 14 +  6 * LEVEL_WIDTH        ,    CLOSED_CHEST , OBJECT_MASK     , OPEN_CHEST  , ITEM_AMULET     , 14 +  6 * LEVEL_WIDTH  ,  OPEN_CHEST   },
+  {  8 +  6 * LEVEL_WIDTH        ,    CLOSED_CHEST , OPEN_CHEST  , ITEM_RING       ,  8 +  6 * LEVEL_WIDTH  ,  OPEN_CHEST   },
+  { 14 +  6 * LEVEL_WIDTH        ,    CLOSED_CHEST , OPEN_CHEST  , ITEM_AMULET     , 14 +  6 * LEVEL_WIDTH  ,  OPEN_CHEST   },
 
-  {  7 +  7 * LEVEL_WIDTH        ,    LVR_UP       , OBJECT_MASK     , LVR_DWN     ,     0           ,  7 + 15 * LEVEL_WIDTH  ,   /*TBD*/ 0   },
-  {  7 +  7 * LEVEL_WIDTH        ,    LVR_DWN      , OBJECT_MASK     , LVR_UP      ,     0           ,  7 + 15 * LEVEL_WIDTH  ,   /*TBD*/ 0   },
+  {  7 +  7 * LEVEL_WIDTH        ,    LVR_UP       , LVR_DWN     ,     0           ,  7 + 15 * LEVEL_WIDTH  ,   /*TBD*/ 0   },
+  {  7 +  7 * LEVEL_WIDTH        ,    LVR_DWN      , LVR_UP      ,     0           ,  7 + 15 * LEVEL_WIDTH  ,   /*TBD*/ 0   },
 
-  {  3 + 10 * LEVEL_WIDTH        ,    CLOSED_CHEST , OBJECT_MASK     , OPEN_CHEST  , /*TBD*/ 0       ,  3 +  10 * LEVEL_WIDTH  ,  OPEN_CHEST  },
+  {  3 + 10 * LEVEL_WIDTH        ,    CLOSED_CHEST , OPEN_CHEST  , /*TBD*/ 0       ,  3 +  10 * LEVEL_WIDTH  ,  OPEN_CHEST  },
 
-  {  0 + 12 * LEVEL_WIDTH        ,    LVR_UP       , OBJECT_MASK     , LVR_DWN     ,     0           ,  3 + 12 * LEVEL_WIDTH  ,      0        },
-  {  0 + 12 * LEVEL_WIDTH        ,    LVR_DWN      , OBJECT_MASK     , LVR_UP      ,     0           ,  4 + 12 * LEVEL_WIDTH  ,    BARS       },
-  {  7 + 12 * LEVEL_WIDTH        ,    CLOSED_CHEST , OBJECT_MASK     , OPEN_CHEST  ,ITEM_KEY|ITEM_COMPASS,  7 + 12 * LEVEL_WIDTH  ,  OPEN_CHEST   },
-  { 11 + 12 * LEVEL_WIDTH        ,    DOOR         , OBJECT_MASK     ,    0        ,     0           , 11 + 12 * LEVEL_WIDTH  ,      0        },
+  {  0 + 12 * LEVEL_WIDTH        ,    LVR_UP       , LVR_DWN     ,     0           ,  3 + 12 * LEVEL_WIDTH  ,      0        },
+  {  0 + 12 * LEVEL_WIDTH        ,    LVR_DWN      , LVR_UP      ,     0           ,  4 + 12 * LEVEL_WIDTH  ,    BARS       },
+  {  7 + 12 * LEVEL_WIDTH        ,    CLOSED_CHEST , OPEN_CHEST  ,ITEM_KEY|ITEM_COMPASS,  7 + 12 * LEVEL_WIDTH  ,  OPEN_CHEST   },
+  { 11 + 12 * LEVEL_WIDTH        ,    DOOR         ,    0        ,     0           , 11 + 12 * LEVEL_WIDTH  ,      0        },
 
-  {  1 + 15 * LEVEL_WIDTH        ,    LVR_UP       , OBJECT_MASK     , LVR_DWN     ,     0           ,  3 + 12 * LEVEL_WIDTH  ,    BARS       },
-  {  1 + 15 * LEVEL_WIDTH        ,    LVR_DWN      , OBJECT_MASK     , LVR_UP      ,     0           ,  4 + 12 * LEVEL_WIDTH  ,      0        },
-  {  3 + 15 * LEVEL_WIDTH        ,    LVR_UP       , OBJECT_MASK     , LVR_DWN     ,     0           ,  3 + 12 * LEVEL_WIDTH  ,      0        },
-  {  3 + 15 * LEVEL_WIDTH        ,    LVR_DWN      , OBJECT_MASK     , LVR_UP      ,     0           ,  4 + 12 * LEVEL_WIDTH  ,    BARS       },
-  { 11 + 15 * LEVEL_WIDTH        ,    LVR_UP       , OBJECT_MASK     , LVR_DWN     ,     0           , 13 +  7 * LEVEL_WIDTH  ,      0        },
-  { 11 + 15 * LEVEL_WIDTH        ,    LVR_DWN      , OBJECT_MASK     , LVR_UP      ,     0           , 13 +  4 * LEVEL_WIDTH  ,      0        },
+  {  1 + 15 * LEVEL_WIDTH        ,    LVR_UP       , LVR_DWN     ,     0           ,  3 + 12 * LEVEL_WIDTH  ,    BARS       },
+  {  1 + 15 * LEVEL_WIDTH        ,    LVR_DWN      , LVR_UP      ,     0           ,  4 + 12 * LEVEL_WIDTH  ,      0        },
+  {  3 + 15 * LEVEL_WIDTH        ,    LVR_UP       , LVR_DWN     ,     0           ,  3 + 12 * LEVEL_WIDTH  ,      0        },
+  {  3 + 15 * LEVEL_WIDTH        ,    LVR_DWN      , LVR_UP      ,     0           ,  4 + 12 * LEVEL_WIDTH  ,    BARS       },
+  { 11 + 15 * LEVEL_WIDTH        ,    LVR_UP       , LVR_DWN     ,     0           , 13 +  7 * LEVEL_WIDTH  ,      0        },
+  { 11 + 15 * LEVEL_WIDTH        ,    LVR_DWN      , LVR_UP      ,     0           , 13 +  4 * LEVEL_WIDTH  ,      0        },
 };
 
 // monster stats (6 bytes per monster - must fit into RAM - or EEPROM???)
-const MONSTER_STATS monsterStats[] PROGMEM =
+const MONSTER_STATS monsterStats[MAX_MONSTERS] PROGMEM =
 {
   // position                monsterType  hp  bonusDamage   attacksFirst  treasureItemMask
-  {   0 +  3 * LEVEL_WIDTH,  RAT        ,  3 ,     -6      ,      1       ,     0                     }, // rat
-  {   6 +  1 * LEVEL_WIDTH,  MIMIC      , 15 ,     -3      ,      1       ,    ITEM_SHIELD            }, // mimic
-  //{  12 +  3 * LEVEL_WIDTH,  BEHOLDER   , 50 ,     +7      ,      1       ,    ITEM_VICTORY           }, // beholder (end boss)
-  
-  //{   3 +  1 * LEVEL_WIDTH,  SKELETON   ,  6 ,      0      ,      0       ,  ITEM_SWORD | ITEM_SHIELD }, // skeleton
-  //{   6 +  2 * LEVEL_WIDTH,  BEHOLDER   , 20 ,     +2      ,      1       ,  ITEM_VICTORY             }, // beholder (end boss)
-  //{   1 +  0 * LEVEL_WIDTH,  SKELETON   , 10 ,     -2      ,      0       ,  ITEM_SWORD | ITEM_SHIELD }, // skeleton
-  //{   0 +  7 * LEVEL_WIDTH,  SKELETON   , 10 ,     -2      ,      0       ,  ITEM_SWORD | ITEM_SHIELD }, // skeleton
-  { 0, 0, 0, 0, 0, 0 },
-  { 0, 0, 0, 0, 0, 0 },
-  { 0, 0, 0, 0, 0, 0 },
-  { 0, 0, 0, 0, 0, 0 },
+  {   0 +  3 * LEVEL_WIDTH,  RAT        ,  3 ,     -6      ,      1       ,           0                }, // rat
+  {   6 +  1 * LEVEL_WIDTH,  MIMIC      , 15 ,     -3      ,      1       ,       ITEM_SHIELD          }, // mimic
+  {  12 +  3 * LEVEL_WIDTH,  BEHOLDER   , 50 ,     +7      ,      1       ,           0                }, // beholder (end boss)
+  {   3 +  5 * LEVEL_WIDTH,  RAT        ,  5 ,     -5      ,      1       ,           0                }, // rat
+  {  13 +  6 * LEVEL_WIDTH,  SKELETON   , 10 ,     +1      ,      0       ,  ITEM_SWORD | ITEM_SHIELD  }, // skeleton
+  {   2 + 11 * LEVEL_WIDTH,  SKELETON   ,  8 ,     -1      ,      0       ,  ITEM_SWORD | ITEM_SHIELD  }, // skeleton
+  {  11 + 14 * LEVEL_WIDTH,  SKELETON   ,  8 ,     +1      ,      0       ,  ITEM_SWORD | ITEM_SHIELD }, // skeleton
 };
 
 // special cell effects (4 bytes per FX)
