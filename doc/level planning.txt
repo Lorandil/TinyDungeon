@@ -1,22 +1,21 @@
 
-Longest Journey - mit Teleporter zwei Felder zurück
+Longest Journey - a teleporter teleports the player two cells back
 ---------------
 
 W W W W W
-.<<<. . .   - abschaltbar per Schalter
+.<<<. . .   - can be disabled by a switch
 W W W W W
 
-oder mit Umgehung:
+or with a detour
 
 W W W W W W W
-. . .<<<. . .   - mit Fakewalls oder schaltbaren Mauern
+. . .<<<. . .   - or avoided by a hidden path
 W W f W f W W
   W . . . W
   W W W W W  
 
 
-
-Death Snare ggf. mit (abschaltbarem) Teleporter und/oder Spinner
+Death Snare with teleporter (s.a.) and spinner(s)
 -----------
 
 W W W W W W W
@@ -40,5 +39,10 @@ W . . . . . W
 W W W W W W W 
 
 
+Materializing Chest
+-------------------
+if a button is pressed, a chest materializes out of nowhere
 
-
+Materializing Monster
+---------------------
+Of course the same could be true for a monster

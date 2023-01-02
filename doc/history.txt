@@ -55,11 +55,12 @@ already achieved:
   - enabled wider icons for the player's gear
   - saved a lot of flash bytes and RAM
 * monsters can attack first
+* fixed problem with left/right walls in the distance
+* changed compass from letters to arrows
+
 
 next steps:
 * monsters should attack player on approaching (if they attack first)
-
-* change compass from letters to arrows?
 
 Combat System
   * are there walking monsters? nope
@@ -69,7 +70,7 @@ Combat System
 
 Game Logic
   * define a goal (defeat the boss (beholder?) )
-  * what happens when the player wins? - Just some text lame message?
+  * what happens when the player wins? - Just some lame text message?
   * can the player "break" the dungeon [i.e. get in a deadlock - probably yes :)]
   * Should the player be healed by fountains?
     - how?
@@ -77,11 +78,10 @@ Game Logic
     - walking over it?
     - how often?
     - change fountain to water basin placed on a wall?
-  * require key to open chests/doors - use same key type for both?
+  * require key to open chests/doors - use same key type for both? yes
 
 Graphics Engine
   * extend object drawing to full field of view?
-  * fix problem with left/right walls in the distance
  [* add stairs up/down]
   * add treasure
   * ...
@@ -90,7 +90,7 @@ Graphics Engine
 perhaps:
 ? use just left walls and mirror them for right:
   - saves 384 bytes + 24 empty bytes in the center
-  - and should be quite easy, but kills the "movement" effect
+  - and should be quite easy, but would kill the important "movement" effect
   or
   - or use mirror table (nibble based?)
   - estimation: will save 300 bytes?
@@ -102,6 +102,6 @@ final steps:
 ? use only one bitmap for all front walls using downscaling <- is this really still necessary, it's just 576 bytes?! 
 
 
-goal
+goals
 * 4 levels(?) or one larger level (save space for stairs graphics)
 * save to EEPROM?

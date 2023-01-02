@@ -19,12 +19,13 @@ Optimization ideas
 * outer left/right walls look bad - should be reworked ;)
 * use darkening effect by dithering - should there be a torch?
 * add support for partial line updates
+* recreate the bars bitmap, so that it becomes thinner in distance 2 (shift by 1 pixel to the left) -> bitmap size grows to 32x48 (64x48 with mask)
 
 <convenience>
 * automatically place monsters in level during startup
   - cost is about 24 bytes of code and 1 byte per monster - fine by me...
 <memory/convenience>
-* optionally add reverse functionality for interactions (switches, etc)
+* optionally add reverse functionality for interactions (switches, etc) - not possible, because interactions aren't (and cannot be) stored in RAM!
 
 <performance>
 * store all visible walls/items in a small array (5x3 bytes) before rendering a frame

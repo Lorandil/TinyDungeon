@@ -85,7 +85,7 @@ const SPECIAL_CELL_INFO specialCellFX[] PROGMEM =
 {
   // cell type ,     position       , value_1, value_2
   //{ TELEPORTER , 5 + 4 * LEVEL_WIDTH,     6  ,    4    },
-  //{ SPINNER    , 2 + 5 * LEVEL_WIDTH,    +1  ,    0    },
+  { SPINNER    , 10 + 2 * LEVEL_WIDTH,    +2  ,    0    },
 };
 
 // list of possible non wall objects (i.e. monsters, doors, ...) (10 bytes per object)

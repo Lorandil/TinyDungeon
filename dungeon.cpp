@@ -485,6 +485,12 @@ void Dungeon::openChest( INTERACTION_INFO &info )
       serialPrintln( F("+ <Key> found!") );
       break;
     }
+    case ITEM_POTION:
+    {    
+      // hooray!
+      serialPrintln( F("+ <Potion> found!") );
+      break;
+    }
     case ITEM_SWORD:
     {    
       // hooray!
