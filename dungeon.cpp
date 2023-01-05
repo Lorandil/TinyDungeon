@@ -23,8 +23,8 @@ void Dungeon::init()
   clear();
 
   // Prepare the dungeon
-  _dungeon.playerX = 7; // could save 4 bytes here, if the whole level is shifted, so that the starting point is at (0,0)
-  _dungeon.playerY = 11;
+  _dungeon.playerX = 1; //7; // could save 4 bytes here, if the whole level is shifted, so that the starting point is at (0,0)
+  _dungeon.playerY = 1; //11;
   _dungeon.dir  = EAST;
   // prepare player stats
   _dungeon.playerHP = 10;
@@ -692,7 +692,7 @@ void Dungeon::playerInteraction( uint8_t *cell, const uint8_t cellValue )
             }
             break;
           }
-
+        // handle the rest (e.g. fountain, levers, ...)
         default:
           {
             // just grab the item!
@@ -702,13 +702,13 @@ void Dungeon::playerInteraction( uint8_t *cell, const uint8_t cellValue )
 
         if ( modifyCurrentPosition )
         {
-          // change current position
+          // change data at current position
           *cell = ( cellValue - interactionInfo.currentStatus ) | interactionInfo.nextStatus;
         }
 
         if ( modifyTargetPosition )
         {
-          // modify target position
+          // modify data at target position
           _dungeon.currentLevel[interactionInfo.modifiedPosition] = interactionInfo.modifiedPositionCellValue;
         }
 

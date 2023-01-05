@@ -97,11 +97,19 @@ perhaps:
 
   - create darkness effect (disable every 2nd pixel) when no torch is lit?  
 
-final steps:
+Final Steps:
 ? add floor graphics
 ? use only one bitmap for all front walls using downscaling <- is this really still necessary, it's just 576 bytes?! 
 
 
-goals
-* 4 levels(?) or one larger level (save space for stairs graphics)
-* save to EEPROM?
+The Sky is the Limit:
+---------------------
+* add a second level, that would require 
+  - 256 bytes for the level 
+  - 140 bytes for interactions
+  - 60 bytes for monsters
+  - redesign monster storage:
+    + separate hitpoints from monster properties (to save RAM)
+    + save level to EEPROM when swapping between the levels (this would consume the whole 512 bytes of EEPROM)
+
+* alternative: save game to EEPROM?

@@ -36,8 +36,8 @@ enum
   FAKE_WALL           = 0x10,
   WALL                = FAKE_WALL | FLAG_SOLID,
   DOOR                = 0x30	| FLAG_SOLID,
-  LVR_UP              = 0x50	| FLAG_SOLID,
-  LVR_DWN             = 0x70	| FLAG_SOLID,
+  LVR_LEFT            = 0x50	| FLAG_SOLID,
+  LVR_RIGHT           = 0x70	| FLAG_SOLID,
 
   // Caution! The following objects are *never* rendered on a wall,
   // so the wall bit (0) must be '0'
@@ -151,15 +151,15 @@ public:
       {
         uint8_t cellValue = currentLevel[y * LEVEL_WIDTH + x];
         char text[3] = "..";
-        if ( ( cellValue & WALL_MASK ) == FAKE_WALL ) { memcpy_P( text, F("W "), 2 ); }
+        if ( ( cellValue & OBJECT_MASK ) == LVR_LEFT ) { memcpy_P( text, F("W>"), 2 ); }
+        else if ( ( cellValue & OBJECT_MASK ) == LVR_RIGHT ) { memcpy_P( text, F("W<"), 2 ); }
+        else if ( ( cellValue & WALL_MASK ) == FAKE_WALL ) { memcpy_P( text, F("W "), 2 ); }
         else if ( cellValue == SKELETON ) { memcpy_P( text, F("sk"), 2 ); }
         else if ( cellValue == BEHOLDER ) { memcpy_P( text, F("bh"), 2 ); }
         else if ( cellValue == RAT ) { memcpy_P( text, F("rt"), 2 ); }
         else if ( cellValue == MIMIC ) { memcpy_P( text, F("mi"), 2 ); }
         else if ( ( cellValue & OBJECT_MASK ) == DOOR ) { memcpy_P( text, F("D "), 2 ); }
         else if ( ( cellValue & OBJECT_MASK ) == BARS ) { memcpy_P( text, F("# "), 2 ); }
-        else if ( ( cellValue & OBJECT_MASK ) == LVR_UP ) { memcpy_P( text, F("Lu"), 2 ); }
-        else if ( ( cellValue & OBJECT_MASK ) == LVR_DWN ) { memcpy_P( text, F("Ld"), 2 ); }
         else if ( ( cellValue & OBJECT_MASK ) == FOUNTAIN ) { memcpy_P( text, F("F "), 2 ); }
         Serial.print( text );
         Serial.print( F(" ") );
