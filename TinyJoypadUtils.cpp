@@ -249,6 +249,12 @@ void DisplayBuffer()
   // display buffer (not necessary)
   display.display();
 
+  // slow down fast microcontrollers
+  #if defined(_VARIANT_ARDUINO_ZERO_)
+    // wait 100ms to compensate for extremely fast hardware i2c
+    delay( 100 );
+  #endif
+  
   #ifndef _SERIAL_SCREENSHOT_NO_AUTO_SHOT_
     // check for screenshot request
     CheckForSerialScreenshot();

@@ -23,7 +23,7 @@ const uint8_t Level_1[] PROGMEM =
 /*  9 */     WALL     ,     0      ,   WALL     , FAKE_WALL  ,   WALL     ,     0      ,     0      ,     0      ,     0      ,     0      ,   WALL     ,     0      ,   WALL     ,     0      ,   WALL     ,     0      , /*  9 */
 /* 10 */     WALL     ,     0      ,   WALL     ,CLOSED_CHEST,   WALL     ,     0      ,   WALL     ,     0      ,   WALL     ,     0      ,   WALL     ,     0      ,     0      ,     0      ,     0      ,     0      , /* 10 */
 /* 11 */     WALL     ,     0      ,/*SKELETN*/0,   WALL     ,   WALL     ,     0      ,     0      ,/*TELEP.*/ 0 ,    0      ,     0      ,   WALL     ,   WALL     ,     0      ,     0      ,     0      ,     0      , /* 11 */
-/* 12 */  WALL|LVR_LEFT ,   WALL     ,     0      ,   BARS     ,   BARS     ,     0      ,   WALL     ,CLOSED_CHEST,   WALL     ,     0      ,     0      , WALL|DOOR  ,     0      ,     0      ,     0      ,   WALL     , /* 12 */
+/* 12 */  WALL|LVR_LEFT ,   WALL     ,     0      ,   BARS     , BARS     ,     0      ,   WALL     ,CLOSED_CHEST,   WALL     ,     0      ,     0      , WALL|DOOR  ,     0      ,     0      ,     0      ,   WALL     , /* 12 */
 /* 13 */       0      ,     0      ,     0      ,   WALL     ,   WALL     ,     0      ,     0      ,/*TELEP.*/ 0,     0      ,     0      ,   WALL     ,   WALL     ,     0      ,     0      ,     0      ,   WALL     , /* 13 */
 /* 14 */     WALL     ,     0      ,     0      ,     0      ,   WALL     ,     0      ,   WALL     ,     0      ,   WALL     ,     0      ,   WALL     ,/*SKELETN*/0,     0      ,     0      ,     0      ,     0      , /* 14 */
 /* 15 */     WALL     , WALL|LVR_LEFT,   WALL     ,WALL|LVR_LEFT ,   WALL     ,     0      ,     0      ,/*TELEP.*/ 0,     0      ,     0      ,   WALL     ,WALL|LVR_LEFT ,   WALL     ,   WALL     ,   WALL     ,     0      , /* 15 */
@@ -61,9 +61,9 @@ const INTERACTION_INFO interactionData[] PROGMEM =
   { 11 + 12 * LEVEL_WIDTH        ,    DOOR         ,    0        ,         0           , 11 + 12 * LEVEL_WIDTH  ,      0        },
 																	    
   {  1 + 15 * LEVEL_WIDTH        ,    LVR_LEFT     , LVR_RIGHT   ,         0           ,  3 + 12 * LEVEL_WIDTH  ,    BARS       },
-  {  1 + 15 * LEVEL_WIDTH        ,    LVR_RIGHT    , LVR_LEFT    ,         0           ,  4 + 12 * LEVEL_WIDTH  ,      0        },
-  {  3 + 15 * LEVEL_WIDTH        ,    LVR_LEFT     , LVR_RIGHT   ,         0           ,  3 + 12 * LEVEL_WIDTH  ,      0        },
-  {  3 + 15 * LEVEL_WIDTH        ,    LVR_RIGHT    , LVR_LEFT    ,         0           ,  4 + 12 * LEVEL_WIDTH  ,    BARS       },
+  {  1 + 15 * LEVEL_WIDTH        ,    LVR_RIGHT    , LVR_LEFT    ,         0           ,  4 + 12 * LEVEL_WIDTH  ,    BARS       },
+  {  3 + 15 * LEVEL_WIDTH        ,    LVR_LEFT     , LVR_RIGHT   ,         0           ,  3 + 12 * LEVEL_WIDTH  ,    BARS       },
+  {  3 + 15 * LEVEL_WIDTH        ,    LVR_RIGHT    , LVR_LEFT    ,         0           ,  4 + 12 * LEVEL_WIDTH  ,      0        },
 																    
   { 11 + 15 * LEVEL_WIDTH        ,    LVR_LEFT     , LVR_RIGHT   ,         0           , 13 +  7 * LEVEL_WIDTH  ,      0        },
   { 11 + 15 * LEVEL_WIDTH        ,    LVR_RIGHT    , LVR_LEFT    ,         0           , 13 +  4 * LEVEL_WIDTH  ,      0        },

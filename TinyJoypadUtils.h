@@ -59,7 +59,7 @@
   #endif
   // use extensive checks (not memory restricted by ATtiny85...)
   #define USE_EXTENDED_CHECKS
-  #define USE_SERIAL_PRINT
+  //#define USE_SERIAL_PRINT
 #endif
 
 
