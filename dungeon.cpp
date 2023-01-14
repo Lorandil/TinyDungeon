@@ -23,8 +23,8 @@ void Dungeon::init()
   clear();
 
   // Prepare the dungeon
-  _dungeon.playerX = 2; //7; // could save 4 bytes here, if the whole level is shifted, so that the starting point is at (0,0)
-  _dungeon.playerY = 12; //11;
+  _dungeon.playerX = 1; //2; //7; // we could save 4 bytes here, if the whole level is shifted, so that the starting point is at (0,0)
+  _dungeon.playerY = 1; //12; //11;
   _dungeon.dir  = EAST;
   // prepare player stats
   _dungeon.playerHP = 10;
@@ -459,57 +459,46 @@ void Dungeon::openChest( INTERACTION_INFO &info )
   }
   
 #if !defined(__AVR_ATtiny85__)
-  switch( info.newItem )
+  if ( info.newItem & ITEM_COMPASS )
   {
-    case ITEM_COMPASS:
-      {
-        // hooray!
-        serialPrintln( F("+ <Compass> found!") );
-        break;
-      }
-    case ITEM_AMULET:
-      {    
-        // hooray!
-        serialPrintln( F("+ <Amulet of True Sight> found!") );
-        break;
-      }
-    case ITEM_RING:
-      {    
-        // hooray!
-        serialPrintln( F("+ <Ring of Orientation> found!") );
-        break;
-      }
-    case ITEM_KEY:
-    {    
-      // hooray!
-      serialPrintln( F("+ <Key> found!") );
-      break;
-    }
-    case ITEM_POTION:
-    {    
-      // hooray!
-      serialPrintln( F("+ <Potion> found!") );
-      break;
-    }
-    case ITEM_SWORD:
-    {    
-      // hooray!
-      serialPrintln( F("+ <Rusty Sword found> found!") );
-      break;
-    }
-    case ITEM_SHIELD:
-    {    
-      // hooray!
-      serialPrintln( F("+ <Wooden Shield> found!") );
-      break;
-    }
-    case ITEM_VICTORY:
-    {    
-      // hooray!
-      serialPrintln( F("+ <Victory condition> found!") );
-      break;
-    }
-}
+    // hooray!
+    serialPrintln( F("+ <Compass> found!") );
+  }
+  if ( info.newItem & ITEM_AMULET )
+  {    
+    // hooray!
+    serialPrintln( F("+ <Amulet of True Sight> found!") );
+  }
+  if ( info.newItem & ITEM_RING )
+  {    
+    // hooray!
+    serialPrintln( F("+ <Ring of Orientation> found!") );
+  }
+  if ( info.newItem & ITEM_KEY )
+  {    
+    // hooray!
+    serialPrintln( F("+ <Key> found!") );
+  }
+  if ( info.newItem & ITEM_POTION )
+  {    
+    // hooray!
+    serialPrintln( F("+ <Potion> found!") );
+  }
+  if ( info.newItem & ITEM_SWORD )
+  {    
+    // hooray!
+    serialPrintln( F("+ <Rusty Sword found> found!") );
+  }
+  if ( info.newItem & ITEM_SHIELD )
+  {    
+    // hooray!
+    serialPrintln( F("+ <Wooden Shield> found!") );
+  }
+  if ( info.newItem & ITEM_VICTORY )
+  {    
+    // hooray!
+    serialPrintln( F("+ <Victory condition> found!") );
+  }
 #endif
 }
 
@@ -679,7 +668,6 @@ void Dungeon::playerInteraction( uint8_t *cell, const uint8_t cellValue )
             openChest( interactionInfo );
             break;
           }
-          
         // is there a door?        
         case DOOR | FLAG_SOLID:
           {
@@ -698,6 +686,15 @@ void Dungeon::playerInteraction( uint8_t *cell, const uint8_t cellValue )
             // just grab the item!
             _dungeon.playerItems |= interactionInfo.newItem;
           }
+        }
+
+        // potion found?
+        if ( _dungeon.playerItems & ITEM_POTION )
+        {
+          // add hitpoints to player's status
+          _dungeon.playerHP += POTION_HITPOINT_BONUS; // + getDice( 4 );              
+          // remove potion from inventory
+          _dungeon.playerItems -= ITEM_POTION;
         }
 
         if ( modifyCurrentPosition )
