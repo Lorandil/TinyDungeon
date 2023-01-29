@@ -39,7 +39,7 @@ public:
   void playerAttack( MONSTER_STATS *monster );
   void monsterAttack( MONSTER_STATS *monster );
   void playerInteraction( uint8_t *cell, const uint8_t cellValue );
-  void /*__attribute__ ((noinline))*/ RenderImage();
+  void /*__attribute__ ((noinline))*/ renderImage();
   // bitmap drawing functions
   uint8_t /*__attribute__ ((always_inline))*/ getWallPixels( const int8_t x, const int8_t y );
   uint8_t getDownScaledBitmapData( int8_t x, int8_t y, 

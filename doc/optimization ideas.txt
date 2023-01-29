@@ -12,8 +12,12 @@ Optimization ideas
 -> NOPE (because of the motion simulation by mirroring on each alternate position)
 * splitting walls further:
   - large 88x64 wall in distance 1 could be created from a tile half the width (would save > 300 bytes(!))
-  - diagonal walls could be split to make use of reduced height (costs 2 * 9 bytes for more table entries)
-  - does this work with mirroring
+  - done: diagonal walls could be split to make use of reduced height (costs 2 * 9 bytes for more table entries)
+
+<RAM usage>
+* monster stats are stored in RAM, costing MAX_MONSTERS * 6 bytes, currently 54 bytes of RAM (10%!)
+  - keep monsters in flash except the hitpoints value
+  - or copy monsters to EEPROM to save RAM (EEPROM code required)
 
 <graphics>
 * outer left/right walls look bad (the 5 pixels on each side) - should be reworked ;)

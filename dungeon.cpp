@@ -101,7 +101,7 @@ void Dungeon::initDice()
 #endif
 
     // update the status pane and render the screen
-    RenderImage();
+    renderImage();
 
     // update player's position and orientation
     checkPlayerMovement();
@@ -111,7 +111,7 @@ void Dungeon::initDice()
   clear();
 
   // update the status pane and render the screen
-  RenderImage();
+  renderImage();
 
   // let the player feel the darkness...
   while ( !isFirePressed() );
@@ -310,9 +310,9 @@ void Dungeon::checkPlayerMovement()
             }
 
             // update the status pane and render the screen (monster will be inverted)
-            RenderImage();
+            renderImage();
             // redraw with normal monster (so that the monster appears to have flashed)
-            RenderImage();
+            renderImage();
           }
 
           /////////////////////////////////////////////
@@ -629,7 +629,7 @@ void Dungeon::monsterAttack( MONSTER_STATS *monster )
 #endif
 
     // update the status pane and render the screen
-    RenderImage();
+    renderImage();
 
   // just some logging
   serialPrintln(F("<- monsterAttack()"));
@@ -693,7 +693,7 @@ void Dungeon::playerInteraction( uint8_t *cell, const uint8_t cellValue )
         if ( _dungeon.playerItems & ITEM_POTION )
         {
           // add hitpoints to player's status
-          _dungeon.playerHP += POTION_HITPOINT_BONUS; // + getDice( 4 );              
+          _dungeon.playerHP += POTION_HITPOINT_BONUS + getDice( 8 );
           // remove potion from inventory
           _dungeon.playerItems -= ITEM_POTION;
           // play some "swallowing" sound
@@ -722,7 +722,7 @@ void Dungeon::playerInteraction( uint8_t *cell, const uint8_t cellValue )
 }
 
 /*--------------------------------------------------------*/
-void Dungeon::RenderImage()
+void Dungeon::renderImage()
 {
   uint8_t statusPanelOffset = 0; 
 
@@ -769,8 +769,8 @@ void Dungeon::RenderImage()
         // hitpoints
         if ( y == 4 )
         {
-          // display HP as am unscaled bar, so max HP is 28 ;)
-            if ( x > _dungeon.playerHP + 2 ) { pixels = 0; }
+          // display HP as a 4x scaled bar, so max visible HP is 112 ;)
+            if ( ( x - 2 ) > ( _dungeon.playerHP / 4 ) ) { pixels = 0; }
             // invert the row if the player was hurt
             pixels ^= _dungeon.invertStatusEffect;
         }
