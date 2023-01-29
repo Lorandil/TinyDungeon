@@ -25,7 +25,7 @@ const uint8_t nibbleBitCount[16] PROGMEM =
   4, // 0b1111
 };
 
-// a 4 bit zoom table (e.g. for charachter enlargement)
+// a 4 bit zoom table (e.g. for character enlargement)
 const uint8_t  nibbleZoom[] PROGMEM = {
   0b00000000, // 0b0000
   0b00000011, // 0b0001
@@ -46,7 +46,7 @@ const uint8_t  nibbleZoom[] PROGMEM = {
 };
 
 // Conversion table from view distance to scaling factor.
-// A distance of '0' is undefined but simplifies adressing.
+// A distance of '0' is undefined but simplyfies addressing.
 const uint8_t scalingFactorFromDistance[] PROGMEM = { 0, 1, 2, 4 };
 
 // Vertical start and end offsets depending on distance
@@ -64,7 +64,7 @@ const uint8_t verticalStartOffset[] PROGMEM = { 0, 0, 2, 3 };
 const uint8_t verticalEndOffset[]   PROGMEM = { 0, 7, 5, 4 };
 
 // Conversion table from scaling factor to bit mask.
-// A factor of '0' is undefined but simplies adressing.
+// A factor of '0' is undefined but simplyfies addressing.
 const uint8_t bitMaskFromScalingFactor[] PROGMEM =
 {
 //    -     1     2     -       4 

@@ -6,3 +6,4 @@
 void stepSound();
 void wallSound();
 void swordSound();
+void potionSound();

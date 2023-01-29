@@ -3,6 +3,7 @@
 
 #include "bitTables.h"
 #include "dungeon.h"
+#include "LevelDefinitions.h"
 #include "dungeonTypes.h"
 #include "externBitmaps.h"
 #include "soundFX.h"
@@ -100,7 +101,7 @@ void Dungeon::initDice()
 #endif
 
     // update the status pane and render the screen
-    Tiny_Flip();
+    RenderImage();
 
     // update player's position and orientation
     checkPlayerMovement();
@@ -110,7 +111,7 @@ void Dungeon::initDice()
   clear();
 
   // update the status pane and render the screen
-  Tiny_Flip();
+  RenderImage();
 
   // let the player feel the darkness...
   while ( !isFirePressed() );
@@ -309,9 +310,9 @@ void Dungeon::checkPlayerMovement()
             }
 
             // update the status pane and render the screen (monster will be inverted)
-            Tiny_Flip();
+            RenderImage();
             // redraw with normal monster (so that the monster appears to have flashed)
-            Tiny_Flip();
+            RenderImage();
           }
 
           /////////////////////////////////////////////
@@ -628,7 +629,7 @@ void Dungeon::monsterAttack( MONSTER_STATS *monster )
 #endif
 
     // update the status pane and render the screen
-    Tiny_Flip();
+    RenderImage();
 
   // just some logging
   serialPrintln(F("<- monsterAttack()"));
@@ -695,6 +696,8 @@ void Dungeon::playerInteraction( uint8_t *cell, const uint8_t cellValue )
           _dungeon.playerHP += POTION_HITPOINT_BONUS; // + getDice( 4 );              
           // remove potion from inventory
           _dungeon.playerItems -= ITEM_POTION;
+          // play some "swallowing" sound
+          potionSound();
         }
 
         if ( modifyCurrentPosition )
@@ -719,9 +722,9 @@ void Dungeon::playerInteraction( uint8_t *cell, const uint8_t cellValue )
 }
 
 /*--------------------------------------------------------*/
-void Dungeon::Tiny_Flip()
+void Dungeon::RenderImage()
 {
-  uint8_t statusPaneOffset = 0; 
+  uint8_t statusPanelOffset = 0; 
 
   for ( uint8_t y = 0; y < 8; y++ )
   {
@@ -749,7 +752,7 @@ void Dungeon::Tiny_Flip()
       pixels = 0;
       if ( y | ( _dungeon.playerItems & ITEM_COMPASS ) )
       {
-        pixels = pgm_read_byte( statusPane + statusPaneOffset );
+        pixels = pgm_read_byte( statusPanel + statusPanelOffset );
         // compass present?
         if ( !y )
         {
@@ -827,7 +830,7 @@ void Dungeon::Tiny_Flip()
       // send 8 vertical pixels to the display
       SendPixels( pixels );
 
-      statusPaneOffset++;
+      statusPanelOffset++;
     }
     
     // this row has been finished
