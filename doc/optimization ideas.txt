@@ -36,4 +36,5 @@ Optimization ideas
 * rejected: store all visible walls/items in a small array (5x3 bytes) before rendering a frame
             - failed, only 10-20% performance increase, but 64 bytes more flash usage
 * skip drawing the status panel if nothing has changed
+  - requires partial line transfers
 

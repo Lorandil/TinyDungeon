@@ -33,7 +33,7 @@ extern const unsigned char outerLeftRightWalls_D3 [] PROGMEM;
 // list of possible non wall objects (i.e. monsters, doors, ...) (10 bytes per object)
 const NON_WALL_OBJECT objectList [11] PROGMEM = {
 //  itemType    , width, verticalOffsetBits, heightBits, lineOffset, scalingThreshold, bitmapData
-  { SKELETON    ,  28,         2 * 8,          5 * 8,         56,      { 1, 2, 99 },   joey        },  //  0
+  { SKELETON    ,  28,         2 * 8,          5 * 8,         56,      { 1, 2,  5 },   joey        },  //  0
   { BEHOLDER    ,  32,         0 * 8,          7 * 8,         64,      { 1, 2,  5 },   beholder    },  //  1
   { BARS        ,  28,         1 * 8,          6 * 8,         56,      { 1, 2,  5 },   newBars     },  //  2
   { DOOR        ,  32,         1 * 8,          7 * 8,         64,      { 1, 3, 12 },   door        },  //  3
