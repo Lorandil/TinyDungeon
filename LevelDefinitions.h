@@ -9,7 +9,7 @@ const uint8_t Level_1[] PROGMEM =
 {
 /*             0             1             2            3              4              5             6            7             8            9           10           11            12           13           14           15              */
 /*  0 */     WALL      ,   WALL      ,   WALL     ,   WALL      ,WALL|LVR_LEFT,     WALL     ,    WALL     ,     0       ,   WALL     ,   WALL     ,     0      ,     0       ,     0      ,     0      ,     0,         WALL   , /*  0 */
-/*  1 */       0       ,/*START*/ 0  ,   BARS     ,     0       ,CLOSED_CHEST ,     WALL     ,  /*MIMIC*/ 0,   WALL      ,     0      ,   WALL     ,     0      ,   WALL      ,   WALL     ,   WALL     ,     0      ,   WALL     , /*  1 */
+/*  1 */       0       ,/*START*/ 0  ,   BARS     ,     0       ,CLOSED_CHEST ,     WALL     , CLOSED_CHEST,   WALL      ,     0      ,   WALL     ,     0      ,   WALL      ,   WALL     ,   WALL     ,     0      ,   WALL     , /*  1 */
 /*  2 */       0       ,     0       ,   WALL     ,     0       ,    WALL     ,     WALL     ,    WALL     ,     0       ,     0      ,   WALL     ,     0      ,   WALL      ,  FOUNTAIN  ,   WALL     ,     0      ,   WALL     , /*  2 */
 /*  3 */  /* RAT*/ 0   ,   WALL      ,     0      ,     0       ,    WALL     ,       0      ,      0      ,     0       ,   WALL     ,   WALL     ,     0      ,   WALL      ,/*BEHOLDR*/0,   WALL     ,     0      ,   WALL     , /*  3 */
 /*  4 */  WALL|LVR_LEFT,   WALL      ,     0      ,   WALL      ,      0      ,       0      ,    WALL     ,     0       ,     0      ,   WALL     ,     0      ,   WALL      ,     0      ,   BARS     ,     0      ,   WALL     , /*  4 */
@@ -37,6 +37,7 @@ const INTERACTION_INFO interactionData[] PROGMEM =
   {  7 +  0 * LEVEL_WIDTH        ,    LVR_RIGHT    , LVR_LEFT    ,         0           ,  2 +  1 * LEVEL_WIDTH  ,  /*TBD*/ 0    },
 																      
   {  4 +  1 * LEVEL_WIDTH        ,    CLOSED_CHEST , OPEN_CHEST  ,     ITEM_COMPASS    ,  4 +  1 * LEVEL_WIDTH  ,  OPEN_CHEST   },
+  {  6 +  1 * LEVEL_WIDTH        ,    CLOSED_CHEST , OPEN_CHEST  ,    ITEM_SHIELD      ,  6 +  1 * LEVEL_WIDTH  ,  OPEN_CHEST   },
 																      
   { 12 +  2 * LEVEL_WIDTH        ,    FOUNTAIN     , FOUNTAIN    ,     ITEM_VICTORY    , 12 +  2 * LEVEL_WIDTH  ,    FOUNTAIN   },
 																      
@@ -48,8 +49,6 @@ const INTERACTION_INFO interactionData[] PROGMEM =
 																      
   {  7 +  7 * LEVEL_WIDTH        ,    LVR_LEFT     , LVR_RIGHT   ,         0           ,  7 + 15 * LEVEL_WIDTH  ,   /*TBD*/ 0   },
   {  7 +  7 * LEVEL_WIDTH        ,    LVR_RIGHT    , LVR_LEFT    ,         0           ,  7 + 15 * LEVEL_WIDTH  ,   /*TBD*/ 0   },
-																      
-  {  3 + 10 * LEVEL_WIDTH        ,    CLOSED_CHEST , OPEN_CHEST  ,ITEM_POTION|ITEM_SWORD,  3 +  10 * LEVEL_WIDTH  ,  OPEN_CHEST  },
 																      
   {  0 + 12 * LEVEL_WIDTH        ,    LVR_LEFT     , LVR_RIGHT   ,         0           ,  3 + 12 * LEVEL_WIDTH  ,      0        },
   {  0 + 12 * LEVEL_WIDTH        ,    LVR_RIGHT    , LVR_LEFT    ,         0           ,  4 + 12 * LEVEL_WIDTH  ,    BARS       },
@@ -83,11 +82,12 @@ const MONSTER_STATS monsterStats[MAX_MONSTERS] PROGMEM =
 {
   // position                monsterType  hp  bonusDamage   attacksFirst  treasureItemMask
   {   0 +  3 * LEVEL_WIDTH,  RAT        ,  3 ,     -6      ,      1       ,           0                               }, // rat
-  {   6 +  1 * LEVEL_WIDTH,  MIMIC      , 15 ,     -3      ,      1       ,       ITEM_SHIELD                         }, // mimic
+  {   8 +  1 * LEVEL_WIDTH,  RAT        ,  3 ,     -4      ,      1       ,           0                               }, // rat
   {  12 +  3 * LEVEL_WIDTH,  BEHOLDER   , 40 ,     +7      ,      1       ,           0                               }, // beholder (end boss)
   {   3 +  5 * LEVEL_WIDTH,  RAT        ,  5 ,     -4      ,      1       ,           0                               }, // rat
   {  13 +  6 * LEVEL_WIDTH,  SKELETON   , 15 ,     +4      ,      0       ,  ITEM_SWORD | ITEM_SHIELD                 }, // skeleton
   {   7 +  8 * LEVEL_WIDTH,  SKELETON   , 12 ,     +3      ,      0       ,  ITEM_SWORD | ITEM_SHIELD                 }, // skeleton
+  {   3 + 10 * LEVEL_WIDTH,  MIMIC      , 15 ,     -1      ,      1       ,     ITEM_POTION | ITEM_SWORD              }, // mimic
   {  11 + 10 * LEVEL_WIDTH,  MIMIC      , 15 ,     +1      ,      0       ,  ITEM_SWORD | ITEM_SHIELD | ITEM_POTION   }, // mimic
   {   3 + 14 * LEVEL_WIDTH,  SKELETON   , 12 ,     +3      ,      0       ,  ITEM_SWORD | ITEM_SHIELD                 }, // skeleton
   {  13 + 14 * LEVEL_WIDTH,  SKELETON   , 12 ,     +3      ,      0       ,  ITEM_SWORD | ITEM_SHIELD                 }, // skeleton

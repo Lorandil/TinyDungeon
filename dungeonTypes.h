@@ -11,7 +11,7 @@ const uint8_t LEVEL_HEIGHT      = 16;
 const uint16_t MAX_LEVEL_BYTES  = LEVEL_WIDTH * LEVEL_HEIGHT;
 const uint8_t MAX_VIEW_DISTANCE = 3;
 
-const uint8_t MAX_MONSTERS      = 9;
+const uint8_t MAX_MONSTERS      = 10;
 
 const uint8_t WINDOW_SIZE_X     = 96;
 const uint8_t WINDOW_CENTER_X   = WINDOW_SIZE_X / 2; /* = 48 */
