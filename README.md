@@ -110,8 +110,8 @@ The player wins the game when reaching the Fountain of Life, gaining the despera
 * max. dungeon size is 256 tiles
 
 ## Current Size
-Sketch uses 7694 bytes (93%) of program storage space. Maximum is 8192 bytes (498 bytes left).
-Global variables use 308 bytes (60%) of dynamic memory, leaving 204 bytes for local variables. Maximum is 512 bytes.
+Sketch uses 7762 bytes (94%) of program storage space. Maximum is 8192 bytes (430 bytes left).
+Global variables use 326 bytes (63%) of dynamic memory, leaving 186 bytes for local variables. Maximum is 512 bytes.
 
 ## License
-GNU General Public License v3.0
+MIT License
