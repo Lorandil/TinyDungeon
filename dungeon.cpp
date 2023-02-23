@@ -738,9 +738,6 @@ void Dungeon::renderImage()
     {
       pixels = getWallPixels( x, y );
       pixels ^= _dungeon.displayXorEffect;
-    #ifdef _SHOW_GRID_OVERLAY
-      if ( ( x & 0x01 ) && ( y < 7 ) ) { pixels |= 0x80; }
-    #endif      
 
       // send 8 vertical pixels to the display
       SendPixels( pixels );

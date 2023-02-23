@@ -1,31 +1,29 @@
-//   >>>>>  T-I-N-Y  D-U-N-G-E-O-N v0.5 for ATTINY85  GPLv3 <<<<
+//   >>>>>  T-I-N-Y  D-U-N-G-E-O-N v1.0 for ATTINY85  MIT License <<<<
 //						Tinyjoypad rev2 compatible
-//                   Programmer: Sven B 2021-2023
+//                   Developer: Sven B 2021-2023
 //              Contact EMAIL: Lorandil@gmx.de
 
 //  Tiny Dungeon is free software: you can redistribute it and/or modify
-//  it under the terms of the GNU General Public License as published by
-// the Free Software Foundation, either version 3 of the License, or
-// (at your option) any later version.
+//  it under the terms of the MIT License.
 
 //  This program is distributed in the hope that it will be useful,
 //  but WITHOUT ANY WARRANTY; without even the implied warranty of
 //  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-//  GNU General Public License for more details.
+//  MIT License for more details.
 
-// The code works at 16MHZ internal PLL
-// and uses the ssd1306xled library for SSD1306 oled display 128x64 (on ATtiny85)
-// or the Adafruit_SSD1306 library on any other micro controller.
-
-// To stuff all code and data into the 8192 bytes of the ATtiny85
-// the ATTinyCore (v1.5.2) by Spence Konde is recommended.
-// The core is available at github: [https://github.com/SpenceKonde/ATTinyCore], just add the
-// following board manager to the Arduino IDE: [http://drazzy.com/package_drazzy.com_index.json]
-// Please enable LTO (link time optimization) and disable 'millis()' and
-// 'micros()'.
-
-// show an 8x8 grid overlay
-//#define _SHOW_GRID_OVERLAY
+// Resources:
+// ----------
+// A SSD1306 library for I2C is required:
+// - for ATtiny85 the <ssd1306xled> library by Tinusaur/Neven Boyanov is required.
+// - for all other micro controllers the Adafruit_SSD1306 library is used.
+//
+// Because the Arduino IDE doesn't come with ATtiny85 support, a suitable core is required:
+//   To stuff all code and data into the 8192 bytes of the ATtiny85
+//   the ATTinyCore (v1.5.2) by Spence Konde is recommended.
+//   The core is available at github: [https://github.com/SpenceKonde/ATTinyCore], just add the
+//   following board manager to the Arduino IDE: [http://drazzy.com/package_drazzy.com_index.json]
+//   Please enable LTO (link time optimization) and disable 'millis()' and
+//   'micros()' and set the PLL to 16MHZ Internal PLL.
 
 #include "dungeon.h"
 #include "tinyJoypadUtils.h"

@@ -1,5 +1,3 @@
-// Just a text file, but Ardiono IDE doesn't like "txt" to be added to the project
-
 History and open points list of TinyDungeon
 
 already achieved:
@@ -109,7 +107,7 @@ The Sky is the Limit:
   - 140 bytes for interactions
   - 60 bytes for monsters
   - redesign monster storage:
-    + separate hitpoints from monster properties (to save RAM)
+    + separate hit points from monster properties (to save RAM)
     + save level to EEPROM when swapping between the levels (this would consume the whole 512 bytes of EEPROM)
 
 * alternative: save game to EEPROM?
