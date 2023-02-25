@@ -1,25 +1,46 @@
 # Tiny Dungeon
-Just a simple DungeonMaster "clone" for the ATtiny85 with an 128x64 OLED display (especially for the TinyJoypad platform).<br>
+This is my implementation of a simple *Dungeon Master* "clone" for the ATtiny85 with an 128x64 OLED display (especially for the TinyJoypad platform).<br>
 Let's see how far we can get!
 
 ---
 ## The Idea
-When I discovered Daniel C's TinyJoypad project I was stunned by all the cool retro like
-games Daniel had created. 
+When I discovered Daniel C's TinyJoypad project I was stunned by all the cool retro like games Daniel had created. 
 
-I started to play with the code of Tiny invaders and decided to try to make it even a little more fun (check the result here: https://github.com/Lorandil/Tiny-invaders-v4.2).
+I started to play with the code of Tiny invaders and decided to try to make it even a little more fun ([TinyInvader v4.2](https://github.com/Lorandil/Tiny-invaders-v4.2)).
 When I had finished most of my ideas on that project, I thought of a game project of my own.
 
-I always loved games like The Bard's Tale or DungeonMaster in the 80s and early 90s.
+I always loved games like *The Bard's Tale* or *Dungeon Master* in the 80s and early 90s.
 Why don't develop something like a 3D dungeon crawler on the TinyJoypad platform?
+Or die trying?
 
 ---
-## Game Features
-* 3D graphics (ok - it's pseudo 3D)
+## The Goal of the Game
+***Let me tell you a story:***
+
+Your love is suffering from a slow, but deadly disease. The wise woman in your village told you, that the only known remedy is a vial of water from the *Fountain of Life*. You ask her immediately about the location of the fountain. She falls silent for a moment, makes a sign against evil and takes a deep breath. She tells you about a valley in the northern mountains. There ought to be a cave, where the fountain is rumored to be found. "Be careful, dear" she said, "Places of great power attracts all kind of thing, evil things..." she adds. You nod solemnly, but what choice do you have anyway?
+
+You pack your backpack and after kissing the burning hot forehead of your love, you leave at immediately, there is no time to waste! You walk fast and even though the trail is becoming narrower and steeper all the time, you reach a small village in the mountains by the evening of the next day. It's very quiet in the village. You suspect that you might meet some inhabitants in the dimly lit house in the village center - a tavern? When you approach the building, you hear voices talking, mugs clattering and a woman's voice singing a melancholic song to the sound of a lute.
+
+When you enter the tavern, the voices fall silent immediately and you feel all eyes on you. Even the singer, a chestnut haired woman, wearing a dark green dress, stops performing. She puts down her instrument and watches you with a strange interest.
+
+You try to ignore the uneasy feeling crawling up your back, walk to the counter and order a beer. The barkeeper, a dark haired man with bad teeth and a dirty apron, pours a mug of a sour smelling liquid from an old barrel in the back, then slams it on the wood right in front of you. "You owe me two coppers" he barks. You quickly pay the man, inspect the mug and start sipping cautiously. It tastes even worse than it smells.
+
+The bard steps to the counter right beside you. From close you can see that her eyes have a deep green color, matching her dress. Around her neck you see a leather strap with a silver amulet in the form of an eye. The eyeball is formed by a red gemstone which appears to flicker in the light from the fireplace. "You shouldn't drink that" she says. "But I think you know that by now." she continues smiling.
+
+
+
+
+
+
+
+---
+## Game Features (February 2023)
+* 3D graphics (ok - it's only pseudo 3D)
 * Large dungeon size of 16x16 tiles
 * Four different monster types
 * Treasure chests
 * Teleporters
+* Magical items
 * Spinners
 * Compass
 * Doors
@@ -28,17 +49,8 @@ Why don't develop something like a 3D dungeon crawler on the TinyJoypad platform
 * Sound effects
 
 ---
-## List of Objects
-* Compass - always points north
-* Wooden shield - massively reducing damage taken
-* Sword  - increases damage of attacks substantially
-* Amulet of True Sight - displayed as an eye, lets the player see through fake walls
-* Ring of Orientation - displayed as a ring, lets the screen flash when teleporting or spinning
-* Healing Potions - granting additional hit points
-
----
 ## Combat System
-The health state of the player and the monsters is persistent, so damaged monsters will stay damaged. <br>
+The health state of the player and the monsters are persistent, so damaged monsters will stay damaged (as will the player until healed by a potion). <br>
 
 ### Initiative
 Some monsters are faster than the player and will attack first.
@@ -48,8 +60,8 @@ Others like undead are slower but deadly nonetheless.<br>
 If it's the player's turn, the player can chose to attack by pressing the button or run away by moving back.<br>
 If the monster survives the attack, it will retaliate immediately.
 
-### Damage
-The damage is determined by a roll of a D8 plus/minus some monster specific value. 
+### Damage System
+The monster's damage is determined by a roll of a D8 plus/minus some monster specific value. The damage value will be reduced by the player's armour (if present) and then subtracted from the players hit points. The player's damage is determined by a D8 and a weapon bonus (if a weapon is equipped) and subtracted from the monster's hit points.
 
 ### Rewards on Dead Monsters
 Some monsters may leave items which will be automatically added to the player's inventory.
@@ -62,6 +74,17 @@ When the game is lost, the game will restart after pressing the button.
 ---
 ## Winning the Game
 The goal of the game is reaching the Fountain of Life, gaining the desperately needed remedy for the player's lover.
+
+---
+# *** SPOILERS AHEAD ***
+
+## List of Objects
+* Compass - always points north
+* Wooden shield - massively reducing damage taken
+* Sword  - increases damage of attacks substantially
+* Amulet of True Sight - displayed as an eye, lets the player see through fake walls
+* Ring of Orientation - displayed as a ring, lets the screen flash when teleporting or spinning
+* Healing Potions - granting additional hit points
 
 ---
 ## Engine Features
@@ -77,8 +100,8 @@ The goal of the game is reaching the Fountain of Life, gaining the desperately n
 * highly opimized for size (target system is an ATtiny85 with 512 bytes of RAM and 8kB of flash)
 * code compiles for ATtiny85 with xled1306 library
 * code compiles for Arduino Uno R3, Leonardo, Mega 2560, Zero and many boards more using the Adafruit SSD1306 library (encapsuled in `"tinyJoypadUtils.h"`)
-* Screenshot functionality: Dump screen content to serial port as a hexdump
-  [only on MCUs with serial port, so not on ATtiny85 ;)]
+* Screenshot functionality: Dump screen content to serial port as a hex dump.
+  *This feature is only available on MCUs with serial port, so not on ATtiny85 ;)*
 
 ---
 ## Engine Limitations
