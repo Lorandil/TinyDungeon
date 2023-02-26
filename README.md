@@ -15,22 +15,9 @@ Or die trying?
 
 ---
 ## The Goal of the Game
-***Let me tell you a story:***
+Find the Foutain of Life to save your true love!
 
-Your love is suffering from a slow, but deadly disease. The wise woman in your village told you, that the only known remedy is a vial of water from the *Fountain of Life*. "Where is this fountain? How do I get there?" you ask. She looks you deep into the eyes and falls silent for a moment. Then she makes the sign against evil and takes a slow steadying breath. "There is a small valley in the northern mountains, a day's walk from here". She gives you a long list of instructions where to turn left or right, where to crawl under some branches or squeeze through a crevice. She makes you repeat the instructions and corrects where necessary. When you manage to repeat everything correctly, she smiles a little. "There ought to be a cave near the spring of a small steam. Inside that cave the fountain shall be found." she says. "But be careful, dear. Places of great power attract all kind of things. Evil things...". You nod solemnly, but what choice do you have anyway?
-
-You pack your backpack and after kissing the burning hot forehead of your love, you leave at immediately, there is no time to waste! You walk fast and even though the trail is becoming narrower and steeper all the time, you reach a small village in the mountains by the evening of the next day. It's very quiet in the village. You suspect that you might meet some inhabitants in the dimly lit house in the village center - a tavern? When you approach the building, you hear voices talking, mugs clattering and a woman's voice singing a melancholic song to the sound of a lute.
-
-When you enter the tavern, the voices fall silent immediately and you feel all eyes on you. Even the singer, a chestnut haired woman, wearing a dark green dress, stops performing. She puts down her instrument and watches you with a strange interest.
-
-You try to ignore the uneasy feeling crawling up your back, walk to the counter and order a beer. The barkeeper, a dark haired man with bad teeth and a dirty apron, pours a mug of a sour smelling liquid from an old barrel in the back, then slams it on the wood right in front of you. "You owe me two coppers" he barks. You quickly pay the man, inspect the mug and start sipping cautiously. It tastes even worse than it smells.
-
-The bard steps to the counter right beside you. From close you can see that her eyes have a deep green color, matching her dress. Around her neck you see a leather strap with a silver amulet in the form of an eye. The eyeball is formed by a red gemstone which appears to flicker in the light from the fireplace. "You shouldn't drink that" she says. "But I think you know that by now." she continues smiling.
-
-
-
-
-
+*A more elaborate version of the story will follow later :)*
 
 
 ---
