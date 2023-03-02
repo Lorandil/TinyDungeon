@@ -679,6 +679,12 @@ void Dungeon::playerInteraction( uint8_t *cell, const uint8_t cellValue )
               // and the key is gone, too
               _dungeon.playerItems &= ~ITEM_KEY;
             }
+            else
+            {
+              // don't change a thing!
+              modifyCurrentPosition = false;
+              modifyTargetPosition = false;
+            }            
             break;
           }
         // handle the rest (e.g. fountain, levers, ...)
