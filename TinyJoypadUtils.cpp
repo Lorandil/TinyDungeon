@@ -8,7 +8,7 @@
 //
 
 #include <Arduino.h>
-#include "tinyJoypadUtils.h"
+#include "TinyJoypadUtils.h"
 
 #if defined(__AVR_ATtiny85__)
   #include <ssd1306xled.h>

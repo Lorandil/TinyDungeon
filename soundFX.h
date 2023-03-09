@@ -1,7 +1,7 @@
 #pragma once
 
 #include <Arduino.h>
-#include "tinyJoypadUtils.h"
+#include "TinyJoypadUtils.h"
 
 void stepSound();
 void wallSound();

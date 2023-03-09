@@ -26,7 +26,7 @@
 //   'micros()' and set the PLL to 16MHZ Internal PLL.
 
 #include "dungeon.h"
-#include "tinyJoypadUtils.h"
+#include "TinyJoypadUtils.h"
 #include "soundFX.h"
 
 static Dungeon _dungeon;

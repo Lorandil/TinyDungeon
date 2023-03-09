@@ -7,7 +7,7 @@
 #include "dungeonTypes.h"
 #include "externBitmaps.h"
 #include "soundFX.h"
-#include "tinyJoypadUtils.h"
+#include "TinyJoypadUtils.h"
 
 /*--------------------------------------------------------*/
 void Dungeon::clear()
