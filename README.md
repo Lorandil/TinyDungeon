@@ -20,6 +20,7 @@ Find the Foutain of Life to save your true love!
 *A more elaborate version of the story will follow later :)*
 
 
+
 ---
 ## Game Features (February 2023)
 * 3D graphics (ok - it's only pseudo 3D)
@@ -86,7 +87,7 @@ The goal of the game is reaching the Fountain of Life, gaining the desperately n
 * extensible design (levels, bitmaps, interactions, ...)
 * highly opimized for size (target system is an ATtiny85 with 512 bytes of RAM and 8kB of flash)
 * code compiles for ATtiny85 with xled1306 library
-* code compiles for Arduino Uno R3, Leonardo, Mega 2560, Zero and many boards more using the Adafruit SSD1306 library (encapsuled in `"tinyJoypadUtils.h"`)
+* code compiles for Arduino Uno R3, Leonardo, Mega 2560, Zero and many boards more using the Adafruit SSD1306 library (encapsuled in `"TinyJoypadUtils.h"`)
 * Screenshot functionality: Dump screen content to serial port as a hex dump.
   *This feature is only available on MCUs with serial port, so not on ATtiny85 ;)*
 
@@ -112,7 +113,7 @@ This sums up to nearly 4000 bytes - meaning half the flash memory is used to sto
 
 ---
 ## Current Size
-Sketch uses **7762 bytes (94%)** of program storage space. Maximum is 8192 bytes **(430 bytes left)**.
+Sketch uses **7760 bytes (94%)** of program storage space. Maximum is 8192 bytes **(432 bytes left)**.
 Global variables use **326 bytes (63%)** of dynamic memory, leaving **186 bytes** for local variables. Maximum is 512 bytes.
 
 ---
@@ -146,12 +147,12 @@ In early 2023 I optimized some bitmaps for better scaling (especially the chest 
 <br>Uh oh...
 
 ---
-## Resources
+## Credits/Resources
 * an older version of [ssd1306xled](https://github.com/tinusaur/ssd1306xled) library by tinusaur/Neven Boyanov - a small and fast library for I2C communication with SSD1306 compatible boards (I will try to use the current version in a later release)
 * [ATTinyCore 1.5.2](https://github.com/SpenceKonde/ATTinyCore) by Spence Konde - in my opinion the best ATtiny core available!
 * [Arduino IDE 2.0](https://github.com/arduino/arduino-ide) the official IDE
 * the [TinyJoypad](https://www.tinyjoypad.com/tinyjoypad_attiny85) project which inspired me to develop TinyDungeon - thanks Daniel C!
-
+* [image2cpp](http://javl.github.io/image2cpp/) a great online bitmap converting tool
 
 ---
 ## License
