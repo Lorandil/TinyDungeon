@@ -1,0 +1,8 @@
+Ideas for improvements
+
+* display damage dealt/received on screen
+
+Done
+
++ scale hit points by 2 (again)
++ add version info to panel

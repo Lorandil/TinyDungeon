@@ -772,8 +772,8 @@ void Dungeon::renderImage()
         // hitpoints
         if ( y == 4 )
         {
-          // display HP as a 4x scaled bar, so max visible HP is 112 ;)
-            if ( ( x - 2 ) > ( _dungeon.playerHP / 4 ) ) { pixels = 0; }
+          // display HP as a 2x scaled bar, so max visible HP is 56 ;)
+            if ( ( x - 2 ) > ( _dungeon.playerHP / 2 ) ) { pixels = 0; }
             // invert the row if the player was hurt
             pixels ^= _dungeon.invertStatusEffect;
         }
