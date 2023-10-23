@@ -55,6 +55,7 @@ already achieved:
 * monsters can attack first
 * fixed problem with left/right walls in the distance
 * changed compass from letters to arrows
+* added mimic, reusing the chest bitmap
 
 
 next steps:
@@ -63,7 +64,7 @@ next steps:
 Combat System
   * are there walking monsters? nope
   * monsters should be able to attack the player if he/she comes close (should the player automatically turn to the threat?)
-  * add more monster(s) - perhaps a mimic looking like a closed chest?
+  * add more monster(s)
   * monster attacks should play a sound
 
 Game Logic

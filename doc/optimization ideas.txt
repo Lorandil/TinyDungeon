@@ -22,8 +22,9 @@ Optimization ideas
 <graphics>
 * outer left/right walls look bad (the 5 pixels on each side) - should be reworked ;)
 * use darkening effect by dithering - should there be a torch?
-* add support for partial line updates on increase frame rate?
+* add support for partial line updates to increase frame rate?
 * recreate the bars bitmap, so that it becomes thinner in distance 2 (shift by 1 pixel to the left) -> bitmap size grows to 32x48 (64x48 with mask)
+* let dead monsters sink through the floor instead of simply vanishing
 
 <convenience>
 * done: automatically place monsters in level during startup
