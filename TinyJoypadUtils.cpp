@@ -57,28 +57,29 @@ void InitTinyJoypad()
 bool isLeftPressed()
 {
   uint16_t inputX = analogRead( LEFT_RIGHT_BUTTON );
-  return( ( inputX >= 750 ) && ( inputX < 950 ) );
+  serialPrintln( inputX );
+  return( ( inputX >= ANALOG_UPPER_LIMIT_MIN ) && ( inputX < ANALOG_UPPER_LIMIT_MAX ) );
 }
 
 /*-------------------------------------------------------*/
 bool isRightPressed()
 {
   uint16_t inputX = analogRead( LEFT_RIGHT_BUTTON );
-  return( ( inputX > 500 ) && ( inputX < 750 ) );
+  return( ( inputX > ANALOG_LOWER_LIMIT_MIN ) && ( inputX < ANALOG_LOWER_LIMIT_MAX ) );
 }
 
 /*-------------------------------------------------------*/
 bool isUpPressed()
 {
   uint16_t inputY = analogRead( UP_DOWN_BUTTON );
-  return( ( inputY > 500 ) && ( inputY < 750 ) );
+  return( ( inputY > ANALOG_LOWER_LIMIT_MIN ) && ( inputY < ANALOG_LOWER_LIMIT_MAX ) );
 }
 
 /*-------------------------------------------------------*/
 bool isDownPressed()
 {
   uint16_t inputY = analogRead( UP_DOWN_BUTTON );
-  return( ( inputY >= 750 ) && ( inputY < 950 ) );
+  return( ( inputY >= ANALOG_UPPER_LIMIT_MIN ) && ( inputY < ANALOG_UPPER_LIMIT_MAX ) );
 }
 
 /*-------------------------------------------------------*/
@@ -113,25 +114,25 @@ void readAnalogJoystick()
 /*-------------------------------------------------------*/
 bool wasLeftPressed()
 {
-  return( ( analogJoystickX >= 750 ) && ( analogJoystickX < 950 ) );
+  return( ( analogJoystickX >= ANALOG_UPPER_LIMIT_MIN ) && ( analogJoystickX < ANALOG_UPPER_LIMIT_MAX ) );
 }
 
 /*-------------------------------------------------------*/
 bool wasRightPressed()
 {
-  return( ( analogJoystickX > 500 ) && ( analogJoystickX < 750 ) );
+  return( ( analogJoystickX > ANALOG_LOWER_LIMIT_MIN ) && ( analogJoystickX < ANALOG_LOWER_LIMIT_MAX ) );
 }
 
 /*-------------------------------------------------------*/
 bool wasUpPressed()
 {
-  return( ( analogJoystickY > 500 ) && ( analogJoystickY < 750 ) );
+  return( ( analogJoystickY > ANALOG_LOWER_LIMIT_MIN ) && ( analogJoystickY < ANALOG_LOWER_LIMIT_MAX ) );
 }
 
 /*-------------------------------------------------------*/
 bool wasDownPressed()
 {
-  return( ( analogJoystickY >= 750 ) && ( analogJoystickY < 950 ) );
+  return( ( analogJoystickY >= ANALOG_UPPER_LIMIT_MIN ) && ( analogJoystickY < ANALOG_UPPER_LIMIT_MAX ) );
 }
 
 /*-------------------------------------------------------*/
