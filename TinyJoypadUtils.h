@@ -75,7 +75,7 @@
     const uint32_t ANALOG_UPPER_LIMIT_MIN = 750;
     const uint32_t ANALOG_UPPER_LIMIT_MAX = 950;
   #elif defined(ARDUINO_UNOWIFIR4) || defined(ARDUINO_UNOR4_MINIMA)
-    const uint32_t ANALOG_LOWER_LIMIT_MIN = 450;
+    const uint32_t ANALOG_LOWER_LIMIT_MIN = 300;
     const uint32_t ANALOG_LOWER_LIMIT_MAX = 540;
     const uint32_t ANALOG_UPPER_LIMIT_MIN = 540;
     const uint32_t ANALOG_UPPER_LIMIT_MAX = 650;

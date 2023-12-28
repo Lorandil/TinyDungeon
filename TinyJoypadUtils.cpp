@@ -57,7 +57,6 @@ void InitTinyJoypad()
 bool isLeftPressed()
 {
   uint16_t inputX = analogRead( LEFT_RIGHT_BUTTON );
-  serialPrintln( inputX );
   return( ( inputX >= ANALOG_UPPER_LIMIT_MIN ) && ( inputX < ANALOG_UPPER_LIMIT_MAX ) );
 }
 
