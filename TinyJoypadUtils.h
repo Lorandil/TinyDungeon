@@ -41,6 +41,12 @@
   // disable extended features
   #undef USE_EXTENDED_CHECKS
   #undef USE_SERIAL_PRINT
+
+  // Analog limits for joystick control (controller/voltage dependent)
+  const uint16_t ANALOG_LOWER_LIMIT_MIN = 500;
+  const uint16_t ANALOG_LOWER_LIMIT_MAX = 750;
+  const uint16_t ANALOG_UPPER_LIMIT_MIN = 750;
+  const uint16_t ANALOG_UPPER_LIMIT_MAX = 950;
 #else
   #if defined(__AVR_ATmega2560__) || defined(__AVR_ATmega32U4__) || defined(__AVR_ATmega328P__) || defined(_VARIANT_ARDUINO_ZERO_) || defined(ARDUINO_UNOWIFIR4) || defined(ARDUINO_UNOR4_MINIMA)
     // Arduino Mega 2560 (and compatible)
@@ -59,31 +65,26 @@
   #endif
 
   // Analog limits for joystick control (controller/voltage dependent)
-  #if defined(__AVR_ATtiny85__)
-    const uint32_t ANALOG_LOWER_LIMIT_MIN = 500;
-    const uint32_t ANALOG_LOWER_LIMIT_MAX = 750;
-    const uint32_t ANALOG_UPPER_LIMIT_MIN = 750;
-    const uint32_t ANALOG_UPPER_LIMIT_MAX = 950;
-  #elif defined(__AVR_ATmega2560__) || defined(__AVR_ATmega32U4__) || defined(__AVR_ATmega328P__)
-    const uint32_t ANALOG_LOWER_LIMIT_MIN = 500;
-    const uint32_t ANALOG_LOWER_LIMIT_MAX = 750;
-    const uint32_t ANALOG_UPPER_LIMIT_MIN = 750;
-    const uint32_t ANALOG_UPPER_LIMIT_MAX = 950;
+  #if defined(__AVR_ATmega2560__) || defined(__AVR_ATmega32U4__) || defined(__AVR_ATmega328P__)
+    const uint16_t ANALOG_LOWER_LIMIT_MIN = 500;
+    const uint16_t ANALOG_LOWER_LIMIT_MAX = 750;
+    const uint16_t ANALOG_UPPER_LIMIT_MIN = 750;
+    const uint16_t ANALOG_UPPER_LIMIT_MAX = 950;
   #elif defined(_VARIANT_ARDUINO_ZERO_)
-    const uint32_t ANALOG_LOWER_LIMIT_MIN = 500;
-    const uint32_t ANALOG_LOWER_LIMIT_MAX = 750;
-    const uint32_t ANALOG_UPPER_LIMIT_MIN = 750;
-    const uint32_t ANALOG_UPPER_LIMIT_MAX = 950;
+    const uint16_t ANALOG_LOWER_LIMIT_MIN = 500;
+    const uint16_t ANALOG_LOWER_LIMIT_MAX = 750;
+    const uint16_t ANALOG_UPPER_LIMIT_MIN = 750;
+    const uint16_t ANALOG_UPPER_LIMIT_MAX = 950;
   #elif defined(ARDUINO_UNOWIFIR4) || defined(ARDUINO_UNOR4_MINIMA)
-    const uint32_t ANALOG_LOWER_LIMIT_MIN = 300;
-    const uint32_t ANALOG_LOWER_LIMIT_MAX = 540;
-    const uint32_t ANALOG_UPPER_LIMIT_MIN = 540;
-    const uint32_t ANALOG_UPPER_LIMIT_MAX = 650;
+    const uint16_t ANALOG_LOWER_LIMIT_MIN = 300;
+    const uint16_t ANALOG_LOWER_LIMIT_MAX = 540;
+    const uint16_t ANALOG_UPPER_LIMIT_MIN = 540;
+    const uint16_t ANALOG_UPPER_LIMIT_MAX = 650;
   #else
-    const uint32_t ANALOG_LOWER_LIMIT_MIN = 500;
-    const uint32_t ANALOG_LOWER_LIMIT_MAX = 750;
-    const uint32_t ANALOG_UPPER_LIMIT_MIN = 750;
-    const uint32_t ANALOG_UPPER_LIMIT_MAX = 950;
+    const uint16_t ANALOG_LOWER_LIMIT_MIN = 500;
+    const uint16_t ANALOG_LOWER_LIMIT_MAX = 750;
+    const uint16_t ANALOG_UPPER_LIMIT_MIN = 750;
+    const uint16_t ANALOG_UPPER_LIMIT_MAX = 950;
   #endif
 
   // use extensive checks (not memory restricted by ATtiny85...)
