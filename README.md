@@ -24,8 +24,7 @@ Find the Foutain of Life to save your true love!
 
 *A more elaborate version of the story will follow later :)*
 
-
-The bard steps to the counter right beside you. From close you can see that her eyes have a deep green color, matching her dress. Around her neck you see a leather strap with a silver amulet in the form of an eye. The eyeball is formed by a red gemstone which appears to flicker in the light from the fireplace. "You shouldn't drink that" she says. "But I think you know that by now." she continues smiling.
+***Let me tell you a story:***
 
 ---
 ## Game Features (February 2023)
