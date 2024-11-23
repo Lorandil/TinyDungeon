@@ -298,7 +298,7 @@ void Dungeon::checkPlayerMovement()
           }          
 
           /////////////////////////////////////////////
-          // player attacks monster (if he/she is still alive)
+          // player attacks monster (if still alive)
           if ( _dungeon.playerHP > 0 )
           {
             playerAttack( monster );

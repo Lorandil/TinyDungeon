@@ -1,5 +1,8 @@
 #pragma once
 
+// Dungeon walls inspired by Eye of the Beholder
+// The walls are made from small, irregular rocks - I prefer this look ;)
+
 // 'EOB_frontwall88x64_D1_inv', 88x64px (704 bytes)
 const unsigned char smallFrontWall_D1 [] PROGMEM = {
 	0x00, 0x80, 0xe0, 0xf0, 0xf0, 0x70, 0xf8, 0xf8, 0xf8, 0xf8, 0xf8, 0xf8, 0xf0, 0xf0, 0xf0, 0xf0, 

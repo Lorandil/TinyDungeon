@@ -180,7 +180,13 @@ void Sound( const uint8_t freq, const uint8_t dur )
 void InitDisplay()
 {
 #if defined(__AVR_ATtiny85__) /* codepath for ATtiny85 */
-  SSD1306.ssd1306_init();
+  #if defined( _SSD1306XLED_TINY_INIT_SUPPORTED_ )
+    // library supports shorter init method
+    SSD1306.ssd1306_tiny_init();
+  #else
+    // use standard init method
+    SSD1306.ssd1306_init();
+  #endif
 #else
   // SSD1306_SWITCHCAPVCC = generate display voltage from 3.3V internally
   // Address 0x3D for 128x64

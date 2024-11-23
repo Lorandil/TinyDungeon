@@ -1,6 +1,9 @@
 # Tiny Dungeon
 This is my implementation of a simple *Dungeon Master* "clone" for the ATtiny85 with an 128x64 OLED display (especially for the TinyJoypad platform).<br>
-Let's see how far we can get!
+
+![Oh, I see!](./screenshots/gallery.png)
+<br>Some impressions of the dangerous journey into the dungeon!<br>
+
 
 ---
 ## The Idea
@@ -13,6 +16,8 @@ I always loved games like *The Bard's Tale* or *Dungeon Master* in the 80s and e
 Why don't develop something like a 3D dungeon crawler on the TinyJoypad platform?
 Or die trying?
 
+**The dungeon is the limit!**
+
 ---
 ## The Goal of the Game
 Find the Foutain of Life to save your true love!
@@ -20,6 +25,7 @@ Find the Foutain of Life to save your true love!
 *A more elaborate version of the story will follow later :)*
 
 
+The bard steps to the counter right beside you. From close you can see that her eyes have a deep green color, matching her dress. Around her neck you see a leather strap with a silver amulet in the form of an eye. The eyeball is formed by a red gemstone which appears to flicker in the light from the fireplace. "You shouldn't drink that" she says. "But I think you know that by now." she continues smiling.
 
 ---
 ## Game Features (February 2023)
