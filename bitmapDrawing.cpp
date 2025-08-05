@@ -53,7 +53,7 @@ uint8_t Dungeon::getWallPixels( const int8_t x, const int8_t y )
           uint8_t offsetX;
 
           // is the bitmap smaller than the screen?
-          bool smallBitmap = ( wallInfo.width < WINDOW_SIZE_X );
+          bool smallBitmap = ( wallInfo.width < DUNGEON_WINDOW_SIZE_X );
 
           if ( smallBitmap )
           {
@@ -72,7 +72,7 @@ uint8_t Dungeon::getWallPixels( const int8_t x, const int8_t y )
           else
           {
             // mirror walls on odd fields
-            offsetX = mirror ? ( WINDOW_SIZE_X - 1 ) - x : x;
+            offsetX = mirror ? ( DUNGEON_WINDOW_SIZE_X - 1 ) - x : x;
           }
 
           // get wall pixels (shave off the empty rows)
@@ -120,7 +120,7 @@ uint8_t Dungeon::getWallPixels( const int8_t x, const int8_t y )
       uint8_t objectWidth = object.bitmapWidth >> distance;
 
       // non wall objects will only be rendered if directly in front of the player (for now!)
-      if ( ( x >= WINDOW_CENTER_X - objectWidth ) && ( x < WINDOW_CENTER_X + objectWidth ) )
+      if ( ( x >= DUNGEON_WINDOW_CENTER_X - objectWidth ) && ( x < DUNGEON_WINDOW_CENTER_X + objectWidth ) )
       {
       #ifdef _USE_FIELD_OF_VIEW_
         if ( ( getCell( distance, 0 ) & OBJECT_MASK ) == object.itemType )
@@ -128,7 +128,7 @@ uint8_t Dungeon::getWallPixels( const int8_t x, const int8_t y )
         if ( ( *( getCellRaw( _dungeon.playerX, _dungeon.playerY, distance, 0, _dungeon.dir ) ) & OBJECT_MASK ) == object.itemType )
       #endif
         {
-          objectWidth = WINDOW_CENTER_X - objectWidth;
+          objectWidth = DUNGEON_WINDOW_CENTER_X - objectWidth;
           uint8_t posX = x - objectWidth;
           // free background
           uint8_t mask = getDownScaledBitmapData( posX, y, distance, &object, true );

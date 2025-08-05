@@ -90,11 +90,18 @@
   // use extensive checks (not memory restricted by ATtiny85...)
   #define USE_EXTENDED_CHECKS
   #define USE_SERIAL_PRINT
+
+  // flag if vertical addressing mode is enabled
+  bool verticalAddressingModeEnabled{false};
 #endif
 
 
 // funciton for initializing the TinyJoypad (ATtiny85) and other microcontrollers
 void InitTinyJoypad();
+
+// switch between vertical and horizontal addressing modes
+void EnableVerticalAddressingMode();
+void DisableVerticalAddressingMode();
 
 // function for direct joystick readings
 bool isLeftPressed();
@@ -122,7 +129,9 @@ void Sound( const uint8_t freq, const uint8_t dur );
 // functions to simplify display handling between ATtiny85 and Ardafruit_SSD1306
 void InitDisplay();
 void PrepareDisplayRow( uint8_t y );
+void StartSendPixels();
 void SendPixels( uint8_t pixels );
+void StopSendPixels();
 void FinishDisplayRow();
 void DisplayBuffer();
 

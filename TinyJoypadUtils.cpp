@@ -199,6 +199,34 @@ void InitDisplay()
 }
 
 /*-------------------------------------------------------*/
+void EnableVerticalAddressingMode()
+{
+#if defined(__AVR_ATtiny85__) /* codepath for ATtiny85 */
+  SSD1306.ssd1306_send_command_start();
+  SSD1306.ssd1306_send_byte( 0x20 ); SSD1306.ssd1306_send_byte( 0x01 );
+  SSD1306.ssd1306_send_byte( 0x21 ); SSD1306.ssd1306_send_byte( 0x00 ); SSD1306.ssd1306_send_byte( 0x7f );
+  SSD1306.ssd1306_send_byte( 0x22 ); SSD1306.ssd1306_send_byte( 0x00 ); SSD1306.ssd1306_send_byte( 0x07 );
+  SSD1306.ssd1306_send_command_stop();
+#else
+  verticalAddressingModeEnabled = true;
+#endif
+}
+
+/*-------------------------------------------------------*/
+void DisableVerticalAddressingMode()
+{
+#if defined(__AVR_ATtiny85__) /* codepath for ATtiny85 */
+  SSD1306.ssd1306_send_command_start();
+  SSD1306.ssd1306_send_byte( 0x20 ); SSD1306.ssd1306_send_byte( 0x00 );
+  SSD1306.ssd1306_send_byte( 0x21 ); SSD1306.ssd1306_send_byte( 0x00 ); SSD1306.ssd1306_send_byte( 0x7f );
+  SSD1306.ssd1306_send_byte( 0x22 ); SSD1306.ssd1306_send_byte( 0x00 ); SSD1306.ssd1306_send_byte( 0x07 );
+  SSD1306.ssd1306_send_command_stop();
+#else
+  verticalAddressingModeEnabled = false;
+#endif
+}
+
+/*-------------------------------------------------------*/
 // This code will init the display for row <y>
 void PrepareDisplayRow( uint8_t y )
 {
@@ -225,6 +253,14 @@ void PrepareDisplayRow( uint8_t y )
 }
 
 /*-------------------------------------------------------*/
+void StartSendPixels()
+{
+#if defined(__AVR_ATtiny85__)  /* codepath for ATtiny85 */
+  SSD1306.ssd1306_send_data_start();
+#endif
+}
+
+/*-------------------------------------------------------*/
 void SendPixels( uint8_t pixels )
 {
 #if defined(__AVR_ATtiny85__) /* codepath for ATtiny85 */
@@ -234,6 +270,14 @@ void SendPixels( uint8_t pixels )
 #else  /* codepath for any Adafruit_SSD1306 supported MCU */
   // write pixels directly to the buffer
   *adafruitBuffer++ = pixels;
+#endif
+}
+
+/*-------------------------------------------------------*/
+void StopSendPixels()
+{
+#if defined(__AVR_ATtiny85__)  /* codepath for ATtiny85 */
+  SSD1306.ssd1306_send_data_stop();
 #endif
 }
 

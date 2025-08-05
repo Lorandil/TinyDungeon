@@ -7,6 +7,10 @@
 // uncomment this line to make the player invincible
 //#define _GODMODE_
 
+// used for vertical addressing mode - this is still experimental but should be able to speed up the whole
+// drawing by about factor 8... let's see...
+#define _VERTICAL_RENDERING
+
 // Dungeon
 class Dungeon
 {

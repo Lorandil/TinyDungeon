@@ -1,6 +1,6 @@
-//   >>>>>  T-I-N-Y  D-U-N-G-E-O-N v1.0.1 for ATTINY85  MIT License <<<<
+//   >>>>>  T-I-N-Y  D-U-N-G-E-O-N v1.1.0 for ATTINY85  MIT License <<<<
 //						Tinyjoypad rev2 compatible
-//                   Developer: Sven B 2021-2023
+//                   Developer: Sven B 2021-2025
 //              Contact EMAIL: Lorandil@gmx.de
 
 //  Tiny Dungeon is free software: you can redistribute it and/or modify
@@ -38,6 +38,12 @@ void setup()
   InitTinyJoypad();
   // perform display initialization
   InitDisplay();
+
+#ifdef _VERTICAL_RENDERING
+  // switch addressing mode to vertical adressing
+  // TODO: create an alternate InitDisplay method which uses a different initialization code
+  EnableVerticalAddressingMode();
+#endif
 }
 
 /*--------------------------------------------------------*/

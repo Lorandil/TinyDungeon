@@ -730,27 +730,33 @@ void Dungeon::playerInteraction( uint8_t *cell, const uint8_t cellValue )
 /*--------------------------------------------------------*/
 void Dungeon::renderImage()
 {
-  uint8_t statusPanelOffset = 0; 
+#ifdef _VERTICAL_RENDERING
+  uint8_t pixels;
 
-  for ( uint8_t y = 0; y < 8; y++ )
+  StartSendPixels();
+
+  // the first 96 columns are used to display the dungeon
+  for ( uint8_t x = 0; x < DUNGEON_WINDOW_SIZE_X; x++ )
   {
-    // prepare display of row <y>
-    PrepareDisplayRow( y );
-    
-    uint8_t pixels;
-
-    // the first 96 columns are used to display the dungeon
-    for ( uint8_t x = 0; x < 96; x++ )
+    for ( uint8_t y = 0; y < DUNGEON_WINDOW_SIZE_Y / 8; y++ )
     {
       pixels = getWallPixels( x, y );
       pixels ^= _dungeon.displayXorEffect;
 
       // send 8 vertical pixels to the display
       SendPixels( pixels );
-    } // for x
+    } // for y
+  } // for x
 
-    // display the dashboard here
-    for ( uint8_t x = 0; x < 32; x++ )
+  StopSendPixels();
+
+  StartSendPixels();
+
+  // display the dashboard here
+  uint8_t statusPanelOffset = 0; 
+  for ( uint8_t x = 0; x < DASHBOARD_SIZE_X; x++ )
+  {
+    for ( uint8_t y = 0; y < DASHBOARD_SIZE_Y / 8; y++ )
     {
       pixels = 0;
       if ( y | ( _dungeon.playerItems & ITEM_COMPASS ) )
@@ -834,11 +840,123 @@ void Dungeon::renderImage()
       SendPixels( pixels );
 
       statusPanelOffset++;
-    }
-    
-    // this row has been finished
-    FinishDisplayRow();
-  } // for y
+    } // for y
+
+  } // for x
+
+  StopSendPixels();
+
+  #else
+    uint8_t statusPanelOffset = 0; 
+
+    for ( uint8_t y = 0; y < DUNGEON_WINDOW_SIZE_Y / 8; y++ )
+    {
+      // prepare display of row <y>
+      PrepareDisplayRow( y );
+      
+      uint8_t pixels;
+
+      // the first 96 columns are used to display the dungeon
+      for ( uint8_t x = 0; x < DUNGEON_WINDOW_SIZE_X; x++ )
+      {
+        pixels = getWallPixels( x, y );
+        pixels ^= _dungeon.displayXorEffect;
+
+        // send 8 vertical pixels to the display
+        SendPixels( pixels );
+      } // for x
+
+      // display the dashboard here
+      for ( uint8_t x = 0; x < DASHBOARD_SIZE_X; x++ )
+      {
+        pixels = 0;
+        if ( y | ( _dungeon.playerItems & ITEM_COMPASS ) )
+        {
+          pixels = pgm_read_byte( statusPanel + statusPanelOffset );
+          // compass present?
+          if ( !y )
+          {
+            if ( ( x >= 14 ) && ( x < 19 ) )
+            { 
+              pixels |= pgm_read_byte( compass + x - 14 + 5 * _dungeon.dir );
+            }
+          }
+        }
+
+        // special status rows
+        if ( ( x >= 1 ) && ( x <= 30 ) )
+        {
+          // hitpoints
+          if ( y == 4 )
+          {
+            // display HP as a 2x scaled bar, so max visible HP is 56 ;)
+              if ( ( x - 2 ) > ( _dungeon.playerHP / 2 ) ) { pixels = 0; }
+              // invert the row if the player was hurt
+              pixels ^= _dungeon.invertStatusEffect;
+          }
+          // items: display the appropriate icons
+          if ( y == 5 )
+          {
+            if ( x >= 2 )
+            {
+              if ( x <= 7 )
+              {
+                if ( !( _dungeon.playerItems & ITEM_SWORD ) ) { pixels = 0; }
+              }
+              else if ( x <= 13 )
+              {
+                if ( !( _dungeon.playerItems & ITEM_SHIELD ) ) { pixels = 0; }
+              }
+              else if ( x <= 19 )
+              {
+                if ( !( _dungeon.playerItems & ITEM_AMULET ) ) { pixels = 0; }
+              }
+              else if ( x <= 25 )
+              {
+                if ( !( _dungeon.playerItems & ITEM_RING ) ) { pixels = 0; }
+              }
+              else if ( x <= 30 )
+              {
+                if ( !( _dungeon.playerItems & ITEM_KEY ) ) { pixels = 0; }
+              }
+            }
+          }
+          // did the player win?
+          if ( y == 6 )
+          {
+            if ( !(_dungeon.playerItems & ITEM_VICTORY ) ) { pixels = 0; }
+          }
+        }
+
+        // is the player dead?
+        if ( !isPlayerAlive() )
+        {
+          if ( y >= 3 )
+          {
+            constexpr uint8_t joeyBitmapWidth = 28;
+            constexpr uint8_t joeyMaskWidth = 28;
+            // the y position needs correction, because we are already in row 3
+            const uint8_t *offsetXY = joey - 3 * ( joeyBitmapWidth + joeyMaskWidth ) + y * ( joeyBitmapWidth + joeyMaskWidth ) + joeyBitmapWidth + 2  - x;
+            if ( ( x >= 2 ) && ( x < 30 ) )
+            {
+              // use mask
+              pixels &= pgm_read_byte( offsetXY + joeyMaskWidth );
+              // or pixels in
+              pixels |= pgm_read_byte( offsetXY );
+            }
+          }
+        }
+
+        // send 8 vertical pixels to the display
+        SendPixels( pixels );
+
+        statusPanelOffset++;
+      }
+      
+      // this row has been finished
+      FinishDisplayRow();
+    } // for y
+  #endif
 
   // display the whole screen
   DisplayBuffer();
