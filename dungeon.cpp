@@ -753,7 +753,6 @@ void Dungeon::renderImage()
   StartSendPixels();
 
   // display the dashboard here
-  uint8_t statusPanelOffset = 0; 
   for ( uint8_t x = 0; x < DASHBOARD_SIZE_X; x++ )
   {
     for ( uint8_t y = 0; y < DASHBOARD_SIZE_Y / 8; y++ )
@@ -761,9 +760,9 @@ void Dungeon::renderImage()
       pixels = 0;
       if ( y | ( _dungeon.playerItems & ITEM_COMPASS ) )
       {
-        pixels = pgm_read_byte( statusPanel + statusPanelOffset );
+        pixels = pgm_read_byte( statusPanel + DASHBOARD_SIZE_X * y + x );
         // compass present?
-        if ( !y )
+        if ( !y ) // y == COMPASS_ROW
         {
           if ( ( x >= 14 ) && ( x < 19 ) )
           { 
@@ -776,7 +775,7 @@ void Dungeon::renderImage()
       if ( ( x >= 1 ) && ( x <= 30 ) )
       {
         // hitpoints
-        if ( y == 4 )
+        if ( y == HIT_POINTS_ROW )
         {
           // display HP as a 2x scaled bar, so max visible HP is 56 ;)
             if ( ( x - 2 ) > ( _dungeon.playerHP / 2 ) ) { pixels = 0; }
@@ -784,7 +783,7 @@ void Dungeon::renderImage()
             pixels ^= _dungeon.invertStatusEffect;
         }
         // items: display the appropriate icons
-        if ( y == 5 )
+        if ( y == ITEMS_ROW )
         {
           if ( x >= 2 )
           {
@@ -811,7 +810,7 @@ void Dungeon::renderImage()
           }
         }
         // did the player win?
-        if ( y == 6 )
+        if ( y == VICTORY_ROW )
         {
           if ( !(_dungeon.playerItems & ITEM_VICTORY ) ) { pixels = 0; }
         }
@@ -820,12 +819,12 @@ void Dungeon::renderImage()
       // is the player dead?
       if ( !isPlayerAlive() )
       {
-        if ( y >= 3 )
+        if ( y >= SKELETON_ROW )
         {
           constexpr uint8_t joeyBitmapWidth = 28;
           constexpr uint8_t joeyMaskWidth = 28;
           // the y position needs correction, because we are already in row 3
-          const uint8_t *offsetXY = joey - 3 * ( joeyBitmapWidth + joeyMaskWidth ) + y * ( joeyBitmapWidth + joeyMaskWidth ) + joeyBitmapWidth + 2  - x;
+          const uint8_t *offsetXY = joey + ( y - SKELETON_ROW ) * ( joeyBitmapWidth + joeyMaskWidth ) + joeyBitmapWidth + 2 - x;
           if ( ( x >= 2 ) && ( x < 30 ) )
           {
             // use mask
@@ -839,7 +838,6 @@ void Dungeon::renderImage()
       // send 8 vertical pixels to the display
       SendPixels( pixels );
 
-      statusPanelOffset++;
     } // for y
 
   } // for x

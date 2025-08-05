@@ -23,6 +23,13 @@ const uint8_t DASHBOARD_SIZE_Y          = 64;
 
 const int8_t  POTION_HITPOINT_BONUS     = 8;
 
+const uint8_t COMPASS_ROW               = 0;
+const uint8_t SKELETON_ROW              = 3;
+const uint8_t HIT_POINTS_ROW            = 4;
+const uint8_t ITEMS_ROW                 = 5;
+const uint8_t VICTORY_ROW               = 6;
+
+
 // possible item types
 enum
 {
