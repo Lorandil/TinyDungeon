@@ -6,5 +6,6 @@ pics/_cancelled/
 pics/test*
 objectList_copy.h/$GetCurrent/SafeOS/preoobe.cmd
 .theia/
+.vscode/
 README.md.backup
 *.json

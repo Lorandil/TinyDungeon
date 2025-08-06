@@ -16,7 +16,11 @@
   // include Adafruit library and immediately create an object
   #include <Adafruit_SSD1306.h>
   Adafruit_SSD1306 display( 128, 64, &Wire, -1 );
-  uint8_t *adafruitBuffer;
+  uint8_t *_adafruitBuffer;
+  uint8_t _column{0};
+  uint8_t _row{0};
+  // flag if vertical addressing mode is enabled
+  bool _verticalAddressingModeEnabled{false};
 
   // these functions are only required if a screenshot should be printed as a hexdump to the serial port
   #ifdef _ENABLE_SERIAL_SCREENSHOT_
@@ -26,8 +30,8 @@
 #endif
 
 // buffered analog joystick inputs
-uint16_t analogJoystickX;
-uint16_t analogJoystickY;
+uint16_t _analogJoystickX;
+uint16_t _analogJoystickY;
 
 
 /*-------------------------------------------------------*/
@@ -106,44 +110,44 @@ void waitUntilButtonsReleased( const uint8_t delayTime )
 // read analog joystick inputs into internal variables
 void readAnalogJoystick()
 {
-  analogJoystickX = analogRead( LEFT_RIGHT_BUTTON );
-  analogJoystickY = analogRead( UP_DOWN_BUTTON );
+  _analogJoystickX = analogRead( LEFT_RIGHT_BUTTON );
+  _analogJoystickY = analogRead( UP_DOWN_BUTTON );
 }
 
 /*-------------------------------------------------------*/
 bool wasLeftPressed()
 {
-  return( ( analogJoystickX >= ANALOG_UPPER_LIMIT_MIN ) && ( analogJoystickX < ANALOG_UPPER_LIMIT_MAX ) );
+  return( ( _analogJoystickX >= ANALOG_UPPER_LIMIT_MIN ) && ( _analogJoystickX < ANALOG_UPPER_LIMIT_MAX ) );
 }
 
 /*-------------------------------------------------------*/
 bool wasRightPressed()
 {
-  return( ( analogJoystickX > ANALOG_LOWER_LIMIT_MIN ) && ( analogJoystickX < ANALOG_LOWER_LIMIT_MAX ) );
+  return( ( _analogJoystickX > ANALOG_LOWER_LIMIT_MIN ) && ( _analogJoystickX < ANALOG_LOWER_LIMIT_MAX ) );
 }
 
 /*-------------------------------------------------------*/
 bool wasUpPressed()
 {
-  return( ( analogJoystickY > ANALOG_LOWER_LIMIT_MIN ) && ( analogJoystickY < ANALOG_LOWER_LIMIT_MAX ) );
+  return( ( _analogJoystickY > ANALOG_LOWER_LIMIT_MIN ) && ( _analogJoystickY < ANALOG_LOWER_LIMIT_MAX ) );
 }
 
 /*-------------------------------------------------------*/
 bool wasDownPressed()
 {
-  return( ( analogJoystickY >= ANALOG_UPPER_LIMIT_MIN ) && ( analogJoystickY < ANALOG_UPPER_LIMIT_MAX ) );
+  return( ( _analogJoystickY >= ANALOG_UPPER_LIMIT_MIN ) && ( _analogJoystickY < ANALOG_UPPER_LIMIT_MAX ) );
 }
 
 /*-------------------------------------------------------*/
 uint16_t getAnalogValueX()
 {
-  return( analogJoystickX );
+  return( _analogJoystickX );
 }
 
 /*-------------------------------------------------------*/
 uint16_t getAnalogValueY()
 {
-  return( analogJoystickY );
+  return( _analogJoystickY );
 }
 
 /*-------------------------------------------------------*/
@@ -195,6 +199,13 @@ void InitDisplay()
     // extended the error message
     Serial.println(F("SSD1306 allocation failed - 1024 bytes for frame buffer required!")); for(;;);
   }
+
+  // reset display coordinates
+  _column = 0;
+  _row = 0;
+
+  // get raw image buffer
+   _adafruitBuffer = display.getBuffer();
 #endif
 }
 
@@ -208,7 +219,10 @@ void EnableVerticalAddressingMode()
   SSD1306.ssd1306_send_byte( 0x22 ); SSD1306.ssd1306_send_byte( 0x00 ); SSD1306.ssd1306_send_byte( 0x07 );
   SSD1306.ssd1306_send_command_stop();
 #else
-  verticalAddressingModeEnabled = true;
+  _verticalAddressingModeEnabled = true;
+  // reset display coordinates
+  _column = 0;
+  _row = 0;
 #endif
 }
 
@@ -222,7 +236,10 @@ void DisableVerticalAddressingMode()
   SSD1306.ssd1306_send_byte( 0x22 ); SSD1306.ssd1306_send_byte( 0x00 ); SSD1306.ssd1306_send_byte( 0x07 );
   SSD1306.ssd1306_send_command_stop();
 #else
-  verticalAddressingModeEnabled = false;
+  _verticalAddressingModeEnabled = false;
+  // reset display coordinates
+  _column = 0;
+  _row = 0;
 #endif
 }
 
@@ -248,7 +265,7 @@ void PrepareDisplayRow( uint8_t y )
 #else  /* codepath for any Adafruit_SSD1306 supported MCU */
 
   // address the display buffer
-  adafruitBuffer = display.getBuffer() + ( y * 128 );
+  _row = y;
 #endif
 }
 
@@ -260,16 +277,50 @@ void StartSendPixels()
 #endif
 }
 
+#if !defined(__AVR_ATtiny85__)  /* codepath for ATtiny85 */
+/*-------------------------------------------------------*/
+// writes the pixles and handles the addressing of columns and rows
+void writePixelsToAdafruitBuffer( uint8_t pixels )
+{
+  _adafruitBuffer[_column + _row * 128] = pixels;
+  if ( _verticalAddressingModeEnabled )
+  {
+    _row++;
+    if ( _row > 7 )
+    {
+      _row = 0;
+      _column++;
+      if ( _column > 127 )
+      {
+        _column = 0;
+      }
+    }
+  }
+  else
+  {
+    _column++;
+    if ( _column > 127 )
+    {
+      _column = 0;
+      _row++;
+      if ( _row > 7 )
+      {
+        _row = 0;
+      }
+    }
+  }
+}
+#endif
+
 /*-------------------------------------------------------*/
 void SendPixels( uint8_t pixels )
 {
 #if defined(__AVR_ATtiny85__) /* codepath for ATtiny85 */
   // send a byte directly to the SSD1306
   SSD1306.ssd1306_send_byte( pixels );
-
 #else  /* codepath for any Adafruit_SSD1306 supported MCU */
-  // write pixels directly to the buffer
-  *adafruitBuffer++ = pixels;
+  // write pixels directly into the buffer
+  writePixelsToAdafruitBuffer( pixels );
 #endif
 }
 

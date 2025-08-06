@@ -90,9 +90,6 @@
   // use extensive checks (not memory restricted by ATtiny85...)
   #define USE_EXTENDED_CHECKS
   #define USE_SERIAL_PRINT
-
-  // flag if vertical addressing mode is enabled
-  bool verticalAddressingModeEnabled{false};
 #endif
 
 

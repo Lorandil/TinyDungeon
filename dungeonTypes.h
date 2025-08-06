@@ -21,14 +21,22 @@ const uint8_t DUNGEON_WINDOW_CENTER_Y   = DUNGEON_WINDOW_SIZE_Y / 2; /* = 32 */
 const uint8_t DASHBOARD_SIZE_X          = 32;
 const uint8_t DASHBOARD_SIZE_Y          = 64;
 
-const int8_t  POTION_HITPOINT_BONUS     = 8;
+const int8_t  POTION_HITPOINT_BONUS     =  8;
 
-const uint8_t COMPASS_ROW               = 0;
-const uint8_t SKELETON_ROW              = 3;
-const uint8_t HIT_POINTS_ROW            = 4;
-const uint8_t ITEMS_ROW                 = 5;
-const uint8_t VICTORY_ROW               = 6;
+// rows in the dashboard
+const uint8_t COMPASS_ROW               =  0;
+const uint8_t SKELETON_ROW              =  3;
+const uint8_t HIT_POINTS_ROW            =  4;
+const uint8_t ITEMS_ROW                 =  5;
+const uint8_t VICTORY_ROW               =  6;
 
+// icon positions for the different objects
+const uint8_t ITEM_SWORD_POS_X          =  2;
+const uint8_t ITEM_SHIELD_POS_X         =  8;
+const uint8_t ITEM_AMULET_POS_X         = 14;
+const uint8_t ITEM_RING_POS_X           = 20;
+const uint8_t ITEM_KEY_POS_X            = 26;
+const uint8_t ITEM_LAST_POS_X           = 31;
 
 // possible item types
 enum

@@ -752,15 +752,20 @@ void Dungeon::renderImage()
 
   StartSendPixels();
 
+  uint8_t statusPanelOffset = 0;
+
   // display the dashboard here
   for ( uint8_t x = 0; x < DASHBOARD_SIZE_X; x++ )
   {
     for ( uint8_t y = 0; y < DASHBOARD_SIZE_Y / 8; y++ )
     {
       pixels = 0;
+
+      // the first (0th) row is only displayed, if the player has the compass,
+      // otherwise it is left empty
       if ( y | ( _dungeon.playerItems & ITEM_COMPASS ) )
       {
-        pixels = pgm_read_byte( statusPanel + DASHBOARD_SIZE_X * y + x );
+        pixels = pgm_read_byte( statusPanelVertical + statusPanelOffset );
         // compass present?
         if ( !y ) // y == COMPASS_ROW
         {
@@ -770,42 +775,49 @@ void Dungeon::renderImage()
           }
         }
       }
+      // prepare for next pixels
+      statusPanelOffset++;
 
-      // special status rows
-      if ( ( x >= 1 ) && ( x <= 30 ) )
+      // special status rows (inside the frame)
+      if ( ( x > 0 ) && ( x < DASHBOARD_SIZE_X - 1 ) )
       {
         // hitpoints
         if ( y == HIT_POINTS_ROW )
         {
-          // display HP as a 2x scaled bar, so max visible HP is 56 ;)
+          // display HP bar scaled by 2, so max visible HP is 56 ;)
             if ( ( x - 2 ) > ( _dungeon.playerHP / 2 ) ) { pixels = 0; }
             // invert the row if the player was hurt
             pixels ^= _dungeon.invertStatusEffect;
         }
-        // items: display the appropriate icons
+        // hide/display the appropriate icon for each item
         if ( y == ITEMS_ROW )
         {
-          if ( x >= 2 )
+          if ( x < ITEM_LAST_POS_X )
           {
-            if ( x <= 7 )
+            if ( x >= ITEM_KEY_POS_X )
             {
-              if ( !( _dungeon.playerItems & ITEM_SWORD ) ) { pixels = 0; }
-            }
-            else if ( x <= 13 )
+              // hide if player doesn't own the key
+              if ( !( _dungeon.playerItems & ITEM_KEY ) ) { pixels = 0; }
+            }            
+            else if ( x >= ITEM_RING_POS_X )
             {
-              if ( !( _dungeon.playerItems & ITEM_SHIELD ) ) { pixels = 0; }
-            }
-            else if ( x <= 19 )
-            {
-              if ( !( _dungeon.playerItems & ITEM_AMULET ) ) { pixels = 0; }
-            }
-            else if ( x <= 25 )
-            {
+              // hide if player doesn't own the ring
               if ( !( _dungeon.playerItems & ITEM_RING ) ) { pixels = 0; }
             }
-            else if ( x <= 30 )
+            else if ( x >= ITEM_AMULET_POS_X )
             {
-              if ( !( _dungeon.playerItems & ITEM_KEY ) ) { pixels = 0; }
+              // hide if player doesn't own the amulet
+              if ( !( _dungeon.playerItems & ITEM_AMULET ) ) { pixels = 0; }
+            }
+            else if ( x >= ITEM_SHIELD_POS_X )
+            {
+              // hide if player doesn't own the shield
+              if ( !( _dungeon.playerItems & ITEM_SHIELD ) ) { pixels = 0; }
+            }
+            else if ( x >= ITEM_SWORD_POS_X )
+            {
+              // hide if player doesn't own the sword
+              if ( !( _dungeon.playerItems & ITEM_SWORD ) ) { pixels = 0; }
             }
           }
         }
