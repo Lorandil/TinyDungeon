@@ -84,5 +84,5 @@ const SIMPLE_WALL_INFO arrayOfWallInfo[] PROGMEM = {
   { outerLeftRightWalls_D3 ,  15   ,  29 ,   0x34      ,     3   ,     -2    ,   0  ,  30 }, // 21
   { outerLeftRightWalls_D3 ,  66   ,  80 ,   0x34      ,     3   ,     +2    ,  15  ,  30 }, // 22
 
-  { NULL                   ,   0   ,   0 ,   0x00      ,     0   ,      0    ,   0  ,   0 }, // 7 unused bytes.. how can I save those?
+  { NULL                   ,   0   ,   0 ,   0x00      ,     0   ,      0    ,   0  ,   0 }, // 7 unused bytes.. how can I use these properly?
 };

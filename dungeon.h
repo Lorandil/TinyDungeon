@@ -4,11 +4,16 @@
 #include "dungeonTypes.h"
 #include "externBitmaps.h"
 
+// use nice shading effect, giving more depth
+#define _ENABLE_WALL_SHADING_
+// use object shading, reduces clarity (not recommended)
+//#define _ENABLE_OBJECT_SHADING_
+
 // uncomment this line to make the player invincible
 //#define _GODMODE_
 
-// used for vertical addressing mode - this is still experimental but should be able to speed up the whole
-// drawing by about factor 8... let's see...
+// used for vertical addressing mode - this is still experimental but should be able to
+// speed up the whole drawing a lot... let's see...
 #define _VERTICAL_RENDERING
 
 // Dungeon

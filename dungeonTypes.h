@@ -95,6 +95,7 @@ enum
 
 
 // monster stats
+// (size: 6 bytes)
 class MONSTER_STATS
 {
   public:
@@ -127,6 +128,7 @@ class MONSTER_STATS
 
 
 // DUNGEON
+// (size: 11 + 256 + 60 bytes)
 class DUNGEON
 {
 public:
@@ -192,6 +194,7 @@ public:
 };
 
 // NON_WALL_OBJECT
+// (size: 10 bytes)
 class NON_WALL_OBJECT
 {
   public:
@@ -223,7 +226,7 @@ class NON_WALL_OBJECT
 
 
 // information for single wall display
-// SIMPLE_WALL_INFO
+// (size: 9 bytes)
 class SIMPLE_WALL_INFO
 {
   public:
@@ -231,22 +234,23 @@ class SIMPLE_WALL_INFO
   // wall bitmap to use
   const uint8_t *wallBitmap;
   // screen start position for this bitmap
-  int8_t   startPosX;
+  int8_t startPosX;
   // screen end position for this bitmap
-  int8_t   endPosX;
+  int8_t endPosX;
   // start and end position for Y
   int8_t posStartEndY;
   // view distance of this object
-  int8_t   viewDistance;
+  int8_t viewDistance;
   // offset to left or right
-  int8_t   leftRightOffset;
+  int8_t leftRightOffset;
   // relative offset from left screen edge
-  int8_t   relPos;
-  // width off the bitmap/offset to the next line
-  int8_t   width;
+  int8_t relPos;
+  // width of the bitmap/offset to the next line
+  int8_t width;
 };
 
 // interaction information
+// (size: 6 bytes)
 class INTERACTION_INFO
 {
 public:
@@ -279,6 +283,7 @@ public:
 };
 
 // interaction information
+// (size: 4 bytes)
 class SPECIAL_CELL_INFO
 {
 public:

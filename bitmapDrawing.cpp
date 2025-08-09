@@ -44,53 +44,41 @@ uint8_t Dungeon::getWallPixels( const int8_t x, const int8_t y )
         //if ( y == 0 ) { Serial.print( F("column = ") ); Serial.print( x ); Serial.print( F(" -> objectNo = ") ); Serial.println( objectNo ); }
 
         // split combined positions into start and end
-        int8_t startPosY = wallInfo.posStartEndY / 16;
+        int8_t startPosY = wallInfo.posStartEndY >> 4;
         int8_t endPosY = wallInfo.posStartEndY & 0x0f;
 
         // is there wall information for this vertical position
         if ( ( y >= startPosY ) && ( y <= endPosY ) )
         {
-          uint8_t offsetX;
+          // positions are to be considered relative to the bitmap
+          int8_t posX = x - wallInfo.startPosX;
 
-          // is the bitmap smaller than the screen?
-          bool smallBitmap = ( wallInfo.width < DUNGEON_WINDOW_SIZE_X );
-
-          if ( smallBitmap )
-          {
-            // positions are to be considered relative to the bitmap
-            int8_t posX = x - wallInfo.startPosX;
-
-            if ( mirror )
-            {
-              offsetX = wallInfo.width - 1 - posX - wallInfo.relPos;
-            }
-            else
-            {
-              offsetX = posX + wallInfo.relPos;
-            }
-          }
-          else
-          {
-            // mirror walls on odd fields
-            offsetX = mirror ? ( DUNGEON_WINDOW_SIZE_X - 1 ) - x : x;
-          }
+          // calculate the x offset depending on the mirror flag
+          uint8_t offsetX = mirror ? wallInfo.width - 1 - posX - wallInfo.relPos
+                                   : posX + wallInfo.relPos;
 
           // get wall pixels (shave off the empty rows)
           pixels = pgm_read_byte( wallInfo.wallBitmap + ( y - startPosY ) * wallInfo.width + offsetX );
 
-        #ifdef _ENABLE_SHADING_
+        #ifdef _ENABLE_WALL_SHADING_
+          // TODO: this could be optimized further:
+          // - integrate shading into wall bitmaps
+          // - use simple 'if ( wallInfo.viewDistance > 2 )...' instead of switch statement
           switch ( wallInfo.viewDistance )
           {
             case 0:
             case 1:
               break;
             case 2:
+            default:
               if ( x & 1 ) { pixels &= 0x55; }
               else { pixels &= 0xaa; }
               break;
-            default:
+            /*  
+            default:  
               if ( x & 1 ) { pixels &= 055; }
               else { pixels &= 0x00; }
+            */
           }
         #endif
         }
@@ -120,6 +108,7 @@ uint8_t Dungeon::getWallPixels( const int8_t x, const int8_t y )
       uint8_t objectWidth = object.bitmapWidth >> distance;
 
       // non wall objects will only be rendered if directly in front of the player (for now!)
+      // TODO: fix this! ;)
       if ( ( x >= DUNGEON_WINDOW_CENTER_X - objectWidth ) && ( x < DUNGEON_WINDOW_CENTER_X + objectWidth ) )
       {
       #ifdef _USE_FIELD_OF_VIEW_
@@ -136,20 +125,23 @@ uint8_t Dungeon::getWallPixels( const int8_t x, const int8_t y )
           // and overlay scaled bitmap
           uint8_t scaledBitmap = getDownScaledBitmapData( posX, y, distance, &object, false );
 
-        #ifdef _ENABLE_SHADING_
-          // shading effect to pronounce the distance of an object
+        #ifdef _ENABLE_OBJECT_SHADING_
+          // use shading effect to pronounce the distance of an object (at the cost of clarity)
           switch ( distance )
           {
             case 0:
             case 1:
               break;
             case 2:
+            default:
               if ( x & 1 ) { scaledBitmap &= 0x55; }
               else { scaledBitmap &= 0xaa; }
               break;
+            /*
             default:
               if ( x & 1 ) { scaledBitmap &= 055; }
               else { scaledBitmap &= 0x00; }
+            */
           }
         #endif
 
