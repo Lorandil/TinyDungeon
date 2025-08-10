@@ -147,7 +147,7 @@ uint8_t Dungeon::getWallPixels( const int8_t x, const int8_t y )
 
           if ( distance == 1 )
           {
-            // invert monster?!
+            // apply inversion effect if monster was hit...
             scaledBitmap ^= ( _dungeon.invertMonsterEffect & ~mask );
           }
           pixels |= scaledBitmap;
@@ -243,6 +243,7 @@ uint8_t Dungeon::getDownScaledBitmapData( int8_t x,                      // alre
   // no bits here, set mask to 0xff
   else if ( useMask )
   { 
+    // 0x00-- -> 0xff
     pixels--;
   }
                                      
