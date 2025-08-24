@@ -14,7 +14,7 @@ void hexdumpResetPositionCount()
 
 /*--------------------------------------------------------------*/
 // just print a byte to the serial console (with leading zero)
-void printHexToSerial( uint8_t value, bool addComma )
+void printHexToSerial( uint8_t value, bool addComma /*= false*/, bool autoLineBreak /*= false*/ )
 {
   static uint8_t count = 0;
 
@@ -29,15 +29,18 @@ void printHexToSerial( uint8_t value, bool addComma )
     Serial.print( F(", ") );
   }
 
-  // increase count
-  hexdumpPositionCount++;
-  // maximum reached?
-  if ( hexdumpPositionCount >= hexdumpValuesPerLine )
+  if ( autoLineBreak )
   {
-    // reset count
-    hexdumpPositionCount = 0;
-    // insert line break
-    Serial.println();
+    // increase count
+    hexdumpPositionCount++;
+    // maximum reached?
+    if ( hexdumpPositionCount >= hexdumpValuesPerLine )
+    {
+      // reset count
+      hexdumpPositionCount = 0;
+      // insert line break
+      Serial.println();
+    }
   }
 }
 
@@ -47,7 +50,7 @@ void hexdumpToSerial( uint8_t *pData, uint16_t byteCount, bool finalComma, bool 
 {
   for ( uint16_t n = 0; n < byteCount; n++ )
   {
-    printHexToSerial( pData[n], ( n < byteCount - 1 ) || finalComma );
+    printHexToSerial( pData[n], ( n < byteCount - 1 ) || finalComma, true );
   }
   
   // insert line break if necessary
@@ -64,7 +67,7 @@ void EEPROM_hexdumpToSerial( uint16_t startAddress, uint16_t byteCount, bool fin
 {
   for ( uint16_t n = 0; n < byteCount; n++ )
   {
-    printHexToSerial( EEPROM.read( startAddress + n ), ( n < byteCount - 1 ) || finalComma );
+    printHexToSerial( EEPROM.read( startAddress + n ), ( n < byteCount - 1 ) || finalComma, true );
   }
   
   // insert line break if necessary
@@ -81,7 +84,7 @@ void pgm_hexdumpToSerial( uint8_t *pData, uint16_t byteCount, bool finalComma, b
 {
   for ( uint16_t n = 0; n < byteCount; n++ )
   {
-    printHexToSerial( pgm_read_byte( pData + n ), ( n < byteCount - 1 ) || finalComma );
+    printHexToSerial( pgm_read_byte( pData + n ), ( n < byteCount - 1 ) || finalComma, true );
   }
   
   // insert line break if necessary

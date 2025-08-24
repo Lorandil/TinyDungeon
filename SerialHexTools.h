@@ -12,6 +12,6 @@
   void EEPROM_hexdumpToSerial( uint16_t startAddress, uint16_t byteCount, bool finalComma = false, bool finalLinebreak = true );
   #endif
   void pgm_hexdumpToSerial( uint8_t *pData, uint16_t byteCount, bool finalComma = false, bool finalLinebreak = true );
-  void printHexToSerial( uint8_t value, bool addComma = false );
+  void printHexToSerial( uint8_t value, bool addComma = false, bool autoLineBreak = false );
   void printScreenBufferToSerial( const uint8_t *buffer, const uint8_t widthInPixels, const uint8_t heightInBytes );
 #endif

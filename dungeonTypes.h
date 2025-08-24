@@ -161,7 +161,7 @@ public:
     Serial.print( F(", HP = ") );Serial.print( playerHP );
     Serial.print( F(", DAM = ") );Serial.print( playerDamage );
     Serial.print( F(", Armour = ") );Serial.print( playerArmour );
-    Serial.print( F(", Items = ") );printHexToSerial( playerItems, false );Serial.print( F(", "));
+    Serial.print( F(", Items = ") );printHexToSerial( playerItems, false, false );
     Serial.print( F(", Keys = ") );Serial.print( ( playerItems & ITEM_KEY ) != 0 );
     Serial.print( F(", Compass = ") );Serial.print( ( playerItems & ITEM_COMPASS ) != 0 );
     Serial.print( F(", displayXorEffect = ") );Serial.print( displayXorEffect );

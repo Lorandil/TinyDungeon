@@ -719,6 +719,10 @@ void Dungeon::playerInteraction( uint8_t *cell, const uint8_t cellValue )
         }
 
         swordSound();
+
+      #if !defined( __AVR_ATtiny85__ )
+        _dungeon.serialPrint();
+      #endif
         
         // perform only the first action, otherwise on/off actions might be immediately revoked ;)
         break;

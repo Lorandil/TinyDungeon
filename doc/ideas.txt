@@ -1,13 +1,20 @@
 Ideas for improvements
 
+* double bars "riddle" is too hard/frustrating and lacks logic, perhaps add a third switch for amusement
+* dynamic lighting effect not hardcoded, but using a table with 2 mask bytes per distance (8 bytes in total)
+  - would enable dynamic light range for torch or lamp
+* fix lighting anomaly for front wall in distance 1 (shouldn't be dithered)
 * display damage dealt/received on screen
   - perhaps comic like with spikes (*POW*)
   - monster inflicted damage right near the players HP
   - player inflicted damage central on the dungeon screen
   - mask required (bitmap is 24x24 -> 144 bytes required )
   - font is 7x3, 30 bytes required (probably 40 bytes to simplify adressing)
+* on game start
+  - fade in (by using the lighting)
+* on player death
+  - fade to black (by using the lighting)
 
 Done
-
 + scale hit points by 2 (again)
-+ add version info to panel
++ add version info to panel (to the graphics of course
