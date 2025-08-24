@@ -86,6 +86,9 @@ void Dungeon::initDice()
   // prepare a new dungeon...
   init();
 
+  // start in darkness
+  _dungeon.lightingOffset = ( MAX_VIEW_DISTANCE + 1 ) * 2;
+
 // it ain't over, till it's over...  
   while( isPlayerAlive() )
   {
@@ -103,11 +106,33 @@ void Dungeon::initDice()
     // update the status pane and render the screen
     renderImage();
 
-    // update player's position and orientation
-    checkPlayerMovement();
+    // is the lighting still dimmend?
+    if ( _dungeon.lightingOffset > 0 )
+    {
+      // fade in
+      _dungeon.lightingOffset--;
+    }
+    else
+    {
+      // update player's position and orientation
+      checkPlayerMovement();
+      
+    #ifdef _SLOW_DEATH      
+      // slowly kill the player
+      _dungeon.playerHP--;
+    #endif
+    }
   }
 
   // player is dead... turn dungeon to black
+  while ( _dungeon.lightingOffset < ( MAX_VIEW_DISTANCE + 1 ) * 2 )
+  {
+    // fade out
+    _dungeon.lightingOffset++;
+    // draw image
+    renderImage();
+  }
+  // clear all objects from dungeon
   clear();
 
   // update the status pane and render the screen
@@ -773,9 +798,9 @@ void Dungeon::renderImage()
         // compass present?
         if ( !y ) // y == COMPASS_ROW
         {
-          if ( ( x >= 14 ) && ( x < 19 ) )
+          if ( ( x >= COMPASS_START_X ) && ( x < COMPASS_START_X + COMPASS_SIZE_X ) )
           { 
-            pixels |= pgm_read_byte( compass + x - 14 + 5 * _dungeon.dir );
+            pixels |= pgm_read_byte( compass + x - COMPASS_START_X + COMPASS_SIZE_X * _dungeon.dir );
           }
         }
       }

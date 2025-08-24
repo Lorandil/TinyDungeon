@@ -6,37 +6,39 @@
   #include "SerialHexTools.h"
 #endif
 
-const uint8_t LEVEL_WIDTH               = 16;
-const uint8_t LEVEL_HEIGHT              = 16;
-const uint16_t MAX_LEVEL_BYTES          = LEVEL_WIDTH * LEVEL_HEIGHT;
-const uint8_t MAX_VIEW_DISTANCE         = 3;
+const uint8_t  LEVEL_WIDTH               = 16;
+const uint8_t  LEVEL_HEIGHT              = 16;
+const uint16_t MAX_LEVEL_BYTES           = LEVEL_WIDTH * LEVEL_HEIGHT;
+const uint8_t  MAX_VIEW_DISTANCE         = 3;
 
-const uint8_t MAX_MONSTERS              = 10;
+const uint8_t  MAX_MONSTERS              = 10;
 
-const uint8_t DUNGEON_WINDOW_SIZE_X     = 96;
-const uint8_t DUNGEON_WINDOW_CENTER_X   = DUNGEON_WINDOW_SIZE_X / 2; /* = 48 */
-const uint8_t DUNGEON_WINDOW_SIZE_Y     = 64;
-const uint8_t DUNGEON_WINDOW_CENTER_Y   = DUNGEON_WINDOW_SIZE_Y / 2; /* = 32 */
+const uint8_t  DUNGEON_WINDOW_SIZE_X     = 96;
+const uint8_t  DUNGEON_WINDOW_CENTER_X   = DUNGEON_WINDOW_SIZE_X / 2; /* = 48 */
+const uint8_t  DUNGEON_WINDOW_SIZE_Y     = 64;
+const uint8_t  DUNGEON_WINDOW_CENTER_Y   = DUNGEON_WINDOW_SIZE_Y / 2; /* = 32 */
 
-const uint8_t DASHBOARD_SIZE_X          = 32;
-const uint8_t DASHBOARD_SIZE_Y          = 64;
+const uint8_t  DASHBOARD_SIZE_X          = 32;
+const uint8_t  DASHBOARD_SIZE_Y          = 64;
 
-const int8_t  POTION_HITPOINT_BONUS     =  8;
+const int8_t   POTION_HITPOINT_BONUS     =  8;
 
 // rows in the dashboard
-const uint8_t COMPASS_ROW               =  0;
-const uint8_t SKELETON_ROW              =  3;
-const uint8_t HIT_POINTS_ROW            =  4;
-const uint8_t ITEMS_ROW                 =  5;
-const uint8_t VICTORY_ROW               =  6;
+const uint8_t  COMPASS_ROW               =  0;
+const uint8_t  SKELETON_ROW              =  3;
+const uint8_t  HIT_POINTS_ROW            =  4;
+const uint8_t  ITEMS_ROW                 =  5;
+const uint8_t  VICTORY_ROW               =  6;
 
 // icon positions for the different objects
-const uint8_t ITEM_SWORD_POS_X          =  2;
-const uint8_t ITEM_SHIELD_POS_X         =  8;
-const uint8_t ITEM_AMULET_POS_X         = 14;
-const uint8_t ITEM_RING_POS_X           = 20;
-const uint8_t ITEM_KEY_POS_X            = 26;
-const uint8_t ITEM_LAST_POS_X           = 31;
+const uint8_t  ITEM_SWORD_POS_X          =  2;
+const uint8_t  ITEM_SHIELD_POS_X         =  8;
+const uint8_t  ITEM_AMULET_POS_X         = 14;
+const uint8_t  ITEM_RING_POS_X           = 20;
+const uint8_t  ITEM_KEY_POS_X            = 26;
+const uint8_t  ITEM_LAST_POS_X           = 31;
+const uint8_t  COMPASS_START_X           = 14;
+const uint8_t  COMPASS_SIZE_X            =  5;
 
 // possible item types
 enum
@@ -145,6 +147,7 @@ public:
   uint8_t displayXorEffect;
   uint8_t invertMonsterEffect;
   uint8_t invertStatusEffect;
+  uint8_t lightingOffset;
   uint8_t currentLevel[MAX_LEVEL_BYTES];
 #ifdef _USE_FIELD_OF_VIEW_
   uint8_t fieldOfView[5 * MAX_VIEW_DISTANCE];

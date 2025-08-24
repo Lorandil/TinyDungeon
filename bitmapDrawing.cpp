@@ -63,7 +63,13 @@ uint8_t Dungeon::getWallPixels( const int8_t x, const int8_t y )
         #ifdef _ENABLE_WALL_SHADING_
           // TODO: this could be optimized further:
           // - integrate shading into wall bitmaps
-          // - use simple 'if ( wallInfo.viewDistance > 2 )...' instead of switch statement
+          // - or use simple 'if ( wallInfo.viewDistance > 2 )...' instead of switch statement
+          // - OR use lookup table for dynamic lighting!
+
+          uint8_t lightMask = pgm_read_byte( lightingTable + _dungeon.lightingOffset + wallInfo.viewDistance * 2 + ( x & 0x01 ) );
+          pixels &= lightMask;
+
+          /*
           switch ( wallInfo.viewDistance )
           {
             case 0:
@@ -74,12 +80,8 @@ uint8_t Dungeon::getWallPixels( const int8_t x, const int8_t y )
               if ( x & 1 ) { pixels &= 0x55; }
               else { pixels &= 0xaa; }
               break;
-            /*  
-            default:  
-              if ( x & 1 ) { pixels &= 055; }
-              else { pixels &= 0x00; }
-            */
           }
+          */
         #endif
         }
         else

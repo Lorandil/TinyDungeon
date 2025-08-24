@@ -12,6 +12,9 @@
 // uncomment this line to make the player invincible
 //#define _GODMODE_
 
+// uncomment this to slowly kill the player (required for testing)
+//#define _SLOW_DEATH
+
 // used for vertical addressing mode - this is still experimental but should be able to
 // speed up the whole drawing a lot... let's see...
 #define _VERTICAL_RENDERING
@@ -55,3 +58,15 @@ public:
                                    const uint8_t distance, const NON_WALL_OBJECT *object,
                                    bool useMask );
 };
+
+// TODO: find a more apropriate place for this table
+// lighting mask inclusive fade in and out
+const uint8_t lightingTable[] PROGMEM = { 0b11111111, 0b11111111, // distance 0
+                                          0b11111111, 0b11111111, // distance 1
+                                          0b01010101, 0b10101010, // distance 2
+                                          0b10001000, 0b00100100, // distance 3
+                                          0b00000000, 0b00000000, // distance 4
+                                          0b00000000, 0b00000000, // distance 5
+                                          0b00000000, 0b00000000, // distance 6
+                                          0b00000000, 0b00000000  // distance 7
+                                        };
