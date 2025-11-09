@@ -438,21 +438,23 @@ void serialPrintln( const __FlashStringHelper *text )
 #endif
 }
 
-/*-------------------------------------------------------*/
+/*-------------------------------------------------------
 void serialPrint( const unsigned int number )
 {
 #ifdef USE_SERIAL_PRINT
   Serial.print( number );
 #endif
 }
+*/
 
-/*-------------------------------------------------------*/
+/*-------------------------------------------------------
 void serialPrintln( const unsigned int number )
 {
 #ifdef USE_SERIAL_PRINT
   Serial.println( number );
 #endif
 }
+*/
 
 /*-------------------------------------------------------*/
 void serialPrint( const int number )

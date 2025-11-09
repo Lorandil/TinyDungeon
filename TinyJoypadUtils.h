@@ -120,7 +120,9 @@ bool wasDownPressed();
 uint16_t getAnalogValueX();
 uint16_t getAnalogValueY();
 
-void __attribute__ ((noinline)) _variableDelay_us( uint8_t delayValue );
+#if defined( __AVR_ATtiny85__)
+  void __attribute__ ((noinline)) _variableDelay_us( uint8_t delayValue );
+#endif
 void Sound( const uint8_t freq, const uint8_t dur );
 
 // functions to simplify display handling between ATtiny85 and Ardafruit_SSD1306
@@ -150,7 +152,7 @@ void serialPrint( const char *text );
 void serialPrintln( const char *text );
 void serialPrint( const __FlashStringHelper *text );
 void serialPrintln( const __FlashStringHelper *text );
-void serialPrint( const unsigned int number );
-void serialPrintln( const unsigned int number );
+//void serialPrint( const unsigned int number );
+//void serialPrintln( const unsigned int number );
 void serialPrint( const int number );
 void serialPrintln( const int number );

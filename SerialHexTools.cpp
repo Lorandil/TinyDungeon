@@ -13,17 +13,29 @@ void hexdumpResetPositionCount()
 }
 
 /*--------------------------------------------------------------*/
+char getHexChar( const uint8_t value )
+{
+  if ( value < 10 )
+  {
+    return '0' + value;
+  }
+  else
+  {
+    return 'A' + ( value - 10 );
+  }
+}
+
+
+/*--------------------------------------------------------------*/
 // just print a byte to the serial console (with leading zero)
 void printHexToSerial( uint8_t value, bool addComma /*= false*/, bool autoLineBreak /*= false*/ )
 {
   static uint8_t count = 0;
 
   Serial.print( F("0x") );
-  if ( value < 0x10 )
-  {
-    Serial.print( F("0") );
-  }
-  Serial.print( value, HEX );
+  Serial.print(getHexChar( value >> 4 ) );
+  Serial.print(getHexChar( value & 0x0F ) );
+  
   if ( addComma )
   {
     Serial.print( F(", ") );
