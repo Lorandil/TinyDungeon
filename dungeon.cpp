@@ -1,5 +1,5 @@
 #include <Arduino.h>
-#include <avr/pgmspace.h>
+//#include <avr/pgmspace.h>
 
 #include "bitTables.h"
 #include "dungeon.h"
@@ -347,7 +347,7 @@ void Dungeon::checkPlayerMovement()
             if ( !monster->attacksFirst )
             {
               // just wait a moment (for the display effect to be visible)
-              _variableDelay_us( 250 );
+              _delay_ms( 250 );
               
               // now let the monster attack the player
               monsterAttack( monster );
