@@ -9,3 +9,15 @@ objectList_copy.h/$GetCurrent/SafeOS/preoobe.cmd
 .vscode/
 README.md.backup
 *.json
+/TinyDungeon/Debug
+/TinyDungeon/x64/Debug
+/.vs/TinyDungeon/v17
+/.vs/TinyDungeon/FileContentIndex
+/.vs/TinyDungeon/CopilotIndices/17.14.1368.60722
+/TinyDungeon
+/TinyDungeon.sln
+/x64/Debug
+/.vs/TinyDungeon
+/TinyDungeon/Adafruit_SSD1306.h
+/TinyDungeon/Arduino.h
+/TinyDungeon/Wire.h
