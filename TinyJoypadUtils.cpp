@@ -44,7 +44,7 @@ void InitTinyJoypad()
   SOUND_PORT_DDR &= ~( ( 1 << PB5) | ( 1 << PB3 ) | ( 1 << PB1 ) );
   // configure A2 (aka SOUND_PIN) as output
   SOUND_PORT_DDR |= ( 1 << SOUND_PIN );
-#elsif !defined( USE_KEYBOARD_INPUT )
+#elif !defined( USE_KEYBOARD_INPUT )
   // use 'pinMode()' for simplicity's sake... any other micro controller has enough flash :)
   pinMode( LEFT_RIGHT_BUTTON, INPUT );
   pinMode( UP_DOWN_BUTTON, INPUT );
