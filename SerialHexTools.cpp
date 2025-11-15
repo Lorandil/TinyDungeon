@@ -15,16 +15,9 @@ void hexdumpResetPositionCount()
 /*--------------------------------------------------------------*/
 char getHexChar( const uint8_t value )
 {
-  if ( value < 10 )
-  {
-    return '0' + value;
-  }
-  else
-  {
-    return 'A' + ( value - 10 );
-  }
+  return ( value < 10 ) ? '0' + value
+                        : 'A' + value - 10;
 }
-
 
 /*--------------------------------------------------------------*/
 // just print a byte to the serial console (with leading zero)

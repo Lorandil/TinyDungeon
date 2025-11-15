@@ -44,7 +44,7 @@ void InitTinyJoypad()
   SOUND_PORT_DDR &= ~( ( 1 << PB5) | ( 1 << PB3 ) | ( 1 << PB1 ) );
   // configure A2 (aka SOUND_PIN) as output
   SOUND_PORT_DDR |= ( 1 << SOUND_PIN );
-#else
+#elsif !defined( USE_KEYBOARD_INPUT )
   // use 'pinMode()' for simplicity's sake... any other micro controller has enough flash :)
   pinMode( LEFT_RIGHT_BUTTON, INPUT );
   pinMode( UP_DOWN_BUTTON, INPUT );
@@ -57,38 +57,134 @@ void InitTinyJoypad()
 #endif
 }
 
+#ifdef USE_KEYBOARD_INPUT
+bool leftKeyPressed{ false };
+bool rightKeyPressed{ false };
+bool upKeyPressed{ false };
+bool downKeyPressed{ false };
+bool actionKeyPressed{ false };
+
+/*-------------------------------------------------------*/
+void handleKeys()
+{
+  if (_kbhit())
+  {
+    auto key = _getch();
+    switch( key )
+    {
+      case 'a':
+      case 'A':
+        leftKeyPressed = true;
+        break;
+      case 'd':
+      case 'D':
+        rightKeyPressed = true;
+        break;
+      case 'w':
+      case 'W':
+        upKeyPressed = true;
+        break;
+      case 's':
+      case 'S':
+        downKeyPressed = true;
+        break;
+      case ' ':
+        actionKeyPressed = true;
+        break;
+      default:
+        break;
+      // cursor keys
+      case 224:
+        key = _getch();
+        switch (key)
+        {
+        case 75:
+          leftKeyPressed = true;
+          break;
+        case 77:
+          rightKeyPressed = true;
+          break;
+        case 72:
+          upKeyPressed = true;
+          break;
+        case 80:
+          downKeyPressed = true;
+          break;
+        default:
+          break;
+        }
+    }
+  }
+}
+#endif
+
 /*-------------------------------------------------------*/
 bool isLeftPressed()
 {
+#ifdef USE_KEYBOARD_INPUT
+  handleKeys();
+  auto key = leftKeyPressed;
+  leftKeyPressed = false;
+  return( key );
+#else
   uint16_t inputX = analogRead( LEFT_RIGHT_BUTTON );
   return( ( inputX >= ANALOG_UPPER_LIMIT_MIN ) && ( inputX < ANALOG_UPPER_LIMIT_MAX ) );
+#endif
 }
 
 /*-------------------------------------------------------*/
 bool isRightPressed()
 {
+#ifdef USE_KEYBOARD_INPUT
+  handleKeys();
+  auto key = rightKeyPressed;
+  rightKeyPressed = false;
+  return( key );
+#else
   uint16_t inputX = analogRead( LEFT_RIGHT_BUTTON );
   return( ( inputX > ANALOG_LOWER_LIMIT_MIN ) && ( inputX < ANALOG_LOWER_LIMIT_MAX ) );
+#endif
 }
 
 /*-------------------------------------------------------*/
 bool isUpPressed()
 {
+#ifdef USE_KEYBOARD_INPUT
+  handleKeys();
+  auto key = upKeyPressed;
+  upKeyPressed = false;
+  return(key);
+#else
   uint16_t inputY = analogRead( UP_DOWN_BUTTON );
   return( ( inputY > ANALOG_LOWER_LIMIT_MIN ) && ( inputY < ANALOG_LOWER_LIMIT_MAX ) );
+#endif
 }
 
 /*-------------------------------------------------------*/
 bool isDownPressed()
 {
+#ifdef USE_KEYBOARD_INPUT
+  handleKeys();
+  auto key = downKeyPressed;
+  downKeyPressed = false;
+  return(key);
+#else
   uint16_t inputY = analogRead( UP_DOWN_BUTTON );
   return( ( inputY >= ANALOG_UPPER_LIMIT_MIN ) && ( inputY < ANALOG_UPPER_LIMIT_MAX ) );
+#endif
 }
 
 /*-------------------------------------------------------*/
 bool isFirePressed()
 {
+#ifdef USE_KEYBOARD_INPUT
+  handleKeys();
+  auto key = actionKeyPressed;
+  actionKeyPressed = false;
+  return( key );
+#else
   return( digitalRead( FIRE_BUTTON ) == 0 );
+#endif
 }
 
 /*-------------------------------------------------------*/
@@ -151,7 +247,11 @@ uint16_t getAnalogValueY()
 }
 
 /*-------------------------------------------------------*/
+#if defined(__AVR_ATtiny85__) /* codepath for ATtiny85 */
 void __attribute__ ((noinline)) _variableDelay_us( uint8_t delayValue )
+#else
+void _variableDelay_us(uint8_t delayValue)
+#endif
 {
   while ( delayValue-- != 0 )
   {
@@ -164,20 +264,22 @@ void __attribute__ ((noinline)) _variableDelay_us( uint8_t delayValue )
 // Code optimization by sbr
 void Sound( const uint8_t freq, const uint8_t dur )
 {
-  for ( uint8_t t = 0; t < dur; t++ )
-  {
-#if defined(__AVR_ATtiny85__) /* codepath for ATtiny85 */
-    if ( freq != 0 ){ SOUND_PORT = SOUND_PORT | ( 1 << SOUND_PIN); }
-    _variableDelay_us( 255 - freq );
-    SOUND_PORT = SOUND_PORT & ~( 1 << SOUND_PIN );
-    _variableDelay_us( 255 - freq );
-#else
-    if ( freq != 0 ){ digitalWrite( SOUND_PIN, 1 ); }
-    _variableDelay_us( 255 - freq );
-    digitalWrite( SOUND_PIN, 0 );
-    _variableDelay_us( 255 - freq );
+#if !defined( NO_SOUND )
+    for ( uint8_t t = 0; t < dur; t++ )
+    {
+  #if defined(__AVR_ATtiny85__) /* codepath for ATtiny85 */
+      if ( freq != 0 ){ SOUND_PORT = SOUND_PORT | ( 1 << SOUND_PIN); }
+      _variableDelay_us( 255 - freq );
+      SOUND_PORT = SOUND_PORT & ~( 1 << SOUND_PIN );
+      _variableDelay_us( 255 - freq );
+  #else
+      if ( freq != 0 ){ digitalWrite( SOUND_PIN, 1 ); }
+      _variableDelay_us( 255 - freq );
+      digitalWrite( SOUND_PIN, 0 );
+      _variableDelay_us( 255 - freq );
+  #endif
+    }
 #endif
-  }
 }
 
 /*-------------------------------------------------------*/

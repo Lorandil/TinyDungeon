@@ -81,8 +81,8 @@ void Dungeon::initDice()
 }
 
 /*--------------------------------------------------------*/
- void Dungeon::gameLoop()
- {
+void Dungeon::gameLoop()
+{
   // prepare a new dungeon...
   init();
 
@@ -140,7 +140,7 @@ void Dungeon::initDice()
 
   // let the player feel the darkness...
   while ( !isFirePressed() );
- }
+}
 
 
 /*--------------------------------------------------------*/
@@ -311,7 +311,7 @@ void Dungeon::checkPlayerMovement()
           /////////////////////////////////////////////
           // find the monster... 
           // (cell - _dungeon.currentLevel) is the offset from the level begin ;)
-          MONSTER_STATS *monster = findMonster( cell - _dungeon.currentLevel );
+          MONSTER_STATS *monster = findMonster( uint8_t( cell - _dungeon.currentLevel ) );
 
 
           /////////////////////////////////////////////

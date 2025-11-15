@@ -219,9 +219,9 @@ class NON_WALL_OBJECT
     Serial.print( F("  bitmapVerticalOffsetInBytes  = ") );Serial.print( bitmapVerticalOffsetInBits );Serial.println();
     Serial.print( F("  bitmapHeightInBytes          = ") );Serial.print( bitmapHeightInBits );Serial.println();
     Serial.print( F("  nextLineOffset               = ") );Serial.println( nextLineOffset );
-    Serial.print( F("  scalingThreshold[0]          = ") );Serial.print( scalingThreshold[1] );Serial.println();
-    Serial.print( F("  scalingThreshold[1]          = ") );Serial.print( scalingThreshold[2] );Serial.println();
-    Serial.print( F("  scalingThreshold[2]          = ") );Serial.print( scalingThreshold[3] );Serial.println();
+    Serial.print( F("  scalingThreshold[0]          = ") );Serial.print( scalingThreshold[0] );Serial.println();
+    Serial.print( F("  scalingThreshold[1]          = ") );Serial.print( scalingThreshold[1] );Serial.println();
+    Serial.print( F("  scalingThreshold[2]          = ") );Serial.print( scalingThreshold[2] );Serial.println();
     Serial.println();
   }
 #endif  
