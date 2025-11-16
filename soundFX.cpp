@@ -3,6 +3,8 @@
 #if defined(__AVR_ATtiny85__)
   // required for _delay_us()
   #include <util/delay.h>
+#else
+  #include <Arduino.h>
 #endif
 
 /*--------------------------------------------------------*/
