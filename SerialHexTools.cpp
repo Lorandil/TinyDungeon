@@ -25,9 +25,10 @@ void printHexToSerial( uint8_t value, bool addComma /*= false*/, bool autoLineBr
 {
   static uint8_t count = 0;
 
-  Serial.print( F("0x") );
-  Serial.print(getHexChar( value >> 4 ) );
-  Serial.print(getHexChar( value & 0x0F ) );
+  char hexString[] = F("0x00");
+  hexString[2] = getHexChar( value >> 4 );
+  hexString[3] = getHexChar( value & 0x0F );
+  Serial.print( hexString );
   
   if ( addComma )
   {
