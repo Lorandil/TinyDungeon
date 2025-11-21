@@ -5,29 +5,32 @@
 #include "wallBitmaps.h"
 
 /*--------------------------------------------------------*/
-uint8_t Dungeon::getWallPixels( const int8_t x, const int8_t y )
+// Processes a complete vertical column at position x
+void Dungeon::renderDungeonColumn( const int8_t x )
 {
-  uint8_t pixels = 0;
+  memset( _dungeon.lineBuffer, 0, sizeof( _dungeon.lineBuffer ) / sizeof(_dungeon.lineBuffer[0] ) );
+
+  // here is what we're gonna do:
+  // - find the frontmost wall in this column and determine the max. view distance
+  // start a y-loop
+  //   - get the wall pixels and apply shading
+  //   - place all visible NWOs (Non Wall Objects) over the wall pixels from back to front and apply shading
 
   SIMPLE_WALL_INFO wallInfo;
-  
-  const SIMPLE_WALL_INFO *wallInfoPtr = arrayOfWallInfo;
+
+  const SIMPLE_WALL_INFO* wallInfoPtr = arrayOfWallInfo;
 
   // all objects are visible
   int8_t maxObjectDistance = MAX_VIEW_DISTANCE;
-
-  //int8_t objectNo = -1;
 
   // iterate through the whole list (at least as long as it's necessary)
   while( true )
   {
     // the structure resides in PROGMEM, so we need to copy it to RAM first...
-    memcpy_P( &wallInfo, wallInfoPtr, sizeof( wallInfo ) );
+    memcpy_P(&wallInfo, wallInfoPtr, sizeof(wallInfo));
 
     // end of list reached?
-    if ( wallInfo.wallBitmap == nullptr ) { break; }
-    
-    //objectNo++;
+    if (wallInfo.wallBitmap == nullptr) { break; }
 
     // check conditions
     if ( ( x >= wallInfo.startPosX ) && ( x <= wallInfo.endPosX ) )
@@ -35,60 +38,38 @@ uint8_t Dungeon::getWallPixels( const int8_t x, const int8_t y )
       bool mirror = ( ( _dungeon.playerX + _dungeon.playerY ) & 0x01 );
 
       // is there a wall object?
-    #ifdef _USE_FIELD_OF_VIEW_
-      if ( ( getCell( wallInfo.viewDistance, wallInfo.leftRightOffset ) & WALL_MASK ) == ( WALL & ~FLAG_SOLID ) )
-    #else
-      if ( ( *( getCellRaw( _dungeon.playerX, _dungeon.playerY, wallInfo.viewDistance, wallInfo.leftRightOffset, _dungeon.dir ) ) & WALL_MASK ) == ( WALL & ~FLAG_SOLID ) )
-    #endif
+      if ((*(getCellRaw(_dungeon.playerX, _dungeon.playerY, wallInfo.viewDistance, wallInfo.leftRightOffset, _dungeon.dir)) & WALL_MASK) == (WALL & ~FLAG_SOLID))
       {
-        //if ( y == 0 ) { Serial.print( F("column = ") ); Serial.print( x ); Serial.print( F(" -> objectNo = ") ); Serial.println( objectNo ); }
-
         // split combined positions into start and end
         int8_t startPosY = wallInfo.posStartEndY >> 4;
         int8_t endPosY = wallInfo.posStartEndY & 0x0f;
+        int8_t sizeY = endPosY - startPosY + 1;
 
-        // is there wall information for this vertical position
-        if ( ( y >= startPosY ) && ( y <= endPosY ) )
+        // positions are to be considered relative to the bitmap
+        int8_t posX = x - wallInfo.startPosX;
+
+        // calculate the x offset depending on the mirror flag
+        uint8_t offsetX = mirror ? wallInfo.width - 1 - posX - wallInfo.relPos
+                                 : posX + wallInfo.relPos;
+        
+        // copy wall data to the right position
+        const uint8_t *bitmapData = wallInfo.wallBitmap + offsetX * sizeY;
+        uint8_t* buffer = _dungeon.lineBuffer + startPosY;
+        while (sizeY--)
         {
-          // positions are to be considered relative to the bitmap
-          int8_t posX = x - wallInfo.startPosX;
-
-          // calculate the x offset depending on the mirror flag
-          uint8_t offsetX = mirror ? wallInfo.width - 1 - posX - wallInfo.relPos
-                                   : posX + wallInfo.relPos;
-
-          // get wall pixels (shave off the empty rows)
-          pixels = pgm_read_byte( wallInfo.wallBitmap + ( y - startPosY ) * wallInfo.width + offsetX );
-
+          uint8_t pixels = pgm_read_byte( bitmapData++ );
         #ifdef _ENABLE_WALL_SHADING_
           // TODO: this could be optimized further:
           // - integrate shading into wall bitmaps
           // - or use simple 'if ( wallInfo.viewDistance > 2 )...' instead of switch statement
           // - OR use lookup table for dynamic lighting!
-
-          uint8_t lightMask = pgm_read_byte( lightingTable + _dungeon.lightingOffset + wallInfo.viewDistance * 2 + ( x & 0x01 ) );
-          pixels &= lightMask;
-
-          /*
-          switch ( wallInfo.viewDistance )
-          {
-            case 0:
-            case 1:
-              break;
-            case 2:
-            default:
-              if ( x & 1 ) { pixels &= 0x55; }
-              else { pixels &= 0xaa; }
-              break;
-          }
-          */
+          uint8_t lightMask = pgm_read_byte(lightingTable + _dungeon.lightingOffset + wallInfo.viewDistance * 2 + (x & 0x01));
+          *buffer++ = pixels & lightMask;
+        #else
+          *buffer++ = pixels;
         #endif
         }
-        else
-        {
-          // nope, just nothing
-          pixels = 0;
-        }
+
         // objects behind walls are not visible, but doors or switches might be placed *on* walls
         maxObjectDistance = wallInfo.viewDistance;
         // that's it!
@@ -99,66 +80,52 @@ uint8_t Dungeon::getWallPixels( const int8_t x, const int8_t y )
     wallInfoPtr++;
   }
 
+#if 0
   NON_WALL_OBJECT object;
 
-  // draw NWOs (Non Wall Objects) over the background pixels (with mask!)
-  for ( uint8_t distance = maxObjectDistance; distance > 0; distance-- )
+  // walk over all vertical pixels in the current column
+  for (int y = 0; y < DUNGEON_WINDOW_SIZE_Y / 8; y++)
   {
-    for ( uint8_t n = 0; n < sizeof( objectList ) / sizeof( objectList[0] ); n++ )
+    // draw NWOs (Non Wall Objects) over the background pixels (with mask!)
+    for (uint8_t distance = maxObjectDistance; distance > 0; distance--)
     {
-      memcpy_P( &object, &objectList[n], sizeof( object ) );
-      uint8_t objectWidth = object.bitmapWidth >> distance;
-
-      // non wall objects will only be rendered if directly in front of the player (for now!)
-      // TODO: fix this! ;)
-      if ( ( x >= DUNGEON_WINDOW_CENTER_X - objectWidth ) && ( x < DUNGEON_WINDOW_CENTER_X + objectWidth ) )
+      for (uint8_t n = 0; n < sizeof(objectList) / sizeof(objectList[0]); n++)
       {
-      #ifdef _USE_FIELD_OF_VIEW_
-        if ( ( getCell( distance, 0 ) & OBJECT_MASK ) == object.itemType )
-      #else
-        if ( ( *( getCellRaw( _dungeon.playerX, _dungeon.playerY, distance, 0, _dungeon.dir ) ) & OBJECT_MASK ) == object.itemType )
-      #endif
+        memcpy_P(&object, &objectList[n], sizeof(object));
+        uint8_t objectWidth = object.bitmapWidth >> distance;
+
+        // non wall objects will only be rendered if directly in front of the player (for now!)
+        // TODO: fix this! ;)
+        if ((x >= DUNGEON_WINDOW_CENTER_X - objectWidth) && (x < DUNGEON_WINDOW_CENTER_X + objectWidth))
         {
-          objectWidth = DUNGEON_WINDOW_CENTER_X - objectWidth;
-          uint8_t posX = x - objectWidth;
-          // free background
-          uint8_t mask = getDownScaledBitmapData( posX, y, distance, &object, true );
-          pixels &= mask;
-          // and overlay scaled bitmap
-          uint8_t scaledBitmap = getDownScaledBitmapData( posX, y, distance, &object, false );
-
-        #ifdef _ENABLE_OBJECT_SHADING_
-          // use shading effect to pronounce the distance of an object (at the cost of clarity)
-          switch ( distance )
+          if ((*(getCellRaw(_dungeon.playerX, _dungeon.playerY, distance, 0, _dungeon.dir)) & OBJECT_MASK) == object.itemType)
           {
-            case 0:
-            case 1:
-              break;
-            case 2:
-            default:
-              if ( x & 1 ) { scaledBitmap &= 0x55; }
-              else { scaledBitmap &= 0xaa; }
-              break;
-            /*
-            default:
-              if ( x & 1 ) { scaledBitmap &= 055; }
-              else { scaledBitmap &= 0x00; }
-            */
-          }
-        #endif
+            objectWidth = DUNGEON_WINDOW_CENTER_X - objectWidth;
+            uint8_t posX = x - objectWidth;
+            // free background
+            uint8_t mask = getDownScaledBitmapData(posX, y, distance, &object, true);
+            pixels &= mask;
+            // and overlay scaled bitmap
+            uint8_t scaledBitmap = getDownScaledBitmapData(posX, y, distance, &object, false);
 
-          if ( distance == 1 )
-          {
-            // apply inversion effect if monster was hit...
-            scaledBitmap ^= ( _dungeon.invertMonsterEffect & ~mask );
+#ifdef _ENABLE_OBJECT_SHADING_
+            // use shading effect to pronounce the distance of an object (at the cost of clarity)
+            uint8_t lightMask = pgm_read_byte(lightingTable + _dungeon.lightingOffset + wallInfo.viewDistance);
+            scaledBitmap &= lightMask;
+#endif
+
+            if (distance == 1)
+            {
+              // apply inversion effect if monster was hit...
+              scaledBitmap ^= (_dungeon.invertMonsterEffect & ~mask);
+            }
+            pixels |= scaledBitmap;
           }
-          pixels |= scaledBitmap;
         }
       }
     }
-  }
-  
-  return( pixels );
+  } // for y
+#endif
 }
 
 /*--------------------------------------------------------*/

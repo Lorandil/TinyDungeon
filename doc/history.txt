@@ -25,6 +25,7 @@ already achieved:
 * added teleporter
 * added screenshot via serial port
 * added sound support for Arduino Uno R3 and Mega 2560
+* added support for use on PC with keyborad navigation and rendering pixels as block graphics in the console window
 * every decent dungeon needs rats!
 * player movement control now has a fast running loop. This will be used to create "random" numbers by counting fast
 * new item: <Amulet of True Sight> removes all fake walls from the game
@@ -37,7 +38,7 @@ already achieved:
 * added a death "screen" (dark dungeon screen and skeleton displayed in the status panel)
 * combat "animations": monster gets inverted on a hit, players hitpoints are inverted on a hit
 * changed dice rolling to use a free running timer (at least on ATtiny85)
-* add icons for magic items (Shield of Faith, Ring of Orientation, Sword of Destiny , Amulet of True Sight)
+* add icons for magic items (Shield of Faith, Ring of Orientation, Sword of Destiny, Amulet of True Sight)
 * Check/Change: 
   - player movement control has to have a fast running loop. This will be used to create "random" numbers by counting fast
   [- required for walking monsters, too]

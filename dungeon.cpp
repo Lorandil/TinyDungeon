@@ -98,13 +98,10 @@ void Dungeon::gameLoop()
     // shield found? adjust protection
     if ( _dungeon.playerItems & ITEM_SHIELD ) { _dungeon.playerArmour = 3; }
 
-#ifdef _USE_FIELD_OF_VIEW_
-    // setup field of view according to direction
-    updateFieldOfView();
-#endif
-
     // update the status pane and render the screen
     renderImage();
+    // display the dungeon state
+    _dungeon.serialPrint();
 
     // is the lighting still dimmend?
     if ( _dungeon.lightingOffset > 0 )
@@ -157,12 +154,8 @@ void Dungeon::checkPlayerMovement()
   bool playerAction = false;
 
   // remember to disable the flashing effect
-  bool disableFlashEffect = _dungeon.displayXorEffect | _dungeon.invertMonsterEffect | _dungeon.invertStatusEffect;;
+  bool disableFlashEffect = _dungeon.displayXorEffect | _dungeon.invertMonsterEffect | _dungeon.invertStatusEffect;
   _dungeon.displayXorEffect = 0;
-  /*
-  _dungeon.invertMonsterEffect = 0;
-  _dungeon.invertStatusEffect = 0;
-  */
 
   // stay in this loop until the player does anything
   while ( !playerAction && !disableFlashEffect )
@@ -377,35 +370,6 @@ void Dungeon::checkPlayerMovement()
     }
   }
 }
-
-
-#ifdef _USE_FIELD_OF_VIEW_
-/*--------------------------------------------------------*/
-// copies the current field of view for an array to speed up things
-void Dungeon::updateFieldOfView()
-{
-  uint8_t *pFieldOfView = _dungeon.fieldOfView;
-  
-  for ( uint8_t distance = 1; distance <= MAX_VIEW_DISTANCE; distance++ )
-  {
-    for ( int x = -2; x <=2; x++)
-    {
-      *pFieldOfView++ = *getCellRaw( _dungeon.playerX, _dungeon.playerY, distance, x, _dungeon.dir );
-    }
-  }
-}
-
-
-/*--------------------------------------------------------*/
-// returns the cell value of the dungeon at the current position
-// Caution: A prior call to updateFieldOfView() is required!
-uint8_t Dungeon::getCell( const int8_t distance, const int8_t offsetLR )
-{
-  // watch from x-center (and one step back, because viewDistance ranges from 1..3)
-  const uint8_t *pFieldOfView = _dungeon.fieldOfView - 5 + 2;
-  return( pFieldOfView[ offsetLR + distance * 5] );
-}
-#endif
 
 
 /*--------------------------------------------------------*/
@@ -767,10 +731,11 @@ void Dungeon::renderImage()
   // the first 96 columns are used to display the dungeon
   for ( uint8_t x = 0; x < DUNGEON_WINDOW_SIZE_X; x++ )
   {
-    for ( uint8_t y = 0; y < DUNGEON_WINDOW_SIZE_Y / 8; y++ )
+    // get the graphics at x,y: walls, items, monsters
+    renderDungeonColumn( x );
+    for (uint8_t y = 0; y < DUNGEON_WINDOW_SIZE_Y / 8; y++)
     {
-      pixels = getWallPixels( x, y );
-      pixels ^= _dungeon.displayXorEffect;
+      pixels = _dungeon.lineBuffer[y] ^ _dungeon.displayXorEffect;
 
       // send 8 vertical pixels to the display
       SendPixels( pixels );

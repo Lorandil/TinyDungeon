@@ -2,6 +2,7 @@ Ideas for improvements
 
 * double bars "riddle" is too hard/frustrating and lacks logic, perhaps add a third switch for amusement instead
 * fix lighting anomaly for front wall in distance 1 (shouldn't be dithered)
+* remove heart symbol if player is dead (this requires rework of the frame, as the frame starts at y = 24...)
 * dynamic lighting range for torch or lamp? breathing view distance?
 * use and improve dynamic lighting for objects (use offset of -2 for more clarity?)
 * display damage dealt/received on screen

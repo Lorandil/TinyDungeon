@@ -7,7 +7,7 @@
 // use nice shading effect, giving more depth
 #define _ENABLE_WALL_SHADING_
 // use object shading, reduces clarity (not recommended)
-//#define _ENABLE_OBJECT_SHADING_
+#define _ENABLE_OBJECT_SHADING_
 
 // uncomment this line to make the player invincible
 //#define _GODMODE_
@@ -36,10 +36,6 @@ public:
   void gameLoop();
   void checkPlayerMovement();
 
-#ifdef _USE_FIELD_OF_VIEW_
-  void updateFieldOfView();
-  uint8_t getCell( const int8_t distance, const int8_t offsetLR );
-#endif
   uint8_t *getCellRaw( int8_t x, int8_t y, const int8_t distance, const int8_t offsetLR, const uint8_t orientation );
   void limitDungeonPosition( int8_t &x, int8_t &y );
   void updateStatusPane();
@@ -53,7 +49,7 @@ public:
   void playerInteraction( uint8_t *cell, const uint8_t cellValue );
   void /*__attribute__ ((noinline))*/ renderImage();
   // bitmap drawing functions
-  uint8_t /*__attribute__ ((always_inline))*/ getWallPixels( const int8_t x, const int8_t y );
+  void renderDungeonColumn( const int8_t x );
   uint8_t getDownScaledBitmapData( int8_t x, int8_t y, 
                                    const uint8_t distance, const NON_WALL_OBJECT *object,
                                    bool useMask );

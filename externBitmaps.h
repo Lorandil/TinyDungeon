@@ -22,14 +22,14 @@ extern const uint8_t compass[] PROGMEM;
 
 // walls
 extern const unsigned char smallFrontWall_D1[] PROGMEM;
-extern const unsigned char smallFrontWall_D2 [] PROGMEM;
-extern const unsigned char smallFrontWall_D3 [] PROGMEM;
+extern const unsigned char smallFrontWall_D2[] PROGMEM;
+extern const unsigned char smallFrontWall_D3[] PROGMEM;
 extern const unsigned char leftRightWalls_D0[] PROGMEM;
 extern const unsigned char leftRightWalls_D1[] PROGMEM;
 extern const unsigned char leftRightWalls_D2[] PROGMEM;
 extern const unsigned char leftRightWalls_D3[] PROGMEM;
-extern const unsigned char outerLeftRightWalls_D2 [] PROGMEM;
-extern const unsigned char outerLeftRightWalls_D3 [] PROGMEM;
+extern const unsigned char outerLeftRightWalls_D2[] PROGMEM;
+extern const unsigned char outerLeftRightWalls_D3[] PROGMEM;
 
 // list of possible non wall objects (i.e. monsters, doors, ...) (10 bytes per object)
 const NON_WALL_OBJECT objectList [11] PROGMEM = {

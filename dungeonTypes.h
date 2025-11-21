@@ -149,10 +149,8 @@ public:
   uint8_t invertStatusEffect;
   uint8_t lightingOffset;
   uint8_t currentLevel[MAX_LEVEL_BYTES];
-#ifdef _USE_FIELD_OF_VIEW_
-  uint8_t fieldOfView[5 * MAX_VIEW_DISTANCE];
-#endif
   MONSTER_STATS monsterStats[MAX_MONSTERS];
+  uint8_t lineBuffer[DUNGEON_WINDOW_SIZE_Y / 8];
 
 #if !defined(__AVR_ATtiny85__)
   void serialPrint()
