@@ -38,7 +38,7 @@ void Dungeon::renderDungeonColumn( const int8_t x )
       bool mirror = ( ( _dungeon.playerX + _dungeon.playerY ) & 0x01 );
 
       // is there a wall object?
-      if ((*(getCellRaw(_dungeon.playerX, _dungeon.playerY, wallInfo.viewDistance, wallInfo.leftRightOffset, _dungeon.dir)) & WALL_MASK) == (WALL & ~FLAG_SOLID))
+      if ( ( *( getCellRaw( _dungeon.playerX, _dungeon.playerY, wallInfo.viewDistance, wallInfo.leftRightOffset, _dungeon.dir ) ) & WALL_MASK ) == ( WALL & ~FLAG_SOLID ) )
       {
         // split combined positions into start and end
         int8_t startPosY = wallInfo.posStartEndY >> 4;
@@ -80,52 +80,51 @@ void Dungeon::renderDungeonColumn( const int8_t x )
     wallInfoPtr++;
   }
 
-#if 0
   NON_WALL_OBJECT object;
 
-  // walk over all vertical pixels in the current column
-  for (int y = 0; y < DUNGEON_WINDOW_SIZE_Y / 8; y++)
+  // draw NWOs (Non Wall Objects) over the background pixels (with mask!)
+  for ( uint8_t distance = maxObjectDistance; distance > 0; distance-- )
   {
-    // draw NWOs (Non Wall Objects) over the background pixels (with mask!)
-    for (uint8_t distance = maxObjectDistance; distance > 0; distance--)
+    for ( uint8_t n = 0; n < sizeof(objectList) / sizeof(objectList[0]); n++ )
     {
-      for (uint8_t n = 0; n < sizeof(objectList) / sizeof(objectList[0]); n++)
+      memcpy_P( &object, &objectList[n], sizeof(object) );
+      uint8_t objectWidth = object.bitmapWidth >> distance;
+
+      // non wall objects will only be rendered if directly in front of the player (for now!)
+      // TODO: fix this! ;)
+      if ( ( x >= DUNGEON_WINDOW_CENTER_X - objectWidth ) && ( x < DUNGEON_WINDOW_CENTER_X + objectWidth ) )
       {
-        memcpy_P(&object, &objectList[n], sizeof(object));
-        uint8_t objectWidth = object.bitmapWidth >> distance;
-
-        // non wall objects will only be rendered if directly in front of the player (for now!)
-        // TODO: fix this! ;)
-        if ((x >= DUNGEON_WINDOW_CENTER_X - objectWidth) && (x < DUNGEON_WINDOW_CENTER_X + objectWidth))
+        if ( ( *(getCellRaw( _dungeon.playerX, _dungeon.playerY, distance, 0, _dungeon.dir ) ) & OBJECT_MASK ) == object.itemType )
         {
-          if ((*(getCellRaw(_dungeon.playerX, _dungeon.playerY, distance, 0, _dungeon.dir)) & OBJECT_MASK) == object.itemType)
+          uint8_t* buffer = _dungeon.lineBuffer;
+          // walk over all vertical pixels in the current column
+          for ( uint8_t y = 0; y < DUNGEON_WINDOW_SIZE_Y / 8; y++ )
           {
-            objectWidth = DUNGEON_WINDOW_CENTER_X - objectWidth;
-            uint8_t posX = x - objectWidth;
+            uint8_t posX = x - DUNGEON_WINDOW_CENTER_X + objectWidth;
             // free background
-            uint8_t mask = getDownScaledBitmapData(posX, y, distance, &object, true);
-            pixels &= mask;
+            uint8_t mask = getDownScaledBitmapData( posX, y, distance, &object, true );
+            *buffer &= mask;
             // and overlay scaled bitmap
-            uint8_t scaledBitmap = getDownScaledBitmapData(posX, y, distance, &object, false);
+            uint8_t scaledBitmap = getDownScaledBitmapData( posX, y, distance, &object, false );
 
-#ifdef _ENABLE_OBJECT_SHADING_
+          #ifdef _ENABLE_OBJECT_SHADING_
             // use shading effect to pronounce the distance of an object (at the cost of clarity)
             uint8_t lightMask = pgm_read_byte(lightingTable + _dungeon.lightingOffset + wallInfo.viewDistance);
             scaledBitmap &= lightMask;
-#endif
+          #endif
 
-            if (distance == 1)
+            // is it the object right in front of the player (must be, if distance is 1)
+            if ( distance == 1 )
             {
               // apply inversion effect if monster was hit...
               scaledBitmap ^= (_dungeon.invertMonsterEffect & ~mask);
             }
-            pixels |= scaledBitmap;
-          }
+            *buffer++ |= scaledBitmap;
+          } // for y
         }
       }
-    }
-  } // for y
-#endif
+    } // for n
+  } // for distance
 }
 
 /*--------------------------------------------------------*/
@@ -142,9 +141,10 @@ uint8_t Dungeon::getDownScaledBitmapData( int8_t x,                      // alre
 {
   uint8_t pixels = 0;
 
-  // get start address (and add optional offset for mask)
+  // get start address
   const uint8_t *bitmapData = object->bitmapData;
-  if ( useMask ) { bitmapData += object->bitmapWidth; }
+  // (add optional offset for mask if required)
+  if ( useMask ) { bitmapData += object->bitmapHeightInBytes * object->bitmapWidth; }
 
   // Get scaling factor from LUT (efficient and still flexible).
   uint8_t scaleFactor = pgm_read_byte( scalingFactorFromDistance + distance );
@@ -158,7 +158,7 @@ uint8_t Dungeon::getDownScaledBitmapData( int8_t x,                      // alre
   if ( ( y >= startOffsetY ) && ( y <= endOffsetY ) )
   {
     // modify positions in source bitmap by scaling factor
-    x = x * scaleFactor;
+    //x = x * scaleFactor * object->bitmapHeightInBytes;
     // correct y position by start offset
     y -= startOffsetY;
     
@@ -166,11 +166,14 @@ uint8_t Dungeon::getDownScaledBitmapData( int8_t x,                      // alre
     uint8_t bitMask = pgm_read_byte( bitMaskFromScalingFactor + scaleFactor );
 
     // calculate the first and last bit to be processed
-    uint8_t startBitNo = object->bitmapVerticalOffsetInBits;
-    uint8_t endBitNo = startBitNo + object->bitmapHeightInBits;
+    uint8_t startBitNo = object->bitmapVerticalOffsetInBytes * 8;
+    uint8_t endBitNo = startBitNo + object->bitmapHeightInBytes * 8;
     
     // but we are starting with bit 0 (and its friends)
     uint8_t bitNo = y * 8 * scaleFactor;
+
+    // squared scale factor
+    const uint8_t squaredScaleFactor = scaleFactor * scaleFactor;
   
     // We need to calculate 8 vertical output bits...
     // NOTE: Because the Tiny85 only supports shifting by 1 bit, it is
@@ -180,23 +183,24 @@ uint8_t Dungeon::getDownScaledBitmapData( int8_t x,                      // alre
     {
       uint8_t bitSum = 0;
   
-      if ( ( bitNo >= startBitNo ) && ( bitNo <  endBitNo ) )
+      if ( ( bitNo >= startBitNo ) && ( bitNo < endBitNo ) )
       {
         // calculate start address
         uint8_t row = ( bitNo - startBitNo ) / 8;
-        const uint8_t *data = bitmapData + row * object->nextLineOffset + x;
+        const uint8_t *data = bitmapData + x * scaleFactor * object->bitmapHeightInBytes + row;
         
         // go over the columns - all required bits always are in one row
         for ( uint8_t col = 0; col < scaleFactor; col++ )
         {
           // to get the output value, we will sum all the bits up (using a lookup table saves time and flash space)
-          bitSum += pgm_read_byte( nibbleBitCount + ( ( pgm_read_byte( data++ ) >> ( bitNo & 0x07 ) ) & bitMask ) );
+          bitSum += pgm_read_byte( nibbleBitCount + ( ( pgm_read_byte( data ) >> ( bitNo & 0x07 ) ) & bitMask ) );
+          data += object->bitmapHeightInBytes;
         }
       }
       else if ( useMask )
       {
-        // make bitsum count - otherwise we will erase the backgound
-        bitSum += scaleFactor * scaleFactor;
+        // make bitsum count - otherwise we will erase the backgound ;)
+        bitSum += squaredScaleFactor;
       }
   
       // next bit position

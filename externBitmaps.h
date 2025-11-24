@@ -33,18 +33,20 @@ extern const unsigned char outerLeftRightWalls_D3[] PROGMEM;
 
 // list of possible non wall objects (i.e. monsters, doors, ...) (10 bytes per object)
 const NON_WALL_OBJECT objectList [11] PROGMEM = {
-//  itemType    , width, verticalOffsetBits, heightBits, lineOffset, scalingThreshold, bitmapData
-  { SKELETON    ,  28,         2 * 8,          5 * 8,         56,      { 1, 2,  5 },   joey        },  //  0
-  { BEHOLDER    ,  32,         0 * 8,          7 * 8,         64,      { 1, 2,  5 },   beholder    },  //  1
-  { BARS        ,  28,         1 * 8,          6 * 8,         56,      { 1, 2,  5 },   newBars     },  //  2
-  { DOOR        ,  32,         1 * 8,          7 * 8,         64,      { 1, 3, 12 },   door        },  //  3
-  { LVR_LEFT    ,  16,         3 * 8,          1 * 8,         32,      { 1, 2,  8 },   leverLeft   },  //  4
-  { LVR_RIGHT   ,  16,         3 * 8,          1 * 8,         32,      { 1, 2,  8 },   leverRight  },  //  5
-  { CLOSED_CHEST,  24,         4 * 8,          3 * 8,         48,      { 1, 3, 99 },   chestClosed },  //  6
-  { MIMIC       ,  24,         4 * 8,          3 * 8,         48,      { 1, 3, 99 },   chestClosed },  //  7
-  { OPEN_CHEST  ,  24,         4 * 8,          3 * 8,         48,      { 1, 3, 99 },   chestOpen   },  //  8
-  { FOUNTAIN    ,  12,         4 * 8,          3 * 8,         24,      { 1, 2, 99 },   fountain    },  //  9
-  { RAT         ,  20,         5 * 8,          2 * 8,         40,      { 1, 2, 99 },   rat         },  // 10
+//  itemType    , width, verticalOffsetBytes, heightBytes, lineOffset, scalingThreshold, bitmapData
+  { SKELETON    ,  28,           2,                5,      /*  56, */   { 1, 2,  5 },     joey        },  //  0
+  { BEHOLDER    ,  32,           0,                7,      /*  64, */   { 1, 2,  5 },     beholder    },  //  1
+  { BARS        ,  28,           1,                6,      /*  56, */   { 1, 2,  5 },     newBars     },  //  2
+  { DOOR        ,  32,           1,                7,      /*  64, */   { 1, 3, 12 },     door        },  //  3
+  { LVR_LEFT    ,  16,           3,                1,      /*  32, */   { 1, 2,  8 },     leverLeft   },  //  4
+  { LVR_RIGHT   ,  16,           3,                1,      /*  32, */   { 1, 2,  8 },     leverRight  },  //  5
+  { CLOSED_CHEST,  24,           4,                3,      /*  48, */   { 1, 3, 99 },     chestClosed },  //  6
+  /* TODO: there is no reason to keep the MIMIC as a separate bitmap object, as it is identical to the closed chest! 
+     Is there an easy way to fix this? */
+  { MIMIC       ,  24,           4,                3,      /*  48, */   { 1, 3, 99 },     chestClosed },  //  7
+  { OPEN_CHEST  ,  24,           4,                3,      /*  48, */   { 1, 3, 99 },     chestOpen   },  //  8
+  { FOUNTAIN    ,  12,           4,                3,      /*  24, */   { 1, 2, 99 },     fountain    },  //  9
+  { RAT         ,  20,           5,                2,      /*  40, */   { 1, 2, 99 },     rat         },  // 10
 };
 
 // array of conditions for wall display (9 bytes per row)
