@@ -48,6 +48,8 @@ const uint8_t  nibbleZoom[] PROGMEM = {
 // Conversion table from view distance to scaling factor.
 // A distance of '0' is undefined but simplyfies addressing.
 const uint8_t scalingFactorFromDistance[] PROGMEM = { 0, 1, 2, 4 };
+// Conversion table from view distance to squared scaling factor.
+//const uint8_t scalingFactorFromDistance2[] PROGMEM = { 0, 1, 4, 16 };
 
 // Vertical start and end offsets depending on distance
 //

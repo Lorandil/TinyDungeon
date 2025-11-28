@@ -5,8 +5,14 @@
 #include "wallBitmaps.h"
 
 /*--------------------------------------------------------*/
+uint8_t Dungeon::lightingMask( const uint8_t &viewDistance )
+{
+  return( pgm_read_byte( lightingTable + _dungeon.lightingOffset + viewDistance ) );
+}
+
+/*--------------------------------------------------------*/
 // Processes a complete vertical column at position x
-void Dungeon::renderDungeonColumn( const int8_t x )
+void Dungeon::renderDungeonColumn( const uint8_t x )
 {
   memset( _dungeon.lineBuffer, 0, sizeof( _dungeon.lineBuffer ) / sizeof(_dungeon.lineBuffer[0] ) );
 
@@ -17,7 +23,6 @@ void Dungeon::renderDungeonColumn( const int8_t x )
   //   - place all visible NWOs (Non Wall Objects) over the wall pixels from back to front and apply shading
 
   SIMPLE_WALL_INFO wallInfo;
-
   const SIMPLE_WALL_INFO* wallInfoPtr = arrayOfWallInfo;
 
   // all objects are visible
@@ -27,10 +32,10 @@ void Dungeon::renderDungeonColumn( const int8_t x )
   while( true )
   {
     // the structure resides in PROGMEM, so we need to copy it to RAM first...
-    memcpy_P(&wallInfo, wallInfoPtr, sizeof(wallInfo));
+    memcpy_P( &wallInfo, wallInfoPtr, sizeof( wallInfo ) );
 
     // end of list reached?
-    if (wallInfo.wallBitmap == nullptr) { break; }
+    if ( wallInfo.wallBitmap == nullptr ) { break; }
 
     // check conditions
     if ( ( x >= wallInfo.startPosX ) && ( x <= wallInfo.endPosX ) )
@@ -49,13 +54,15 @@ void Dungeon::renderDungeonColumn( const int8_t x )
         int8_t posX = x - wallInfo.startPosX;
 
         // calculate the x offset depending on the mirror flag
-        uint8_t offsetX = mirror ? wallInfo.width - 1 - posX - wallInfo.relPos
-                                 : posX + wallInfo.relPos;
+        //uint8_t offsetX = mirror ? wallInfo.width - 1 - posX - wallInfo.relPos
+        //                         : posX + wallInfo.relPos;
+        uint8_t offsetX = wallInfo.width - 1 - posX - wallInfo.relPos;  // ternary operator requires 4 bytes more than separate lines...
+        if ( mirror ) { offsetX = posX + wallInfo.relPos; }
         
         // copy wall data to the right position
         const uint8_t *bitmapData = wallInfo.wallBitmap + offsetX * sizeY;
-        uint8_t* buffer = _dungeon.lineBuffer + startPosY;
-        while (sizeY--)
+        uint8_t *buffer = _dungeon.lineBuffer + startPosY;
+        while ( sizeY-- )
         {
           uint8_t pixels = pgm_read_byte( bitmapData++ );
         #ifdef _ENABLE_WALL_SHADING_
@@ -63,8 +70,8 @@ void Dungeon::renderDungeonColumn( const int8_t x )
           // - integrate shading into wall bitmaps
           // - or use simple 'if ( wallInfo.viewDistance > 2 )...' instead of switch statement
           // - OR use lookup table for dynamic lighting!
-          uint8_t lightMask = pgm_read_byte(lightingTable + _dungeon.lightingOffset + wallInfo.viewDistance * 2 + (x & 0x01));
-          *buffer++ = pixels & lightMask;
+          //uint8_t lightMask = pgm_read_byte( lightingTable + _dungeon.lightingOffset + wallInfo.viewDistance * 2 + ( x & 0x01 ) );
+          *buffer++ = pixels & lightingMask( wallInfo.viewDistance * 2 + ( x & 0x01 ) );
         #else
           *buffer++ = pixels;
         #endif
@@ -109,8 +116,8 @@ void Dungeon::renderDungeonColumn( const int8_t x )
 
           #ifdef _ENABLE_OBJECT_SHADING_
             // use shading effect to pronounce the distance of an object (at the cost of clarity)
-            uint8_t lightMask = pgm_read_byte(lightingTable + _dungeon.lightingOffset + wallInfo.viewDistance);
-            scaledBitmap &= lightMask;
+            //uint8_t lightMask = pgm_read_byte( lightingTable + _dungeon.lightingOffset + wallInfo.viewDistance );
+            scaledBitmap &= lightingMask( wallInfo.viewDistance );
           #endif
 
             // is it the object right in front of the player (must be, if distance is 1)
@@ -132,8 +139,8 @@ void Dungeon::renderDungeonColumn( const int8_t x )
 // Supported distance values are 1, 2, 3.
 // Note that x is scaled by the scale factor for
 // the current distance, while y remains unscaled!
-uint8_t Dungeon::getDownScaledBitmapData( int8_t x,                      // already downscaled by 1 << ( distance - 1 )
-                                          int8_t y,                      // unscaled vertical position
+uint8_t Dungeon::getDownScaledBitmapData( uint8_t x,                     // already downscaled by 1 << ( distance - 1 )
+                                          uint8_t y,                     // unscaled vertical position
                                           const uint8_t distance,        // supported values are 1..3
                                           const NON_WALL_OBJECT *object, // current non wall object
                                           bool useMask                   // if true returns the down scaled mask instead of the bitmap
@@ -147,7 +154,9 @@ uint8_t Dungeon::getDownScaledBitmapData( int8_t x,                      // alre
   if ( useMask ) { bitmapData += object->bitmapHeightInBytes * object->bitmapWidth; }
 
   // Get scaling factor from LUT (efficient and still flexible).
-  uint8_t scaleFactor = pgm_read_byte( scalingFactorFromDistance + distance );
+  const uint8_t scaleFactor = pgm_read_byte( scalingFactorFromDistance + distance );
+  const uint8_t squaredScaleFactor = scaleFactor * scaleFactor;
+
   // get threshold (distance is 1..3, so subtract 1 (at no cost!))
   const uint8_t threshold = object->scalingThreshold[distance - 1];
 
@@ -172,9 +181,6 @@ uint8_t Dungeon::getDownScaledBitmapData( int8_t x,                      // alre
     // but we are starting with bit 0 (and its friends)
     uint8_t bitNo = y * 8 * scaleFactor;
 
-    // squared scale factor
-    const uint8_t squaredScaleFactor = scaleFactor * scaleFactor;
-  
     // We need to calculate 8 vertical output bits...
     // NOTE: Because the Tiny85 only supports shifting by 1 bit, it is
     //       more efficient to do the shifting in the 'for' loop instead
@@ -200,6 +206,7 @@ uint8_t Dungeon::getDownScaledBitmapData( int8_t x,                      // alre
       else if ( useMask )
       {
         // make bitsum count - otherwise we will erase the backgound ;)
+        //bitSum += pgm_read_byte( scalingFactorFromDistance2 + distance );
         bitSum += squaredScaleFactor;
       }
   

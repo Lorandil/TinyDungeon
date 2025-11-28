@@ -49,10 +49,17 @@ public:
   void playerInteraction( uint8_t *cell, const uint8_t cellValue );
   void /*__attribute__ ((noinline))*/ renderImage();
   // bitmap drawing functions
-  void renderDungeonColumn( const int8_t x );
-  uint8_t getDownScaledBitmapData( int8_t x, int8_t y, 
+  void renderDungeonColumn( const uint8_t x );
+#if defined(__AVR_ATtiny85__)
+  uint8_t __attribute__ ((noinline)) getDownScaledBitmapData( uint8_t x, uint8_t y, 
                                    const uint8_t distance, const NON_WALL_OBJECT *object,
                                    bool useMask );
+#else
+  uint8_t getDownScaledBitmapData( uint8_t x, uint8_t y,
+                                   const uint8_t distance, const NON_WALL_OBJECT* object,
+                                   bool useMask);
+#endif
+  uint8_t lightingMask( const uint8_t &viewDistance );
 };
 
 // TODO: find a more apropriate place for this table
