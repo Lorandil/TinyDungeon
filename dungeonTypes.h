@@ -202,7 +202,7 @@ class NON_WALL_OBJECT
   
   uint8_t itemType;
   uint8_t bitmapWidth;
-  uint8_t bitmapVerticalOffsetInBytes;
+  uint8_t bitmapVerticalOffsetInBits;
   uint8_t bitmapHeightInBytes;
   //uint8_t nextLineOffset;
   uint8_t scalingThreshold[3];
@@ -214,7 +214,7 @@ class NON_WALL_OBJECT
     Serial.println( F("NON_WALL_OBJECT") );
     Serial.print( F("  itemType                     = ") );Serial.println( itemType );
     Serial.print( F("  bitmapWidth                  = ") );Serial.print( bitmapWidth );Serial.println();
-    Serial.print( F("  bitmapVerticalOffsetInBytes  = ") );Serial.print( bitmapVerticalOffsetInBytes );Serial.println();
+    Serial.print( F("  bitmapVerticalOffsetInBits   = ") );Serial.print( bitmapVerticalOffsetInBits );Serial.println();
     Serial.print( F("  bitmapHeightInBytes          = ") );Serial.print( bitmapHeightInBytes );Serial.println();
     //Serial.print( F("  nextLineOffset               = ") );Serial.println( nextLineOffset );
     Serial.print( F("  scalingThreshold[0]          = ") );Serial.print( scalingThreshold[0] );Serial.println();

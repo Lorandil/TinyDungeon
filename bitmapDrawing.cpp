@@ -166,7 +166,7 @@ uint8_t Dungeon::getDownScaledBitmapData( int8_t x,                      // alre
     uint8_t bitMask = pgm_read_byte( bitMaskFromScalingFactor + scaleFactor );
 
     // calculate the first and last bit to be processed
-    uint8_t startBitNo = object->bitmapVerticalOffsetInBytes * 8;
+    uint8_t startBitNo = object->bitmapVerticalOffsetInBits;
     uint8_t endBitNo = startBitNo + object->bitmapHeightInBytes * 8;
     
     // but we are starting with bit 0 (and its friends)

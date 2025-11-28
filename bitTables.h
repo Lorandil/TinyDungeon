@@ -70,12 +70,3 @@ const uint8_t bitMaskFromScalingFactor[] PROGMEM =
 //    -     1     2     -       4 
     0x00, 0x01, 0x03, 0x00  , 0x0F
 };
-
-/*
-// table of squared scale factors
-const uint8_t squaredScaleFactors[] PROGMEM =
-{
-//  n/a |  1  |  2  | n/a |  4 
-     0,    1,    4,    9,    16
-}
-*/
