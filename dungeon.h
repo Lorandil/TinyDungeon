@@ -38,7 +38,6 @@ public:
 
   uint8_t *getCellRaw( int8_t x, int8_t y, const int8_t distance, const int8_t offsetLR, const uint8_t orientation );
   void limitDungeonPosition( int8_t &x, int8_t &y );
-  void updateStatusPane();
   void openChest( INTERACTION_INFO &info );
   void initDice();
   void updateDice();
