@@ -170,7 +170,7 @@ void Dungeon::checkPlayerMovement()
 
     if ( isLeftPressed() ) 
     {
-      // turn left
+      // turn left (and limit direction to N,E,S,W)
       _dungeon.dir = ( _dungeon.dir - 1 ) & 0x03;
       stepSound();
       playerAction = true;
@@ -178,7 +178,7 @@ void Dungeon::checkPlayerMovement()
     
     if ( isRightPressed() )
     {
-      // turn right
+      // turn right (and limit direction to N,E,S,W)
       _dungeon.dir = ( _dungeon.dir + 1 ) & 0x03;
       stepSound();
       playerAction = true;
@@ -186,7 +186,8 @@ void Dungeon::checkPlayerMovement()
 
     if ( isUpPressed() )
     {
-      if ( ( ( *cell ) & FLAG_SOLID ) != FLAG_SOLID )
+      // is there no wall in front of the player?
+      if ( !( *cell & FLAG_SOLID ) )
       {
         stepSound();
         stepSound();
@@ -200,7 +201,7 @@ void Dungeon::checkPlayerMovement()
           case SOUTH:
             _dungeon.playerY++; break;
           case WEST:
-          default:  // this saves 4 bytes
+          default:  // this may save 4 bytes
             _dungeon.playerX--; break;
         }
 
@@ -215,7 +216,7 @@ void Dungeon::checkPlayerMovement()
     
     if ( isDownPressed() )
     {
-      if ( ( *( getCellRaw( _dungeon.playerX, _dungeon.playerY, -1, 0, _dungeon.dir ) ) & FLAG_SOLID ) != FLAG_SOLID )
+      if ( !( *( getCellRaw( _dungeon.playerX, _dungeon.playerY, -1, 0, _dungeon.dir ) ) & FLAG_SOLID ) )
       {
         stepSound();
         stepSound();
@@ -297,10 +298,10 @@ void Dungeon::checkPlayerMovement()
 
         uint8_t cellValue = *cell;
 
-        #ifdef USE_SERIAL_PRINT
-          _dungeon.serialPrint();
-          Serial.print(F("*cell = "));printHexToSerial( cellValue );Serial.println();
-        #endif
+      #ifdef USE_SERIAL_PRINT
+        _dungeon.serialPrint();
+        Serial.print(F("*cell = "));printHexToSerial( cellValue );Serial.println();
+      #endif
 
         if ( cellValue & FLAG_MONSTER )
         {
@@ -403,8 +404,8 @@ uint8_t *Dungeon::getCellRaw( int8_t x, int8_t y, const int8_t distance, const i
       y += offsetLR;
       break;
     }
-    //case WEST:
-    default:
+    case WEST:
+    default:  // this may save 4 bytes
     {
       x -= distance;
       y -= offsetLR;
