@@ -743,6 +743,11 @@ void Dungeon::renderImage()
       // send 8 vertical pixels to the display
       SendPixels( pixels );
     } // for y
+
+    // TODO: remove this!
+    // display the whole screen
+    //DisplayBuffer();
+
   } // for x
 
   StopSendPixels();

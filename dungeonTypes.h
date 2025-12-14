@@ -43,42 +43,72 @@ const uint8_t  COMPASS_SIZE_X            =  5;
 // possible item types
 enum
 {
-  // bit 2 marks an object as a "monster" 
-  FLAG_MONSTER        = 0x04,
-  // bit 3 is reserved for marking objects as "SOLID", making them impassable
-  FLAG_SOLID          = 0x08,
+  // nutting
+  EMPTY                   = 0x00,
   
-  WALL_MASK           = 0x10,
-  OBJECT_MASK         = 0xF0 | FLAG_SOLID | FLAG_MONSTER,
+  // not every object should be visible from any direction
+  FLAG_LIMITED_VISIBILITY = 0x02,
 
-  EMPTY               = 0x00,
+  // bit 2 marks an object as a "monster" 
+  FLAG_MONSTER            = 0x04,
 
-  // Caution! The following objects are always rendered *on* a wall,
-  // so the wall bit (0) is always set!
-  FAKE_WALL           = 0x10,
-  WALL                = FAKE_WALL | FLAG_SOLID,
-  DOOR                = 0x30	| FLAG_SOLID,
-  LVR_LEFT            = 0x50	| FLAG_SOLID,
-  LVR_RIGHT           = 0x70	| FLAG_SOLID,
+  // bit 3 is reserved for marking objects as "SOLID", making them impassable
+  FLAG_SOLID              = 0x08,
 
-  // Caution! The following objects are *never* rendered on a wall,
-  // so the wall bit (0) must be '0'
-  RAT                 = 0x20 | FLAG_MONSTER | FLAG_SOLID,
-  SKELETON            = 0x40 | FLAG_MONSTER | FLAG_SOLID,
-  BEHOLDER            = 0x60 | FLAG_MONSTER | FLAG_SOLID,
-  CLOSED_CHEST        = 0x80, // | FLAG_SOLID,
+  // it looks like a wall, but you can pass through it...
+  FAKE_WALL               = 0x10,
+  // unless it is solid...
+  WALL                    = FAKE_WALL | FLAG_SOLID,
+  
+  // Caution! The following objects are always rendered *on* a wall, so the wall bit must be '1'
+  DOOR                    = 0x20 | WALL,
+  SWITCH_L                = 0x40 | WALL,
+  SWITCH_R                = 0x60 | WALL,
+
+  // Caution! The following objects are *never* rendered on a wall, so the wall bit must be '0'
+  RAT                     = 0x20 | FLAG_MONSTER | FLAG_SOLID,
+  SKELETON                = 0x40 | FLAG_MONSTER | FLAG_SOLID,
+  BEHOLDER                = 0x60 | FLAG_MONSTER | FLAG_SOLID,
+  CLOSED_CHEST            = 0x80, // | FLAG_SOLID,
   // a mimic is like a chest, but you may not pass through it
-  MIMIC               = CLOSED_CHEST | FLAG_MONSTER | FLAG_SOLID,
-  OPEN_CHEST          = 0xA0, // | FLAG_SOLID,
-  FOUNTAIN            = 0xC0 | FLAG_SOLID,
-  BARS                = 0xE0 | FLAG_SOLID,
+  MIMIC                   = CLOSED_CHEST | FLAG_MONSTER | FLAG_SOLID,
+  OPEN_CHEST              = 0xA0, // | FLAG_SOLID,
+  FOUNTAIN                = 0xC0 | FLAG_SOLID,
+  BARS                    = 0xE0 | FLAG_SOLID,
+
+  WALL_MASK               = 0x10,
+  OBJECT_MASK             = 0xF0 | FLAG_SOLID | FLAG_MONSTER,
+};
+
+// orientations
+enum
+{
+  NORTH   = 0x00,   // 0b00
+  UP      = NORTH,
+  EAST    = 0x01,   // 0b01
+  RIGHT   = EAST,
+  SOUTH   = 0x02,   // 0b10
+  DOWN    = SOUTH,
+  WEST    = 0x03,
+  LEFT    = WEST,   // 0b11
+  MAX_ORIENTATION = 4,
+};
+
+// limited orientation for objects 
+// (because objects look the same from all directions and some objects look wrong from orthognonal directions,
+//  e.g. bars and switches)
+enum
+{
+  E_W                     = FLAG_LIMITED_VISIBILITY | 0x00,
+  N_S                     = FLAG_LIMITED_VISIBILITY | 0x01,
+  LIMITED_VISIBILITY_MASK = 0x01
 };
 
 // special FX types
 enum 
 {
-  TELEPORTER          = 0x01,
-  SPINNER             = 0x02,
+  TELEPORTER              = 0x01,
+  SPINNER                 = 0x02,
 };
 
 // list of items in chests or monster treasure
@@ -174,8 +204,19 @@ public:
       {
         uint8_t cellValue = currentLevel[y * LEVEL_WIDTH + x];
         char text[3] = "..";
-        if ( ( cellValue & OBJECT_MASK ) == LVR_LEFT ) { memcpy_P( text, F("W>"), 2 ); }
-        else if ( ( cellValue & OBJECT_MASK ) == LVR_RIGHT ) { memcpy_P( text, F("W<"), 2 ); }
+        if ((x == playerX) && (y == playerY))
+        {
+          switch (dir)
+          {
+            case NORTH: memcpy_P(text, F("@^"), 2); break;
+            case EAST:  memcpy_P(text, F("@>"), 2); break;
+            case SOUTH: memcpy_P(text, F("@v"), 2); break;
+            default:
+            case WEST:  memcpy_P(text, F("@<"), 2); break;
+          }
+        }
+        else if ( ( cellValue & OBJECT_MASK ) == SWITCH_L ) { memcpy_P( text, F("W>"), 2 ); }
+        else if ( ( cellValue & OBJECT_MASK ) == SWITCH_R ) { memcpy_P( text, F("W<"), 2 ); }
         else if ( ( cellValue & WALL_MASK ) == FAKE_WALL ) { memcpy_P( text, F("W "), 2 ); }
         else if ( cellValue == SKELETON ) { memcpy_P( text, F("sk"), 2 ); }
         else if ( cellValue == BEHOLDER ) { memcpy_P( text, F("bh"), 2 ); }
@@ -305,18 +346,4 @@ public:
     Serial.println();
   }
 #endif
-};
-
-// orientations
-enum 
-{
-  NORTH = 0,
-  UP    = NORTH,
-  EAST  = 1,
-  RIGHT = EAST,
-  SOUTH = 2,
-  DOWN  = SOUTH,
-  WEST  = 3,
-  LEFT  = WEST,
-  MAX_ORIENTATION = 4,
 };

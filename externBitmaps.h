@@ -38,8 +38,8 @@ const NON_WALL_OBJECT objectList [11] PROGMEM = {
   { BEHOLDER    ,  32,           0 * 8,           7,       { 1, 2,  5 },     beholder    },  //  1
   { BARS        ,  28,           1 * 8,           6,       { 1, 2,  5 },     newBars     },  //  2
   { DOOR        ,  32,           1 * 8,           7,       { 1, 3, 12 },     door        },  //  3
-  { LVR_LEFT    ,  16,           3 * 8,           1,       { 1, 2,  8 },     leverLeft   },  //  4
-  { LVR_RIGHT   ,  16,           3 * 8,           1,       { 1, 2,  8 },     leverRight  },  //  5
+  { SWITCH_L    ,  16,           3 * 8,           1,       { 1, 2,  8 },     leverLeft   },  //  4
+  { SWITCH_R   ,  16,           3 * 8,           1,       { 1, 2,  8 },     leverRight  },  //  5
   { CLOSED_CHEST,  24,           4 * 8,           3,       { 1, 3, 99 },     chestClosed },  //  6
   /* TODO: there is no reason to keep the MIMIC as a separate bitmap object, as it is identical to the closed chest! 
      Is there an easy way to fix this? */
@@ -86,5 +86,6 @@ const SIMPLE_WALL_INFO arrayOfWallInfo[] PROGMEM = {
   { outerLeftRightWalls_D3 ,  15   ,  29 ,   0x34      ,     3   ,     -2    ,   0  ,  30 }, // 21
   { outerLeftRightWalls_D3 ,  66   ,  80 ,   0x34      ,     3   ,     +2    ,  15  ,  30 }, // 22
 
-  { NULL                   ,   0   ,   0 ,   0x00      ,     0   ,      0    ,   0  ,   0 }, // 7 unused bytes.. how can I use these properly?
+  // no wall found, assuming full size (is this required?)
+  { NULL                   ,   0   ,  96 ,   0x07      ,     0   ,      0    ,   0  ,  96 }, // 23
 };

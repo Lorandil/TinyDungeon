@@ -5,7 +5,7 @@
 #include "wallBitmaps.h"
 
 /*--------------------------------------------------------*/
-uint8_t Dungeon::lightingMask( const uint8_t &viewDistance )
+uint8_t Dungeon::getLightingMask( const uint8_t &viewDistance )
 {
   return( pgm_read_byte( lightingTable + _dungeon.lightingOffset + viewDistance ) );
 }
@@ -71,7 +71,7 @@ void Dungeon::renderDungeonColumn( const uint8_t x )
           // - or use simple 'if ( wallInfo.viewDistance > 2 )...' instead of switch statement
           // - OR use lookup table for dynamic lighting!
           //uint8_t lightMask = pgm_read_byte( lightingTable + _dungeon.lightingOffset + wallInfo.viewDistance * 2 + ( x & 0x01 ) );
-          *buffer++ = pixels & lightingMask( wallInfo.viewDistance * 2 + ( x & 0x01 ) );
+          *buffer++ = pixels & getLightingMask( wallInfo.viewDistance * 2 + ( x & 0x01 ) );
         #else
           *buffer++ = pixels;
         #endif
@@ -89,48 +89,75 @@ void Dungeon::renderDungeonColumn( const uint8_t x )
 
   NON_WALL_OBJECT object;
 
+  uint8_t cellValue;
+
   // draw NWOs (Non Wall Objects) over the background pixels (with mask!)
   for ( uint8_t distance = maxObjectDistance; distance > 0; distance-- )
   {
-    for ( uint8_t n = 0; n < sizeof(objectList) / sizeof(objectList[0]); n++ )
+    for ( uint8_t n = 0; n < sizeof( objectList ) / sizeof( objectList[0] ); n++ )
     {
       memcpy_P( &object, &objectList[n], sizeof(object) );
       uint8_t objectWidth = object.bitmapWidth >> distance;
 
-      // non wall objects will only be rendered if directly in front of the player (for now!)
-      // TODO: fix this! ;)
-      if ( ( x >= DUNGEON_WINDOW_CENTER_X - objectWidth ) && ( x < DUNGEON_WINDOW_CENTER_X + objectWidth ) )
+      const int8_t* offsets = objectCenterPositions + distance * objCenterPosPerLine;
+      int8_t leftRightOffset = objCenterPosStartOffset;
+
+      // find correct column
+      while ( leftRightOffset <= objCenterPosEndOffset )
       {
-        if ( ( *(getCellRaw( _dungeon.playerX, _dungeon.playerY, distance, 0, _dungeon.dir ) ) & OBJECT_MASK ) == object.itemType )
+        // is this a valid place for the object?
+        if ( ( x >= *offsets - objectWidth ) && ( x < *offsets + objectWidth ) )
         {
-          uint8_t* buffer = _dungeon.lineBuffer;
-          // walk over all vertical pixels in the current column
-          for ( uint8_t y = 0; y < DUNGEON_WINDOW_SIZE_Y / 8; y++ )
+          // is there such an object at the target position?
+          cellValue = *( getCellRaw( _dungeon.playerX, _dungeon.playerY, distance, leftRightOffset, _dungeon.dir ) );
+          if ( ( cellValue & OBJECT_MASK ) == object.itemType )
           {
-            uint8_t posX = x - DUNGEON_WINDOW_CENTER_X + objectWidth;
-            // free background
-            uint8_t mask = getDownScaledBitmapData( posX, y, distance, &object, true );
-            *buffer &= mask;
-            // and overlay scaled bitmap
-            uint8_t scaledBitmap = getDownScaledBitmapData( posX, y, distance, &object, false );
-
-          #ifdef _ENABLE_OBJECT_SHADING_
-            // use shading effect to pronounce the distance of an object (at the cost of clarity)
-            //uint8_t lightMask = pgm_read_byte( lightingTable + _dungeon.lightingOffset + wallInfo.viewDistance );
-            scaledBitmap &= lightingMask( wallInfo.viewDistance );
-          #endif
-
-            // is it the object right in front of the player (must be, if distance is 1)
-            if ( distance == 1 )
+            // some objects must not be visibile from orthogonal directions
+            if ( cellValue & FLAG_LIMITED_VISIBILITY )
             {
-              // apply inversion effect if monster was hit...
-              scaledBitmap ^= (_dungeon.invertMonsterEffect & ~mask);
+              // forbidden direction?
+              if ( ( cellValue & LIMITED_VISIBILITY_MASK ) == ( _dungeon.dir & LIMITED_VISIBILITY_MASK ) )
+              {
+                // not visible
+                break;
+              }
             }
-            *buffer++ |= scaledBitmap;
-          } // for y
+            uint8_t* buffer = _dungeon.lineBuffer;
+            // walk over all vertical pixels in the current column
+            for ( uint8_t y = 0; y < DUNGEON_WINDOW_SIZE_Y / 8; y++ )
+            {
+              uint8_t posX = x - *offsets + objectWidth;
+              // free background
+              uint8_t mask = getDownScaledBitmapData(posX, y, distance, &object, true);
+              *buffer &= mask;
+              // and overlay scaled bitmap
+              uint8_t scaledBitmap = getDownScaledBitmapData(posX, y, distance, &object, false);
+
+            #ifdef _ENABLE_OBJECT_SHADING_
+              // use shading effect to pronounce the distance of an object (at the cost of clarity)
+              //uint8_t lightMask = pgm_read_byte( lightingTable + _dungeon.lightingOffset + wallInfo.viewDistance );
+              scaledBitmap &= getLightingMask(wallInfo.viewDistance);
+            #endif
+
+              // is it the object right in front of the player (must be, if distance is 1)
+              if (distance == 1)
+              {
+                // apply inversion effect if monster was hit...
+                scaledBitmap ^= (_dungeon.invertMonsterEffect & ~mask);
+              }
+              *buffer++ |= scaledBitmap;
+            } // for y
+            break;
+          }
         }
-      }
+      
+        // next column
+        offsets++;
+        leftRightOffset++;
+      } // while
+
     } // for n
+
   } // for distance
 }
 

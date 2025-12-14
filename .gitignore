@@ -22,3 +22,6 @@ README.md.backup
 /TinyDungeon/Arduino.h
 /TinyDungeon/Wire.h
 /x64/Release
+/enc_temp_folder/*
+/doc/TinyDungeonObjectPlanning.xlsx
+/doc/~$TinyDungeonObjectPlanning.xlsx
