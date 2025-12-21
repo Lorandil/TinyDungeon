@@ -658,7 +658,7 @@ void Dungeon::playerInteraction( uint8_t *cell, const uint8_t cellValue )
       bool modifyTargetPosition = true;
 
         // special handling for special types
-        switch ( cellValue )
+        switch ( cellValue & OBJECT_MASK )
         {
         // a closed chest?
         case CLOSED_CHEST:
