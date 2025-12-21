@@ -1,3 +1,8 @@
+Bugs
+* Door can be opened without a key (again!)
+* double gates are rendered from all directions (entry of great hall)
+* switch is rendered from all directions (great hall)
+
 Open Issues
 * teleporters and spinners cannot be removed/enabled
 * non wall items are only rendered in the center line of view, 

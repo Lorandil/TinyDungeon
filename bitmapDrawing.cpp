@@ -122,6 +122,15 @@ void Dungeon::renderDungeonColumn( const uint8_t x )
                 break;
               }
             }
+
+            // if the object is in the same distance as a wall object and not placed on a wall,
+            // it must not be rendered
+            if ((wallInfo.viewDistance == distance)
+              && !(cellValue & WALL_MASK))
+            {
+              return;
+            }
+
             uint8_t* buffer = _dungeon.lineBuffer;
             // walk over all vertical pixels in the current column
             for ( uint8_t y = 0; y < DUNGEON_WINDOW_SIZE_Y / 8; y++ )
@@ -142,7 +151,7 @@ void Dungeon::renderDungeonColumn( const uint8_t x )
               // is it the object right in front of the player (must be, if distance is 1)
               if (distance == 1)
               {
-                // apply inversion effect if monster was hit...
+                // apply inversion effect if the monster was hit...
                 scaledBitmap ^= (_dungeon.invertMonsterEffect & ~mask);
               }
               *buffer++ |= scaledBitmap;

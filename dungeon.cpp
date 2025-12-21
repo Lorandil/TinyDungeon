@@ -106,6 +106,7 @@ void Dungeon::gameLoop()
     _dungeon.serialPrint();
   #endif
 
+#ifdef _ENABLE_WALL_SHADING_
     // is the lighting still dimmend?
     if ( _dungeon.lightingOffset > 0 )
     {
@@ -113,6 +114,7 @@ void Dungeon::gameLoop()
       _dungeon.lightingOffset--;
     }
     else
+#endif
     {
       // update player's position and orientation
       checkPlayerMovement();
@@ -124,6 +126,7 @@ void Dungeon::gameLoop()
     }
   }
 
+#ifdef _ENABLE_WALL_SHADING_
   // player is dead... turn dungeon to black
   while ( _dungeon.lightingOffset < ( MAX_VIEW_DISTANCE + 1 ) * 2 )
   {
@@ -132,6 +135,8 @@ void Dungeon::gameLoop()
     // draw image
     renderImage();
   }
+#endif
+
   // clear all objects from dungeon
   clear();
 

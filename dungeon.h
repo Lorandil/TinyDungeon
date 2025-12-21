@@ -73,13 +73,13 @@ const uint8_t lightingTable[] PROGMEM = { 0b11111111, 0b11111111, // distance 0
                                           0b00000000, 0b00000000  // distance 7
                                         };
 
-constexpr int8_t objCenterPosPerLine = 1;
+constexpr int8_t objCenterPosPerLine = 9;
 constexpr int8_t objCenterPosStartOffset = - ( objCenterPosPerLine - 1 ) / 2;
 constexpr int8_t objCenterPosEndOffset = ( objCenterPosPerLine - 1 ) / 2;
 // center positions for different object sizes and distances
 // TODO: restrict size to width of 3 or 5 positions per line to save flash (and nobody will notice it anyway)
-const int8_t objectCenterPositions[] PROGMEM = { /*-127, -127, -127, -127,*/  48, /*-127,  -127, -127, -127,*/ // 0
-                                                 /*-127, -127, -127,    4,*/  48, /*  92,  -127, -127, -127,*/ // 1
-                                                 /*-127, -127,    4,   26,*/  48, /*  70,    92, -127, -127,*/ // 2
-                                                 /*   0,   12,   24,   36,*/  48, /*  60,    72,   84,   96 */ // 3
+const int8_t objectCenterPositions[] PROGMEM = { -127, -127, -127, -127,  48, -127,  -127, -127, -127, // 0
+                                                 -127, -127, -127,    4,  48,   92,  -127, -127, -127, // 1
+                                                 -127, -127,    4,   26,  48,   70,    92, -127, -127, // 2
+                                                    0,   12,   24,   36,  48,   60,    72,   84,   96  // 3
                                                };
