@@ -39,12 +39,12 @@ const NON_WALL_OBJECT objectList [11] PROGMEM = {
   { BARS        ,  28,           1 * 8,           6,       { 1, 2,  5 },     newBars     },  //  2
   { DOOR        ,  32,           1 * 8,           7,       { 1, 3, 12 },     door        },  //  3
   { SWITCH_L    ,  16,           3 * 8,           1,       { 1, 2,  8 },     leverLeft   },  //  4
-  { SWITCH_R   ,  16,           3 * 8,           1,       { 1, 2,  8 },     leverRight  },  //  5
-  { CLOSED_CHEST,  24,           4 * 8,           3,       { 1, 3, 99 },     chestClosed },  //  6
+  { SWITCH_R    ,  16,           3 * 8,           1,       { 1, 2,  8 },     leverRight  },  //  5
+  { CLOSED_CHEST,  24,           4 * 8,           3,       { 1, 3,  8 },     chestClosed },  //  6
   /* TODO: there is no reason to keep the MIMIC as a separate bitmap object, as it is identical to the closed chest! 
      Is there an easy way to fix this? */
   { MIMIC       ,  24,           4 * 8,           3,       { 1, 3, 99 },     chestClosed },  //  7
-  { OPEN_CHEST  ,  24,           4 * 8,           3,       { 1, 3, 99 },     chestOpen   },  //  8
+  { OPEN_CHEST  ,  24,           4 * 8,           3,       { 1, 3,  8 },     chestOpen   },  //  8
   { FOUNTAIN    ,  12,           4 * 8,           3,       { 1, 2, 99 },     fountain    },  //  9
   { RAT         ,  20,           5 * 8,           2,       { 1, 2, 99 },     rat         },  // 10
 };
