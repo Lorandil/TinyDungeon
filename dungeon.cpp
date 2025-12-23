@@ -1,7 +1,7 @@
 #include <Arduino.h>
 //#include <avr/pgmspace.h>
 
-#include "bitTables.h"
+//#include "bitTables.h"
 #include "dungeon.h"
 #include "LevelDefinitions.h"
 #include "dungeonTypes.h"
@@ -24,8 +24,8 @@ void Dungeon::init()
   clear();
 
   // Prepare the dungeon
-  _dungeon.playerX = 1; //2; //7; // we could save 4 bytes here, if the whole level is shifted, so that the starting point is at (0,0)
-  _dungeon.playerY = 1; //12; //11;
+  _dungeon.playerX = 1; // 9; //2; //7; // we could save 4 bytes here, if the whole level is shifted, so that the starting point would be at (0,0)
+  _dungeon.playerY = 1;// 12; //12; //11;
   _dungeon.dir  = EAST;
   // prepare player stats
   _dungeon.playerHP = 10;
@@ -841,10 +841,11 @@ void Dungeon::renderImage()
         if ( y >= SKELETON_ROW )
         {
           constexpr uint8_t joeyBitmapWidth = 28;
-          constexpr uint8_t joeyMaskWidth = 28;
+          constexpr uint8_t joeyBitmapHeight = 5;
+          constexpr uint8_t joeyMaskWidth = joeyBitmapWidth * joeyBitmapHeight;
           // the y position needs correction, because we are already in row 3
-          const uint8_t *offsetXY = joey + ( y - SKELETON_ROW ) * ( joeyBitmapWidth + joeyMaskWidth ) + joeyBitmapWidth + 2 - x;
-          if ( ( x >= 2 ) && ( x < 30 ) )
+          const uint8_t *offsetXY = joey + y - SKELETON_ROW + ( joeyBitmapWidth - x ) * joeyBitmapHeight;
+          if ( ( x >= 1 ) && ( x < 29 ) )
           {
             // use mask
             pixels &= pgm_read_byte( offsetXY + joeyMaskWidth );

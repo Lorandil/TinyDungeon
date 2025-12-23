@@ -127,6 +127,7 @@ void Sound( const uint8_t freq, const uint8_t dur );
 
 // functions to simplify display handling between ATtiny85 and Ardafruit_SSD1306
 void InitDisplay();
+void InitDisplayVertical();
 void PrepareDisplayRow( uint8_t y );
 void StartSendPixels();
 void SendPixels( uint8_t pixels );

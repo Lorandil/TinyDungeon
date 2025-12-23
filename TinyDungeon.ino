@@ -1,4 +1,4 @@
-//   >>>>>  T-I-N-Y  D-U-N-G-E-O-N v1.1.0 for ATTINY85  MIT License <<<<
+//   >>>>>  T-I-N-Y  D-U-N-G-E-O-N v2.0.1 for ATTINY85  MIT License <<<<
 //						Tinyjoypad rev2 compatible
 //                   Developer: Sven B 2021-2025
 //              Contact EMAIL: Lorandil@gmx.de
@@ -14,10 +14,10 @@
 // Resources:
 // ----------
 // A SSD1306 library for I2C is required:
-// - for ATtiny85 the <ssd1306xled> library by Tinusaur/Neven Boyanov is required.
+// - for ATtiny85 the a modified version of the <ssd1306xled> library by Tinusaur/Neven Boyanov/Tejashwi Kalp Taru is required.
 // - for all other micro controllers the Adafruit_SSD1306 library is used.
 //
-// Because the Arduino IDE doesn't come with ATtiny85 support, a suitable core is required:
+// Because the Arduino IDE doesn't come with ATtiny85 support, a suitable core is also required:
 //   To stuff all code and data into the 8192 bytes of the ATtiny85
 //   the ATTinyCore (v1.5.2) by Spence Konde is recommended.
 //   The core is available at github: [https://github.com/SpenceKonde/ATTinyCore], just add the
@@ -36,14 +36,9 @@ void setup()
 {
   // initialize the pins (and serial port if present)
   InitTinyJoypad();
-  // perform display initialization
-  InitDisplay();
 
-#ifdef _VERTICAL_RENDERING
   // switch addressing mode to vertical adressing
-  // TODO: create an alternate InitDisplay method which uses a different initialization code
-  EnableVerticalAddressingMode();
-#endif
+  InitDisplayVertical();
 }
 
 /*--------------------------------------------------------*/

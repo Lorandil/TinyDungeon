@@ -312,6 +312,45 @@ void InitDisplay()
 }
 
 /*-------------------------------------------------------*/
+void InitDisplayVertical()
+{
+#if defined(__AVR_ATtiny85__) /* codepath for ATtiny85 */
+  #if defined( _SSD1306XLED_TINY_INIT_SUPPORTED_ )
+    #if defined( _SSD1306XLED_INIT_VERTICAL_SUPPORTED_ )
+      // library supports shorter init method
+      SSD1306.ssd1306_tiny_init_vertical();
+    #else    
+      // library supports shorter init method
+      SSD1306.ssd1306_tiny_init();
+      // enable vertical addressing mode
+      EnableVerticalAddressingMode();
+    #endif
+  #else
+    // use standard init method
+    SSD1306.ssd1306_init();
+    // enable vertical addressing mode
+    EnableVerticalAddressingMode();
+  #endif
+#else
+  // SSD1306_SWITCHCAPVCC = generate display voltage from 3.3V internally
+  // Address 0x3D for 128x64
+  if( !display.begin(SSD1306_SWITCHCAPVCC, 0x3C)) 
+  { 
+    // extended the error message
+    Serial.println(F("SSD1306 allocation failed - 1024 bytes for frame buffer required!")); for(;;);
+  }
+
+  _verticalAddressingModeEnabled = true;
+  // reset display coordinates
+  _column = 0;
+  _row = 0;
+
+  // get raw image buffer
+   _adafruitBuffer = display.getBuffer();
+#endif
+}
+
+/*-------------------------------------------------------*/
 void EnableVerticalAddressingMode()
 {
 #if defined(__AVR_ATtiny85__) /* codepath for ATtiny85 */

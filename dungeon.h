@@ -5,19 +5,18 @@
 #include "externBitmaps.h"
 
 // use nice shading effect, giving more depth
-//#define _ENABLE_WALL_SHADING_
-// use object shading, reduces clarity (not recommended)
-//#define _ENABLE_OBJECT_SHADING_
+#define _ENABLE_WALL_SHADING_
+// object shading requires wall shading to work
+#ifdef _ENABLE_WALL_SHADING_
+  // use object shading, reduces clarity (not recommended)
+  #define _ENABLE_OBJECT_SHADING_
+#endif
 
 // uncomment this line to make the player invincible
 //#define _GODMODE_
 
 // uncomment this to slowly kill the player (required for testing)
 //#define _SLOW_DEATH
-
-// used for vertical addressing mode - this is still experimental but should be able to
-// speed up the whole drawing a lot... let's see...
-#define _VERTICAL_RENDERING
 
 // Dungeon
 class Dungeon
@@ -73,13 +72,15 @@ const uint8_t lightingTable[] PROGMEM = { 0b11111111, 0b11111111, // distance 0
                                           0b00000000, 0b00000000  // distance 7
                                         };
 
-constexpr int8_t objCenterPosPerLine = 9;
+constexpr int8_t objCenterPosPerLine = 3;
 constexpr int8_t objCenterPosStartOffset = - ( objCenterPosPerLine - 1 ) / 2;
 constexpr int8_t objCenterPosEndOffset = ( objCenterPosPerLine - 1 ) / 2;
 // center positions for different object sizes and distances
-// TODO: restrict size to width of 3 or 5 positions per line to save flash (and nobody will notice it anyway)
-const int8_t objectCenterPositions[] PROGMEM = { -127, -127, -127, -127,  48, -127,  -127, -127, -127, // 0
-                                                 -127, -127, -127,    4,  48,   92,  -127, -127, -127, // 1
-                                                 -127, -127,    4,   26,  48,   70,    92, -127, -127, // 2
-                                                    0,   12,   24,   36,  48,   60,    72,   84,   96  // 3
+// restricted size to width of 3 positions per line to save flash (and nobody will notice the difference anyway)
+// Note: For distance 1 the right value should have been 136, but that's too big for int8_t, so we use 127 instead
+//                                   offset[px]: left,  center, right distance, width [px]
+const int8_t objectCenterPositions[] PROGMEM = { -127,   48,     127, //  0      176px (not used!)
+                                                  -40,   48,     127, //  1       88px
+                                                    4,   48,      88, //  2       44px
+                                                   26,   48,      70, //  3       22px
                                                };

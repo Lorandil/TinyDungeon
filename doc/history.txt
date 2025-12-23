@@ -58,8 +58,11 @@ already achieved:
 * changed compass from letters to arrows
 * added mimic, reusing the chest bitmap
 
+Graphics Engine
+  * extend object drawing to full field of view?
 
-next steps:
+
+Next steps:
 * monsters should attack player on approaching (if they attack first)
 
 Combat System
@@ -81,11 +84,10 @@ Game Logic
   * require key to open chests/doors - use same key type for both? yes
 
 Graphics Engine
-  * extend object drawing to full field of view?
  [* add stairs up/down]
   * add treasure
   * ...
-  * add fun!
+  * add more fun!
 
 perhaps:
 ? use just left walls and mirror them for right:
@@ -95,7 +97,7 @@ perhaps:
   - or use mirror table (nibble based?)
   - estimation: will save 300 bytes?
 
-  - create darkness effect (disable every 2nd pixel) when no torch is lit?  
+  - create darkness effect (disable every 2nd pixel) when no torch is lit? btw: which torch?
 
 Final Steps:
 ? add floor graphics

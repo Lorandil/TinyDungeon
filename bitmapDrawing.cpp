@@ -19,7 +19,7 @@ void Dungeon::renderDungeonColumn( const uint8_t x )
   // here is what we're gonna do:
   // - find the frontmost wall in this column and determine the max. view distance
   // start a y-loop
-  //   - get the wall pixels and apply shading
+  //   - get the wall pixels and apply shading (if enabled)
   //   - place all visible NWOs (Non Wall Objects) over the wall pixels from back to front and apply shading
 
   SIMPLE_WALL_INFO wallInfo;
@@ -40,7 +40,8 @@ void Dungeon::renderDungeonColumn( const uint8_t x )
     // check conditions
     if ( ( x >= wallInfo.startPosX ) && ( x <= wallInfo.endPosX ) )
     {
-      bool mirror = ( ( _dungeon.playerX + _dungeon.playerY ) & 0x01 );
+      // use mirror effect depending on position and orientation to create walking illusion (this works quite well!)
+      bool mirror = ( ( _dungeon.playerX + _dungeon.playerY +_dungeon.dir ) & 0x01 );
 
       // is there a wall object?
       if ( ( *( getCellRaw( _dungeon.playerX, _dungeon.playerY, wallInfo.viewDistance, wallInfo.leftRightOffset, _dungeon.dir ) ) & WALL_MASK ) == ( WALL & ~FLAG_SOLID ) )
@@ -54,10 +55,8 @@ void Dungeon::renderDungeonColumn( const uint8_t x )
         int8_t posX = x - wallInfo.startPosX;
 
         // calculate the x offset depending on the mirror flag
-        //uint8_t offsetX = mirror ? wallInfo.width - 1 - posX - wallInfo.relPos
-        //                         : posX + wallInfo.relPos;
-        uint8_t offsetX = wallInfo.width - 1 - posX - wallInfo.relPos;  // ternary operator requires 4 bytes more than separate lines...
-        if ( mirror ) { offsetX = posX + wallInfo.relPos; }
+        uint8_t offsetX = mirror ? wallInfo.width - 1 - posX - wallInfo.relPos
+                                 : posX + wallInfo.relPos;
         
         // copy wall data to the right position
         const uint8_t *bitmapData = wallInfo.wallBitmap + offsetX * sizeY;

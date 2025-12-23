@@ -78,6 +78,13 @@ enum
 
   WALL_MASK               = 0x10,
   OBJECT_MASK             = 0xF0 | FLAG_SOLID | FLAG_MONSTER,
+
+  // limited orientation for objects 
+  // (because objects look the same from all directions and some objects look wrong from orthognonal directions,
+  //  e.g. bars and switches)
+  E_W = FLAG_LIMITED_VISIBILITY | 0x00,
+  N_S = FLAG_LIMITED_VISIBILITY | 0x01,
+  LIMITED_VISIBILITY_MASK = 0x01
 };
 
 // orientations
@@ -92,16 +99,6 @@ enum
   WEST    = 0x03,
   LEFT    = WEST,   // 0b11
   MAX_ORIENTATION = 4,
-};
-
-// limited orientation for objects 
-// (because objects look the same from all directions and some objects look wrong from orthognonal directions,
-//  e.g. bars and switches)
-enum
-{
-  E_W                     = FLAG_LIMITED_VISIBILITY | 0x00,
-  N_S                     = FLAG_LIMITED_VISIBILITY | 0x01,
-  LIMITED_VISIBILITY_MASK = 0x01
 };
 
 // special FX types
@@ -217,12 +214,12 @@ public:
         }
         else if ( ( cellValue & OBJECT_MASK ) == SWITCH_L ) { memcpy_P( text, F("W>"), 2 ); }
         else if ( ( cellValue & OBJECT_MASK ) == SWITCH_R ) { memcpy_P( text, F("W<"), 2 ); }
+        else if ( ( cellValue & OBJECT_MASK ) == DOOR ) { memcpy_P( text, F("D "), 2 ); }
         else if ( ( cellValue & WALL_MASK ) == FAKE_WALL ) { memcpy_P( text, F("W "), 2 ); }
         else if ( cellValue == SKELETON ) { memcpy_P( text, F("sk"), 2 ); }
         else if ( cellValue == BEHOLDER ) { memcpy_P( text, F("bh"), 2 ); }
         else if ( cellValue == RAT ) { memcpy_P( text, F("rt"), 2 ); }
         else if ( cellValue == MIMIC ) { memcpy_P( text, F("mi"), 2 ); }
-        else if ( ( cellValue & OBJECT_MASK ) == DOOR ) { memcpy_P( text, F("D "), 2 ); }
         else if ( ( cellValue & OBJECT_MASK ) == BARS ) { memcpy_P( text, F("# "), 2 ); }
         else if ( ( cellValue & OBJECT_MASK ) == FOUNTAIN ) { memcpy_P( text, F("F "), 2 ); }
         Serial.print( text );
@@ -236,7 +233,7 @@ public:
 };
 
 // NON_WALL_OBJECT
-// (size: 10 bytes)
+// (size: 9 bytes)
 class NON_WALL_OBJECT
 {
   public:
@@ -245,7 +242,6 @@ class NON_WALL_OBJECT
   uint8_t bitmapWidth;
   uint8_t bitmapVerticalOffsetInBits;
   uint8_t bitmapHeightInBytes;
-  //uint8_t nextLineOffset;
   uint8_t scalingThreshold[3];
   const uint8_t *bitmapData;
 
@@ -257,7 +253,6 @@ class NON_WALL_OBJECT
     Serial.print( F("  bitmapWidth                  = ") );Serial.print( bitmapWidth );Serial.println();
     Serial.print( F("  bitmapVerticalOffsetInBits   = ") );Serial.print( bitmapVerticalOffsetInBits );Serial.println();
     Serial.print( F("  bitmapHeightInBytes          = ") );Serial.print( bitmapHeightInBytes );Serial.println();
-    //Serial.print( F("  nextLineOffset               = ") );Serial.println( nextLineOffset );
     Serial.print( F("  scalingThreshold[0]          = ") );Serial.print( scalingThreshold[0] );Serial.println();
     Serial.print( F("  scalingThreshold[1]          = ") );Serial.print( scalingThreshold[1] );Serial.println();
     Serial.print( F("  scalingThreshold[2]          = ") );Serial.print( scalingThreshold[2] );Serial.println();
