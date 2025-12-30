@@ -157,7 +157,7 @@ class MONSTER_STATS
 
 
 // DUNGEON
-// (size: 11 + 256 + 60 bytes)
+// (size: 11 + 256 + 60 + 8 bytes)
 class DUNGEON
 {
 public:
@@ -182,7 +182,38 @@ public:
 #if !defined(__AVR_ATtiny85__)
   void serialPrint()
   {
-    Serial.println( F("DUNGEON") );
+    for ( uint8_t y = 0; y < LEVEL_HEIGHT; y++ )
+    {
+      for( uint8_t x = 0; x < LEVEL_WIDTH; x++ )
+      {
+        uint8_t cellValue = currentLevel[y * LEVEL_WIDTH + x];
+        if ((x == playerX) && (y == playerY))
+        {
+          switch (dir)
+          {
+            case NORTH: Serial.print( F("@^") ); break;
+            case EAST: Serial.print( F("@>") ); break;
+            case SOUTH: Serial.print( F("@v") ); break;
+            default:
+            case WEST: Serial.print( F("<@") ); break;
+          }
+        }
+        else if ( ( cellValue & OBJECT_MASK ) == SWITCH_L ) { Serial.print( F("W>") ); }
+        else if ( ( cellValue & OBJECT_MASK ) == SWITCH_R ) { Serial.print( F("W<") ); }
+        else if ( ( cellValue & OBJECT_MASK ) == DOOR ) { Serial.print( F("D ") ); }
+        else if ( ( cellValue & WALL_MASK ) == FAKE_WALL ) { Serial.print( F("W ") ); }
+        else if ( cellValue == SKELETON ) { Serial.print( F("sk") ); }
+        else if ( cellValue == BEHOLDER ) { Serial.print( F("bh") ); }
+        else if ( cellValue == RAT ) { Serial.print( F("rt") ); }
+        else if ( cellValue == MIMIC ) { Serial.print( F("mi") ); }
+        else if ( ( cellValue & OBJECT_MASK ) == BARS ) { Serial.print( F("# ") ); }
+        else if ( ( cellValue & OBJECT_MASK ) == FOUNTAIN ) { Serial.print( F("F ") ); }
+        else { Serial.print( F("  ") ); }
+      }
+      Serial.println();
+    }
+    Serial.println();
+
     Serial.print( F("  playerX = ") );Serial.print( playerX );
     Serial.print( F(", playerY = ") );Serial.print( playerY );
     Serial.print( F(", dir = ") );Serial.print( dir );
@@ -194,42 +225,8 @@ public:
     Serial.print( F(", Compass = ") );Serial.print( ( playerItems & ITEM_COMPASS ) != 0 );
     Serial.print( F(", displayXorEffect = ") );Serial.print( displayXorEffect );
     Serial.println();
-
-    for ( uint8_t y = 0; y < LEVEL_HEIGHT; y++ )
-    {
-      for( uint8_t x = 0; x < LEVEL_WIDTH; x++ )
-      {
-        uint8_t cellValue = currentLevel[y * LEVEL_WIDTH + x];
-        char text[3] = "..";
-        if ((x == playerX) && (y == playerY))
-        {
-          switch (dir)
-          {
-            case NORTH: memcpy_P(text, F("@^"), 2); break;
-            case EAST:  memcpy_P(text, F("@>"), 2); break;
-            case SOUTH: memcpy_P(text, F("@v"), 2); break;
-            default:
-            case WEST:  memcpy_P(text, F("@<"), 2); break;
-          }
-        }
-        else if ( ( cellValue & OBJECT_MASK ) == SWITCH_L ) { memcpy_P( text, F("W>"), 2 ); }
-        else if ( ( cellValue & OBJECT_MASK ) == SWITCH_R ) { memcpy_P( text, F("W<"), 2 ); }
-        else if ( ( cellValue & OBJECT_MASK ) == DOOR ) { memcpy_P( text, F("D "), 2 ); }
-        else if ( ( cellValue & WALL_MASK ) == FAKE_WALL ) { memcpy_P( text, F("W "), 2 ); }
-        else if ( cellValue == SKELETON ) { memcpy_P( text, F("sk"), 2 ); }
-        else if ( cellValue == BEHOLDER ) { memcpy_P( text, F("bh"), 2 ); }
-        else if ( cellValue == RAT ) { memcpy_P( text, F("rt"), 2 ); }
-        else if ( cellValue == MIMIC ) { memcpy_P( text, F("mi"), 2 ); }
-        else if ( ( cellValue & OBJECT_MASK ) == BARS ) { memcpy_P( text, F("# "), 2 ); }
-        else if ( ( cellValue & OBJECT_MASK ) == FOUNTAIN ) { memcpy_P( text, F("F "), 2 ); }
-        Serial.print( text );
-        Serial.print( F(" ") );
-      }
-    Serial.println();
-    }
-    Serial.println();
-  }
-#endif
+  #endif
+ }
 };
 
 // NON_WALL_OBJECT

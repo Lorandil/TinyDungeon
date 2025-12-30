@@ -3,6 +3,7 @@
 #include "monsterBitmaps.h"
 #include "objectBitmaps.h"
 #include "wallBitmaps.h"
+#include "TinyJoypadUtils.h"
 
 /*--------------------------------------------------------*/
 uint8_t Dungeon::getLightingMask( const uint8_t &viewDistance )
@@ -98,14 +99,18 @@ void Dungeon::renderDungeonColumn( const uint8_t x )
       memcpy_P( &object, &objectList[n], sizeof(object) );
       uint8_t objectWidth = object.bitmapWidth >> distance;
 
+      // offset table for center positions at the corresponding distance
       const int8_t* offsets = objectCenterPositions + distance * objCenterPosPerLine;
+
+      // start at the leftmost position
       int8_t leftRightOffset = objCenterPosStartOffset;
 
-      // find correct column
+      // try to find the correct column
       while ( leftRightOffset <= objCenterPosEndOffset )
       {
+        int8_t offset = pgm_read_byte( offsets );
         // is this a valid place for the object?
-        if ( ( x >= *offsets - objectWidth ) && ( x < *offsets + objectWidth ) )
+        if ( ( x >= offset - objectWidth ) && ( x < offset + objectWidth ) )
         {
           // is there such an object at the target position?
           cellValue = *( getCellRaw( _dungeon.playerX, _dungeon.playerY, distance, leftRightOffset, _dungeon.dir ) );
@@ -134,7 +139,7 @@ void Dungeon::renderDungeonColumn( const uint8_t x )
             // walk over all vertical pixels in the current column
             for ( uint8_t y = 0; y < DUNGEON_WINDOW_SIZE_Y / 8; y++ )
             {
-              uint8_t posX = x - *offsets + objectWidth;
+              uint8_t posX = x - offset + objectWidth;
               // free background
               uint8_t mask = getDownScaledBitmapData(posX, y, distance, &object, true);
               *buffer &= mask;

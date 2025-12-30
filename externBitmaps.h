@@ -31,7 +31,7 @@ extern const unsigned char leftRightWalls_D3[] PROGMEM;
 extern const unsigned char outerLeftRightWalls_D2[] PROGMEM;
 extern const unsigned char outerLeftRightWalls_D3[] PROGMEM;
 
-// list of possible non wall objects (i.e. monsters, doors, ...) (10 bytes per object)
+// list of possible non wall objects (i.e. monsters, doors, ...) (9 bytes per object)
 const NON_WALL_OBJECT objectList [11] PROGMEM = {
 //  itemType    , width, verticalOffsetBits, heightBytes, scalingThreshold, bitmapData
   { SKELETON    ,  28,           2 * 8,           5,       { 1, 2,  5 },     joey        },  //  0
@@ -43,7 +43,7 @@ const NON_WALL_OBJECT objectList [11] PROGMEM = {
   { CLOSED_CHEST,  24,           4 * 8,           3,       { 1, 3,  8 },     chestClosed },  //  6
   /* TODO: there is no reason to keep the MIMIC as a separate bitmap object, as it is identical to the closed chest! 
      Is there an easy way to fix this? */
-  { MIMIC       ,  24,           4 * 8,           3,       { 1, 3, 99 },     chestClosed },  //  7
+  { MIMIC       ,  24,           4 * 8,           3,       { 1, 3,  8 },     chestClosed },  //  7
   { OPEN_CHEST  ,  24,           4 * 8,           3,       { 1, 3,  8 },     chestOpen   },  //  8
   { FOUNTAIN    ,  12,           4 * 8,           3,       { 1, 2, 99 },     fountain    },  //  9
   { RAT         ,  20,           5 * 8,           2,       { 1, 2, 99 },     rat         },  // 10

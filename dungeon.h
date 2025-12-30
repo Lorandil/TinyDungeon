@@ -9,7 +9,7 @@
 // object shading requires wall shading to work
 #ifdef _ENABLE_WALL_SHADING_
   // use object shading, reduces clarity (not recommended)
-  #define _ENABLE_OBJECT_SHADING_
+  //#define _ENABLE_OBJECT_SHADING_
 #endif
 
 // uncomment this line to make the player invincible
@@ -50,8 +50,8 @@ public:
   void renderDungeonColumn( const uint8_t x );
 #if defined(__AVR_ATtiny85__)
   uint8_t __attribute__ ((noinline)) getDownScaledBitmapData( uint8_t x, uint8_t y, 
-                                   const uint8_t distance, const NON_WALL_OBJECT *object,
-                                   bool useMask );
+                                                              const uint8_t distance, const NON_WALL_OBJECT *object,
+                                                              bool useMask );
 #else
   uint8_t getDownScaledBitmapData( uint8_t x, uint8_t y,
                                    const uint8_t distance, const NON_WALL_OBJECT* object,

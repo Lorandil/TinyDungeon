@@ -1,3 +1,4 @@
+#include "Wire.h"
 #include <Arduino.h>
 //#include <avr/pgmspace.h>
 
@@ -40,10 +41,10 @@ void Dungeon::init()
 
   serialPrint( F("sizeof( MONSTER_STATS ) = ") );
   serialPrintln( sizeof( MONSTER_STATS ) );
-  serialPrint( F("sizeof( _dungeon.monsterStats ) = ") );
-  serialPrintln( sizeof( _dungeon.monsterStats ) );
   serialPrint( F("sizeof( monsterStats ) = ") );
   serialPrintln( sizeof( monsterStats ) );
+  serialPrint( F("sizeof( DUNGEON ) = ") );
+  serialPrintln( sizeof( DUNGEON ) );
 
   MONSTER_STATS *pMonsterStats = _dungeon.monsterStats;
 
@@ -734,11 +735,11 @@ void Dungeon::renderImage()
 {
   uint8_t pixels;
 
-  StartSendPixels();
-
   // the first 96 columns are used to display the dungeon
   for ( uint8_t x = 0; x < DUNGEON_WINDOW_SIZE_X; x++ )
   {
+    StartSendPixels();
+
     // get the graphics at x,y: walls, items, monsters
     renderDungeonColumn( x );
     for (uint8_t y = 0; y < DUNGEON_WINDOW_SIZE_Y / 8; y++)
@@ -749,21 +750,16 @@ void Dungeon::renderImage()
       SendPixels( pixels );
     } // for y
 
-    // TODO: remove this!
-    // display the whole screen
-    //DisplayBuffer();
-
+    StopSendPixels();
   } // for x
-
-  StopSendPixels();
-
-  StartSendPixels();
-
+  
   uint8_t statusPanelOffset = 0;
 
   // display the dashboard here
   for ( uint8_t x = 0; x < DASHBOARD_SIZE_X; x++ )
   {
+    StartSendPixels();
+
     for ( uint8_t y = 0; y < DASHBOARD_SIZE_Y / 8; y++ )
     {
       pixels = 0;
@@ -860,9 +856,9 @@ void Dungeon::renderImage()
 
     } // for y
 
-  } // for x
+    StopSendPixels();
 
-  StopSendPixels();
+  } // for x
 
   // display the whole screen
   DisplayBuffer();
