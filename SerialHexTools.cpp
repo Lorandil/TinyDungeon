@@ -25,7 +25,8 @@ void printHexToSerial( uint8_t value, bool addComma /*= false*/, bool autoLineBr
 {
   static uint8_t count = 0;
 
-  char hexString[] = F("0x00");
+  char hexString[5];
+  memcpy_P( hexString, F("0x00"), 5 );
   hexString[2] = getHexChar( value >> 4 );
   hexString[3] = getHexChar( value & 0x0F );
   Serial.print( hexString );

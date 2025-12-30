@@ -260,11 +260,13 @@ void _variableDelay_us(uint8_t delayValue)
 }
 
 /*-------------------------------------------------------*/
-// This code was originaly borrowed from Daniel C's Tiny-invaders :)
-// Code optimization by sbr
-void Sound( const uint8_t freq, const uint8_t dur )
-{
-#if !defined( NO_SOUND )
+#if defined( NO_SOUND )
+  void Sound(const uint8_t, const uint8_t) {}
+#else
+  // This code was originaly borrowed from Daniel C's Tiny-invaders :)
+  // Code optimization by sbr
+  void Sound( const uint8_t freq, const uint8_t dur )
+  {
     for ( uint8_t t = 0; t < dur; t++ )
     {
   #if defined(__AVR_ATtiny85__) /* codepath for ATtiny85 */
@@ -279,8 +281,8 @@ void Sound( const uint8_t freq, const uint8_t dur )
       _variableDelay_us( 255 - freq );
   #endif
     }
+  }
 #endif
-}
 
 /*-------------------------------------------------------*/
 void InitDisplay()
@@ -302,6 +304,8 @@ void InitDisplay()
     Serial.println(F("SSD1306 allocation failed - 1024 bytes for frame buffer required!")); for(;;);
   }
 
+  // enable horizontal addressing mode
+  _verticalAddressingModeEnabled = false;
   // reset display coordinates
   _column = 0;
   _row = 0;
@@ -333,13 +337,14 @@ void InitDisplayVertical()
   #endif
 #else
   // SSD1306_SWITCHCAPVCC = generate display voltage from 3.3V internally
-  // Address 0x3D for 128x64
+  // Address 0x3C for 128x64
   if( !display.begin(SSD1306_SWITCHCAPVCC, 0x3C)) 
   { 
     // extended the error message
     Serial.println(F("SSD1306 allocation failed - 1024 bytes for frame buffer required!")); for(;;);
   }
 
+  // enable vertical addressing mode
   _verticalAddressingModeEnabled = true;
   // reset display coordinates
   _column = 0;
@@ -360,6 +365,7 @@ void EnableVerticalAddressingMode()
   SSD1306.ssd1306_send_byte( 0x22 ); SSD1306.ssd1306_send_byte( 0x00 ); SSD1306.ssd1306_send_byte( 0x07 );
   SSD1306.ssd1306_send_command_stop();
 #else
+  // enable vertical addressing mode
   _verticalAddressingModeEnabled = true;
   // reset display coordinates
   _column = 0;
@@ -377,6 +383,7 @@ void DisableVerticalAddressingMode()
   SSD1306.ssd1306_send_byte( 0x22 ); SSD1306.ssd1306_send_byte( 0x00 ); SSD1306.ssd1306_send_byte( 0x07 );
   SSD1306.ssd1306_send_command_stop();
 #else
+  // enable horizontal addressing mode
   _verticalAddressingModeEnabled = false;
   // reset display coordinates
   _column = 0;
@@ -578,24 +585,6 @@ void serialPrintln( const __FlashStringHelper *text )
   Serial.println( text );
 #endif
 }
-
-/*-------------------------------------------------------
-void serialPrint( const unsigned int number )
-{
-#ifdef USE_SERIAL_PRINT
-  Serial.print( number );
-#endif
-}
-*/
-
-/*-------------------------------------------------------
-void serialPrintln( const unsigned int number )
-{
-#ifdef USE_SERIAL_PRINT
-  Serial.println( number );
-#endif
-}
-*/
 
 /*-------------------------------------------------------*/
 void serialPrint( const int number )

@@ -157,3 +157,33 @@ void serialPrintln( const __FlashStringHelper *text );
 //void serialPrintln( const unsigned int number );
 void serialPrint( const int number );
 void serialPrintln( const int number );
+
+#if !defined( __AVR_ATtiny85__)
+class Logger
+{
+public:
+  Logger(const char* text)
+  {
+    serialPrint(F("-> "));
+  #if _MSC_VER
+    strncpy_s(_text, text, sizeof(_text));
+  #else
+    strncpy(_text, text, sizeof(_text));
+  #endif
+    _text[sizeof(_text) - 1] = 0;
+    serialPrintln(text);
+    _startTime = millis();
+  }
+  ~Logger()
+  {
+    serialPrint(F("<- "));
+    serialPrint(_text);
+    serialPrint(F("[time = "));
+    serialPrint( millis() - _startTime );
+    serialPrintln(F("]"));
+  }
+private:
+  char   _text[16];
+  unsigned long _startTime;
+};
+#endif
