@@ -29,7 +29,7 @@
 #include "TinyJoypadUtils.h"
 #include "soundFX.h"
 
-static Dungeon _dungeon;
+static Dungeon theDungeon;
 
 /*--------------------------------------------------------*/
 void setup()
@@ -44,5 +44,5 @@ void setup()
 /*--------------------------------------------------------*/
 void loop()
 {
-  _dungeon.gameLoop();
+  theDungeon.gameLoop();
 }
