@@ -225,8 +225,8 @@ public:
     Serial.print( F(", Compass = ") );Serial.print( ( playerItems & ITEM_COMPASS ) != 0 );
     Serial.print( F(", displayXorEffect = ") );Serial.print( displayXorEffect );
     Serial.println();
+  }
   #endif
- }
 };
 
 // NON_WALL_OBJECT

@@ -9,7 +9,7 @@
 // object shading requires wall shading to work
 #ifdef _ENABLE_WALL_SHADING_
   // use object shading, reduces clarity (not recommended)
-  //#define _ENABLE_OBJECT_SHADING_
+  #define _ENABLE_OBJECT_SHADING_
 #endif
 
 // uncomment this line to make the player invincible
@@ -77,10 +77,9 @@ constexpr int8_t objCenterPosStartOffset = - ( objCenterPosPerLine - 1 ) / 2;
 constexpr int8_t objCenterPosEndOffset = ( objCenterPosPerLine - 1 ) / 2;
 // center positions for different object sizes and distances
 // restricted size to width of 3 positions per line to save flash (and nobody will notice the difference anyway)
-// Note: For distance 1 the right value should have been 136, but that's too big for int8_t, so we use 127 instead
 //                                   offset[px]: left,  center, right distance, width [px]
-const int8_t objectCenterPositions[] PROGMEM = { -127,   48,     127, //  0      176px (not used!)
-                                                  -40,   48,     127, //  1       88px
-                                                    4,   48,      88, //  2       44px
-                                                   26,   48,      70, //  3       22px
+const int8_t objectCenterPositions[] PROGMEM = { -127,    48,     127, //  0      176px
+                                                  -19,    48,     115, //  1       88px
+                                                   18,    48,      78, //  2       44px
+                                                   33,    48,      63, //  3       22px   
                                                };

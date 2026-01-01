@@ -1,6 +1,6 @@
 //   >>>>>  T-I-N-Y  D-U-N-G-E-O-N v2.0.1 for ATTINY85  MIT License <<<<
 //						Tinyjoypad rev2 compatible
-//                   Developer: Sven B 2021-2025
+//                   Developer: Sven B 2021-2026
 //              Contact EMAIL: Lorandil@gmx.de
 
 //  Tiny Dungeon is free software: you can redistribute it and/or modify

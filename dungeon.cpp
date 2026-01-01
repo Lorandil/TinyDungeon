@@ -1,8 +1,5 @@
-#include "Wire.h"
 #include <Arduino.h>
-//#include <avr/pgmspace.h>
 
-//#include "bitTables.h"
 #include "dungeon.h"
 #include "LevelDefinitions.h"
 #include "dungeonTypes.h"

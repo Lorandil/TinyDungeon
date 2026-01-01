@@ -87,5 +87,5 @@ const SIMPLE_WALL_INFO arrayOfWallInfo[] PROGMEM = {
   { outerLeftRightWalls_D3 ,  66   ,  80 ,   0x34      ,     3   ,     +2    ,  15  ,  30 }, // 22
 
   // no wall found, assuming full size (is this required?)
-  { NULL                   ,   0   ,  96 ,   0x07      ,     0   ,      0    ,   0  ,  96 }, // 23
+  { NULL                   ,   0   ,   0 ,   0x07      ,     0   ,      0    ,   0  ,  96 }, // 23
 };
