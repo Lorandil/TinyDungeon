@@ -1,12 +1,13 @@
 Bugs
 * door can be opened without a key (again!)
+* Fix error of partial rendering, when an object is sideways in front of the player, next to a wall on the same side
 
 Open Issues
-* integrate Daniel C's fast OLED driver
 * teleporters and spinners cannot be removed/enabled
 * interaction can only affect one cell    
 * The monster might also hit the player when the player choses to retreat (0 and 1 on D8).
 * Roll initiative for the first attack (use upper bits of timer?)
+* rework level layout for more fun
 
 Fixed Issues
 + opening doors doesn't consume a key
@@ -20,4 +21,5 @@ Fixed Issues
 + objects on adjacent squares are not rendered correctly (too close to center)
 + fixed broken death bitmap (due to vertical adressing mode)
 + death animation is broken
-+ code doesn''t fit into ATTiny85 anymore, need to optimize SSD1306 initialization
++ code doesn't fit into ATTiny85 anymore, need to optimize SSD1306 initialization
++ integrate Daniel C's fast OLED driver

@@ -2,6 +2,8 @@
 
 #include <Arduino.h>
 
+#define _USE_FAST_TINY_DRIVER_
+
 #if defined( __AVR_ATtiny85__)
   // required for _delay_us()
   #include <util/delay.h>
@@ -9,15 +11,6 @@
   #define _delay_ms    delay
   #define _delay_us    delayMicroseconds
 #endif
-
-////////////////////////////////////////////////////////////
-// Uncomment the following line if you are using the old function naming convention
-// where all function names were starting with 'TinyFlip_'
-//#define ENABLE_OLD_TINYFLIP_NAMING_CONVENTION
-
-////////////////////////////////////////////////////////////
-// Uncomment the following line to activate SH1106 support 
-//#define _USE_SH1106_
 
 ////////////////////////////////////////////////////////////
 // Uncomment the following line to enable serial screenshot
@@ -138,15 +131,6 @@ void DisplayBuffer();
 // screenshot functions
 void SerialScreenshot();
 void CheckForSerialScreenshot();
-
-#ifdef ENABLE_OLD_TINYFLIP_NAMING_CONVENTION
-  #define TinyFlip_PrepareDisplayRow        PrepareDisplayRow
-  #define TinyFlip_SendPixels               SendPixels
-  #define TinyFlip_FinishDisplayRow         FinishDisplayRow
-  #define TinyFlip_DisplayBuffer            DisplayBuffer
-  #define TinyFlip_SerialScreenshot         SerialScreenshot
-  #define TinyFlip_CheckForSerialScreenshot CheckForSerialScreenshot
-#endif
 
 // serial output without clustering the code with #if !defined(__AVR_ATtiny85__)...
 void serialPrint( const char *text );

@@ -11,7 +11,11 @@
 #include "TinyJoypadUtils.h"
 
 #if defined(__AVR_ATtiny85__)
-  #include <ssd1306xled.h>
+  #if defined( _USE_FAST_TINY_DRIVER_ )
+    #include "FastTinyDriver.h"
+  #else
+    #include <ssd1306xled.h>
+  #endif
 #else
   // include Adafruit library and immediately create an object
   #include <Adafruit_SSD1306.h>
@@ -288,12 +292,16 @@ void _variableDelay_us(uint8_t delayValue)
 void InitDisplay()
 {
 #if defined(__AVR_ATtiny85__) /* codepath for ATtiny85 */
-  #if defined( _SSD1306XLED_TINY_INIT_SUPPORTED_ )
-    // library supports shorter init method
-    SSD1306.ssd1306_tiny_init();
+  #if defined(_USE_FAST_TINY_DRIVER_)
+    TinyOLED_init();
   #else
-    // use standard init method
-    SSD1306.ssd1306_init();
+    #if defined( _SSD1306XLED_TINY_INIT_SUPPORTED_ )
+      // library supports shorter init method
+      SSD1306.ssd1306_tiny_init();
+    #else
+      // use standard init method
+      SSD1306.ssd1306_init();
+    #endif
   #endif
 #else
   // SSD1306_SWITCHCAPVCC = generate display voltage from 3.3V internally
@@ -319,7 +327,9 @@ void InitDisplay()
 void InitDisplayVertical()
 {
 #if defined(__AVR_ATtiny85__) /* codepath for ATtiny85 */
-  #if defined( _SSD1306XLED_TINY_INIT_SUPPORTED_ )
+  #if defined(_USE_FAST_TINY_DRIVER_)
+    TinyOLED_init();
+  #elif defined( _SSD1306XLED_TINY_INIT_SUPPORTED_ )
     #if defined( _SSD1306XLED_INIT_VERTICAL_SUPPORTED_ )
       // library supports shorter init method
       SSD1306.ssd1306_tiny_init_vertical();
@@ -359,11 +369,21 @@ void InitDisplayVertical()
 void EnableVerticalAddressingMode()
 {
 #if defined(__AVR_ATtiny85__) /* codepath for ATtiny85 */
-  SSD1306.ssd1306_send_command_start();
-  SSD1306.ssd1306_send_byte( 0x20 ); SSD1306.ssd1306_send_byte( 0x01 );
-  SSD1306.ssd1306_send_byte( 0x21 ); SSD1306.ssd1306_send_byte( 0x00 ); SSD1306.ssd1306_send_byte( 0x7f );
-  SSD1306.ssd1306_send_byte( 0x22 ); SSD1306.ssd1306_send_byte( 0x00 ); SSD1306.ssd1306_send_byte( 0x07 );
-  SSD1306.ssd1306_send_command_stop();
+  #if defined(_USE_FAST_TINY_DRIVER_)
+    i2c_start();
+    // Envoie l’adresse de l’esclave SSD1306 avec bit d’écriture (0)
+    i2c_write(SSD1306_ADDRESS << 1);
+    // Envoie l’octet de contrôle pour indiquer des données
+    i2c_write(0x40);
+    i2c_write(0x20); i2c_write(0x01);
+    i2c_stop();
+  #else
+    SSD1306.ssd1306_send_command_start();
+    SSD1306.ssd1306_send_byte( 0x20 ); SSD1306.ssd1306_send_byte( 0x01 );
+    SSD1306.ssd1306_send_byte( 0x21 ); SSD1306.ssd1306_send_byte( 0x00 ); SSD1306.ssd1306_send_byte( 0x7f );
+    SSD1306.ssd1306_send_byte( 0x22 ); SSD1306.ssd1306_send_byte( 0x00 ); SSD1306.ssd1306_send_byte( 0x07 );
+    SSD1306.ssd1306_send_command_stop();
+  #endif
 #else
   // enable vertical addressing mode
   _verticalAddressingModeEnabled = true;
@@ -377,11 +397,17 @@ void EnableVerticalAddressingMode()
 void DisableVerticalAddressingMode()
 {
 #if defined(__AVR_ATtiny85__) /* codepath for ATtiny85 */
-  SSD1306.ssd1306_send_command_start();
-  SSD1306.ssd1306_send_byte( 0x20 ); SSD1306.ssd1306_send_byte( 0x00 );
-  SSD1306.ssd1306_send_byte( 0x21 ); SSD1306.ssd1306_send_byte( 0x00 ); SSD1306.ssd1306_send_byte( 0x7f );
-  SSD1306.ssd1306_send_byte( 0x22 ); SSD1306.ssd1306_send_byte( 0x00 ); SSD1306.ssd1306_send_byte( 0x07 );
-  SSD1306.ssd1306_send_command_stop();
+  #if defined(_USE_FAST_TINY_DRIVER_)
+    i2c_start();
+    i2c_write(0x20); i2c_write(0x00);
+    i2c_stop();
+  #else
+    SSD1306.ssd1306_send_command_start();
+    SSD1306.ssd1306_send_byte( 0x20 ); SSD1306.ssd1306_send_byte( 0x00 );
+    SSD1306.ssd1306_send_byte( 0x21 ); SSD1306.ssd1306_send_byte( 0x00 ); SSD1306.ssd1306_send_byte( 0x7f );
+    SSD1306.ssd1306_send_byte( 0x22 ); SSD1306.ssd1306_send_byte( 0x00 ); SSD1306.ssd1306_send_byte( 0x07 );
+    SSD1306.ssd1306_send_command_stop();
+  #endif
 #else
   // enable horizontal addressing mode
   _verticalAddressingModeEnabled = false;
@@ -396,22 +422,17 @@ void DisableVerticalAddressingMode()
 void PrepareDisplayRow( uint8_t y )
 {
 #if defined(__AVR_ATtiny85__)  /* codepath for ATtiny85 */
-    // initialize image transfer to segment 'y'
-    SSD1306.ssd1306_send_command(0xb0 + y);
-  #ifdef _USE_SH1106_
-    // SH1106 internally uses 132 pixels/line,
-    // output is (always?) centered, so we need to start at position 2
-    SSD1306.ssd1306_send_command(0x02);
-    SSD1306.ssd1306_send_command(0x10);  
+  #if defined(_USE_FAST_TINY_DRIVER_)
+    ssd1306_selectPage( y );
   #else
-    // classic SSD1306 supports only 128 pixels/line, so we start at 0
-    SSD1306.ssd1306_send_command(0x00);
-    SSD1306.ssd1306_send_command(0x10);  
-  #endif    
-    SSD1306.ssd1306_send_data_start();
+      // initialize image transfer to segment 'y'
+      SSD1306.ssd1306_send_command(0xb0 + y);
+      SSD1306.ssd1306_send_command(0x00);
+      SSD1306.ssd1306_send_command(0x10);  
+      SSD1306.ssd1306_send_data_start();
+  #endif
 
 #else  /* codepath for any Adafruit_SSD1306 supported MCU */
-
   // address the display buffer
   _row = y;
 #endif
@@ -421,7 +442,15 @@ void PrepareDisplayRow( uint8_t y )
 void StartSendPixels()
 {
 #if defined(__AVR_ATtiny85__)  /* codepath for ATtiny85 */
-  SSD1306.ssd1306_send_data_start();
+  #if defined(_USE_FAST_TINY_DRIVER_)
+    i2c_start();
+    // Envoie l’adresse de l’esclave SSD1306 avec bit d’écriture (0)
+    i2c_write(SSD1306_ADDRESS << 1);
+    // Envoie l’octet de contrôle pour indiquer des données
+    i2c_write(0x40);
+  #else
+    SSD1306.ssd1306_send_data_start();
+  #endif
 #endif
 }
 
@@ -464,8 +493,12 @@ void writePixelsToAdafruitBuffer( uint8_t pixels )
 void SendPixels( uint8_t pixels )
 {
 #if defined(__AVR_ATtiny85__) /* codepath for ATtiny85 */
-  // send a byte directly to the SSD1306
-  SSD1306.ssd1306_send_byte( pixels );
+  #if defined(_USE_FAST_TINY_DRIVER_)
+    i2c_write( pixels );
+  #else
+    // send a byte directly to the SSD1306
+    SSD1306.ssd1306_send_byte( pixels );
+  #endif
 #else  /* codepath for any Adafruit_SSD1306 supported MCU */
   // write pixels directly into the buffer
   writePixelsToAdafruitBuffer( pixels );
@@ -476,7 +509,11 @@ void SendPixels( uint8_t pixels )
 void StopSendPixels()
 {
 #if defined(__AVR_ATtiny85__)  /* codepath for ATtiny85 */
-  SSD1306.ssd1306_send_data_stop();
+  #if defined (_USE_FAST_TINY_DRIVER_)
+    i2c_stop();
+  #else
+    SSD1306.ssd1306_send_data_stop();
+  #endif
 #endif
 }
 
@@ -487,7 +524,7 @@ void FinishDisplayRow()
 #if defined(__AVR_ATtiny85__)
   // this line appears to be optional, as it was never called during the intro screen...
   // but hey, we still have some bytes left ;)
-  SSD1306.ssd1306_send_data_stop();
+  StopSendPixels();
 #endif
 }
 

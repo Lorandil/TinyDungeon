@@ -132,7 +132,10 @@ void Dungeon::renderDungeonColumn( const uint8_t x )
             if ((wallInfo.viewDistance == distance)
               && !(cellValue & WALL_MASK))
             {
-              return;
+              if ( !leftRightOffset )
+              {
+                return;
+              }
             }
 
             uint8_t* buffer = _dungeon.lineBuffer;

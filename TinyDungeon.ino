@@ -37,7 +37,7 @@ void setup()
   // initialize the pins (and serial port if present)
   InitTinyJoypad();
 
-  // switch addressing mode to vertical adressing
+  // switch to vertical addressing mode
   InitDisplayVertical();
 }
 

@@ -59,7 +59,9 @@ enum
   FAKE_WALL               = 0x10,
   // unless it is solid...
   WALL                    = FAKE_WALL | FLAG_SOLID,
-  
+  // but even a non solid wall *looks* like a wall
+  WALL_MASK               = FAKE_WALL,
+
   // Caution! The following objects are always rendered *on* a wall, so the wall bit must be '1'
   DOOR                    = 0x20 | WALL,
   SWITCH_L                = 0x40 | WALL,
@@ -76,7 +78,6 @@ enum
   FOUNTAIN                = 0xC0 | FLAG_SOLID,
   BARS                    = 0xE0 | FLAG_SOLID,
 
-  WALL_MASK               = 0x10,
   OBJECT_MASK             = 0xF0 | FLAG_SOLID | FLAG_MONSTER,
 
   // limited orientation for objects 
@@ -208,6 +209,8 @@ public:
         else if ( cellValue == MIMIC ) { Serial.print( F("mi") ); }
         else if ( ( cellValue & OBJECT_MASK ) == BARS ) { Serial.print( F("# ") ); }
         else if ( ( cellValue & OBJECT_MASK ) == FOUNTAIN ) { Serial.print( F("F ") ); }
+        else if ((cellValue & OBJECT_MASK ) == CLOSED_CHEST ) { Serial.print(F("cc") ); }
+        else if ((cellValue & OBJECT_MASK ) == OPEN_CHEST ) { Serial.print(F("oc") ); }
         else { Serial.print( F("  ") ); }
       }
       Serial.println();
