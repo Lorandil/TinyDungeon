@@ -116,7 +116,10 @@ void Dungeon::gameLoop()
     {
       // update player's position and orientation
       checkPlayerMovement();
-      
+
+      // wait a litte while to give the player a chance to navigate the dungeon ;)
+      _delay_ms( 100 );
+
     #ifdef _SLOW_DEATH      
       // slowly kill the player
       _dungeon.playerHP--;
@@ -329,10 +332,7 @@ void Dungeon::checkPlayerMovement()
             playerAttack( monster );
 
             // wait for fire button to be released (random number generation!)
-            while ( isFirePressed() )
-            {
-              updateDice();
-            }
+            waitUntilFireButtonReleased();
 
             // update the status pane and render the screen (monster will be inverted)
             renderImage();
@@ -629,6 +629,16 @@ void Dungeon::monsterAttack( MONSTER_STATS *monster )
 
   // just some logging
   serialPrintln(F("<- monsterAttack()"));
+}
+
+/*--------------------------------------------------------*/
+void Dungeon::waitUntilFireButtonReleased()
+{
+  // wait for fire button to be released (random number generation!)
+  while ( isFirePressed() )
+  {
+    updateDice();
+  }
 }
 
 /*--------------------------------------------------------*/

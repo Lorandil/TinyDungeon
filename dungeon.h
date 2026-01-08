@@ -45,6 +45,7 @@ public:
   void playerAttack( MONSTER_STATS *monster );
   void monsterAttack( MONSTER_STATS *monster );
   void playerInteraction( uint8_t *cell, const uint8_t cellValue );
+  void waitUntilFireButtonReleased();
   void /*__attribute__ ((noinline))*/ renderImage();
   // bitmap drawing functions
   void renderDungeonColumn( const uint8_t x );
