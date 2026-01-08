@@ -5,7 +5,7 @@
 
 //  Tiny Dungeon is free software: you can redistribute it and/or modify
 //  it under the terms of the MIT License.
-
+  
 //  This program is distributed in the hope that it will be useful,
 //  but WITHOUT ANY WARRANTY; without even the implied warranty of
 //  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -14,7 +14,10 @@
 // Resources:
 // ----------
 // A SSD1306 library for I2C is required:
-// - for ATtiny85 the a modified version of the <ssd1306xled> library by Tinusaur/Neven Boyanov/Tejashwi Kalp Taru is required.
+// - for ATtiny85 
+//   - a modified version of the <ssd1306xled> library by Tinusaur/Neven Boyanov/Tejashwi Kalp Taru is required
+//   or 
+//   - the FastTinyDriver by Electro L.I.B (provided unter GPLv3)
 // - for all other micro controllers the Adafruit_SSD1306 library is used.
 //
 // Because the Arduino IDE doesn't come with ATtiny85 support, a suitable core is also required:
