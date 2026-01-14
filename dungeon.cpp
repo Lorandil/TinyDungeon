@@ -118,7 +118,7 @@ void Dungeon::gameLoop()
       checkPlayerMovement();
 
       // wait a litte while to give the player a chance to navigate the dungeon ;)
-      _delay_ms( 100 );
+      _delay_ms( 200 );
 
     #ifdef _SLOW_DEATH      
       // slowly kill the player

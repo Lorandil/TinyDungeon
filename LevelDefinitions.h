@@ -64,14 +64,16 @@ const INTERACTION_INFO interactionData[] PROGMEM =
 };
 
 // special cell effects (4 bytes per FX)
+// Note: If there would be a lot more spinners/teleporters/... it would make sense to combine value_1 and value_2 into a single byte.
+//       But as it is, saving 5 bytes of data here would increase decoding costs by ~16 bytes, so no deal ;)
 const SPECIAL_CELL_INFO specialCellFX[] PROGMEM =
 {
-  // cell type ,     position       , value_1, value_2
+  // cell type ,       position       , value_1, value_2
   { TELEPORTER ,  7 + 11 * LEVEL_WIDTH,     5  ,   13    },
   { TELEPORTER ,  7 + 13 * LEVEL_WIDTH,     5  ,   11    },
   { SPINNER    , 10 +  2 * LEVEL_WIDTH,    +2  ,    0    },
   { SPINNER    ,  2 +  5 * LEVEL_WIDTH,    +1  ,    0    },
-  { SPINNER    ,  7 +  8 * LEVEL_WIDTH,    +3  ,    0    },
+  { SPINNER    ,  7 +  9 * LEVEL_WIDTH,    +3  ,    0    },
 };
 
 // monster stats (6 bytes per monster - must fit into RAM - or EEPROM???)
