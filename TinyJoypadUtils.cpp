@@ -17,10 +17,18 @@
     #include <ssd1306xled.h>
   #endif
 #else
-  // include Adafruit library and immediately create an object
-  #include <Adafruit_SSD1306.h>
-  Adafruit_SSD1306 display( 128, 64, &Wire, -1 );
-  uint8_t *_adafruitBuffer;
+  // Arduboy2?
+  #ifdef _USE_ARDUBOY2_
+    Arduboy2 arduboy;
+    BeepPin1 beep;
+  #else
+    // include Adafruit library and immediately create an object
+    #include <Adafruit_SSD1306.h>
+    Adafruit_SSD1306 display( 128, 64, &Wire, -1 );
+  #endif
+
+  // frame buffer handling and addressing
+  uint8_t *_frameBuffer;
   uint8_t _column{0};
   uint8_t _row{0};
   // flag if vertical addressing mode is enabled
@@ -49,15 +57,22 @@ void InitTinyJoypad()
   // configure A2 (aka SOUND_PIN) as output
   SOUND_PORT_DDR |= ( 1 << SOUND_PIN );
 #elif !defined( USE_KEYBOARD_INPUT )
-  // use 'pinMode()' for simplicity's sake... any other micro controller has enough flash :)
-  pinMode( LEFT_RIGHT_BUTTON, INPUT );
-  pinMode( UP_DOWN_BUTTON, INPUT );
-  pinMode( FIRE_BUTTON, INPUT );
-  // configure SOUND_PIN as output (Pin D12 on Arduino UNO R3 and Pin D10 on Arduino Mega 2560 )
-  pinMode( SOUND_PIN, OUTPUT );
-
-  // prepare serial port for debugging output
-  Serial.begin( 115200 );
+  #ifdef _USE_ARDUBOY2_
+    // initialize Arduboy2
+    arduboy.begin();
+    beep.begin();
+    // prepare serial port for debugging output
+    Serial.begin( 115200 );
+  #else
+    // use 'pinMode()' for simplicity's sake... any other micro controller has enough flash :)
+    pinMode( LEFT_RIGHT_BUTTON, INPUT );
+    pinMode( UP_DOWN_BUTTON, INPUT );
+    pinMode( FIRE_BUTTON, INPUT );
+    // configure SOUND_PIN as output (Pin D12 on Arduino UNO R3 and Pin D10 on Arduino Mega 2560 )
+    pinMode( SOUND_PIN, OUTPUT );
+    // prepare serial port for debugging output
+    Serial.begin( 115200 );
+  #endif
 #endif
 }
 
@@ -131,8 +146,12 @@ bool isLeftPressed()
   leftKeyPressed = false;
   return( key );
 #else
-  uint16_t inputX = analogRead( LEFT_RIGHT_BUTTON );
-  return( ( inputX >= ANALOG_UPPER_LIMIT_MIN ) && ( inputX < ANALOG_UPPER_LIMIT_MAX ) );
+  #ifdef _USE_ARDUBOY2_
+    return( arduboy.pressed( LEFT_BUTTON ) );
+  #else
+    uint16_t inputX = analogRead( LEFT_RIGHT_BUTTON );
+    return( ( inputX >= ANALOG_UPPER_LIMIT_MIN ) && ( inputX < ANALOG_UPPER_LIMIT_MAX ) );
+  #endif
 #endif
 }
 
@@ -145,8 +164,12 @@ bool isRightPressed()
   rightKeyPressed = false;
   return( key );
 #else
-  uint16_t inputX = analogRead( LEFT_RIGHT_BUTTON );
-  return( ( inputX > ANALOG_LOWER_LIMIT_MIN ) && ( inputX < ANALOG_LOWER_LIMIT_MAX ) );
+  #ifdef _USE_ARDUBOY2_
+    return( arduboy.pressed( RIGHT_BUTTON ) );
+  #else
+    uint16_t inputX = analogRead( LEFT_RIGHT_BUTTON );
+    return( ( inputX > ANALOG_LOWER_LIMIT_MIN ) && ( inputX < ANALOG_LOWER_LIMIT_MAX ) );
+  #endif
 #endif
 }
 
@@ -159,8 +182,12 @@ bool isUpPressed()
   upKeyPressed = false;
   return(key);
 #else
-  uint16_t inputY = analogRead( UP_DOWN_BUTTON );
-  return( ( inputY > ANALOG_LOWER_LIMIT_MIN ) && ( inputY < ANALOG_LOWER_LIMIT_MAX ) );
+  #ifdef _USE_ARDUBOY2_
+    return( arduboy.pressed( UP_BUTTON ) );
+  #else
+    uint16_t inputY = analogRead( UP_DOWN_BUTTON );
+    return( ( inputY > ANALOG_LOWER_LIMIT_MIN ) && ( inputY < ANALOG_LOWER_LIMIT_MAX ) );
+  #endif
 #endif
 }
 
@@ -173,8 +200,12 @@ bool isDownPressed()
   downKeyPressed = false;
   return(key);
 #else
-  uint16_t inputY = analogRead( UP_DOWN_BUTTON );
-  return( ( inputY >= ANALOG_UPPER_LIMIT_MIN ) && ( inputY < ANALOG_UPPER_LIMIT_MAX ) );
+  #ifdef _USE_ARDUBOY2_
+    return( arduboy.pressed( DOWN_BUTTON ) );
+  #else
+    uint16_t inputY = analogRead( UP_DOWN_BUTTON );
+    return( ( inputY >= ANALOG_UPPER_LIMIT_MIN ) && ( inputY < ANALOG_UPPER_LIMIT_MAX ) );
+  #endif
 #endif
 }
 
@@ -187,7 +218,11 @@ bool isFirePressed()
   actionKeyPressed = false;
   return( key );
 #else
-  return( digitalRead( FIRE_BUTTON ) == 0 );
+  #ifdef _USE_ARDUBOY2_
+    return( arduboy.pressed( A_BUTTON ) );
+  #else
+    return( digitalRead( FIRE_BUTTON ) == 0 );
+  #endif
 #endif
 }
 
@@ -279,10 +314,14 @@ void _variableDelay_us(uint8_t delayValue)
       SOUND_PORT = SOUND_PORT & ~( 1 << SOUND_PIN );
       _variableDelay_us( 255 - freq );
   #else
+    #ifdef _USE_ARDUBOY2_
+      // yeah, figure that out later...
+    #else
       if ( freq != 0 ){ digitalWrite( SOUND_PIN, 1 ); }
       _variableDelay_us( 255 - freq );
       digitalWrite( SOUND_PIN, 0 );
       _variableDelay_us( 255 - freq );
+    #endif
   #endif
     }
   }
@@ -304,22 +343,26 @@ void InitDisplay()
     #endif
   #endif
 #else
-  // SSD1306_SWITCHCAPVCC = generate display voltage from 3.3V internally
-  // Address 0x3D for 128x64
-  if( !display.begin(SSD1306_SWITCHCAPVCC, 0x3C)) 
-  { 
-    // extended the error message
-    Serial.println(F("SSD1306 allocation failed - 1024 bytes for frame buffer required!")); for(;;);
-  }
+  #ifdef _USE_ARDUBOY2_
+    _frameBuffer = arduboy.getBuffer();
+  #else
+    // SSD1306_SWITCHCAPVCC = generate display voltage from 3.3V internally
+    // Address 0x3D for 128x64
+    if( !display.begin(SSD1306_SWITCHCAPVCC, 0x3C)) 
+    { 
+      // extended the error message
+      Serial.println(F("SSD1306 allocation failed - 1024 bytes for frame buffer required!")); for(;;);
+    }
+
+    // get raw image buffer
+    _frameBuffer = display.getBuffer();
+  #endif
 
   // enable horizontal addressing mode
   _verticalAddressingModeEnabled = false;
   // reset display coordinates
   _column = 0;
   _row = 0;
-
-  // get raw image buffer
-   _adafruitBuffer = display.getBuffer();
 #endif
 }
 
@@ -346,22 +389,25 @@ void InitDisplayVertical()
     EnableVerticalAddressingMode();
   #endif
 #else
-  // SSD1306_SWITCHCAPVCC = generate display voltage from 3.3V internally
-  // Address 0x3C for 128x64
-  if( !display.begin(SSD1306_SWITCHCAPVCC, 0x3C)) 
-  { 
-    // extended the error message
-    Serial.println(F("SSD1306 allocation failed - 1024 bytes for frame buffer required!")); for(;;);
-  }
+  #ifdef _USE_ARDUBOY2_
+    _frameBuffer = arduboy.getBuffer();
+  #else
+    // SSD1306_SWITCHCAPVCC = generate display voltage from 3.3V internally
+    // Address 0x3C for 128x64
+    if( !display.begin(SSD1306_SWITCHCAPVCC, 0x3C)) 
+    { 
+      // extended the error message
+      Serial.println(F("SSD1306 allocation failed - 1024 bytes for frame buffer required!")); for(;;);
+    }
+    // get raw image buffer
+    _frameBuffer = display.getBuffer();
+  #endif
 
   // enable vertical addressing mode
   _verticalAddressingModeEnabled = true;
   // reset display coordinates
   _column = 0;
   _row = 0;
-
-  // get raw image buffer
-   _adafruitBuffer = display.getBuffer();
 #endif
 }
 
@@ -457,9 +503,9 @@ void StartSendPixels()
 #if !defined(__AVR_ATtiny85__)  /* codepath for ATtiny85 */
 /*-------------------------------------------------------*/
 // writes the pixles and handles the addressing of columns and rows
-void writePixelsToAdafruitBuffer( uint8_t pixels )
+void writePixelsToFrameBuffer( uint8_t pixels )
 {
-  _adafruitBuffer[_column + _row * 128] = pixels;
+  _frameBuffer[_column + _row * 128] = pixels;
   if ( _verticalAddressingModeEnabled )
   {
     _row++;
@@ -501,7 +547,7 @@ void SendPixels( uint8_t pixels )
   #endif
 #else  /* codepath for any Adafruit_SSD1306 supported MCU */
   // write pixels directly into the buffer
-  writePixelsToAdafruitBuffer( pixels );
+  writePixelsToFrameBuffer( pixels );
 #endif
 }
 
@@ -532,15 +578,19 @@ void FinishDisplayRow()
 void DisplayBuffer()
 {
 #if !defined(__AVR_ATtiny85__) /* codepath for any Adafruit_SSD1306 supported MCU */
-  // display buffer (not necessary)
-  display.display();
+  #ifdef _USE_ARDUBOY2_
+    arduboy.display();
+  #else
+    // display buffer (not necessary)
+    display.display();
 
-  // slow down fast microcontrollers
-  #if defined(_VARIANT_ARDUINO_ZERO_)
-    // wait 100ms to compensate for extremely fast hardware i2c
-    delay( 100 );
+    // slow down fast microcontrollers (maybe obsolete)
+    #if defined(_VARIANT_ARDUINO_ZERO_)
+      // wait 100ms to compensate for extremely fast hardware i2c
+      delay( 100 );
+    #endif
   #endif
-  
+
   #ifndef _SERIAL_SCREENSHOT_NO_AUTO_SHOT_
     // check for screenshot request
     CheckForSerialScreenshot();

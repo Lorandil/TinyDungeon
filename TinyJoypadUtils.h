@@ -2,12 +2,21 @@
 
 #include <Arduino.h>
 
-#define _USE_FAST_TINY_DRIVER_
-
 #if defined( __AVR_ATtiny85__)
+  // use Daniel C's fast display driver for ATtiny85 and SSD1306
+  #define _USE_FAST_TINY_DRIVER_
   // required for _delay_us()
   #include <util/delay.h>
 #else
+  // option to prevent usage of Arduboy2 by preprocessor directive
+  #ifndef _NO_ARDUBOY2_
+    // use Arduboy2 for everything that's not an ATtiny85
+    #define _USE_ARDUBOY2_
+    #ifdef _USE_ARDUBOY2_
+      #include <Arduboy2.h>
+    #endif
+  #endif
+
   #define _delay_ms    delay
   #define _delay_us    delayMicroseconds
 #endif
