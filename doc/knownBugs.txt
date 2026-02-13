@@ -1,6 +1,6 @@
 Bugs
-* door can be opened without a key (again!)
 * Fix error of partial rendering, when an object is sideways in front of the player, next to a wall on the same side
+* Potion's effect doesn't show immediately - why?
 
 Open Issues
 * teleporters and spinners cannot be removed/enabled

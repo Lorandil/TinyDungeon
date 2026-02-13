@@ -26,7 +26,7 @@ void Dungeon::init()
   _dungeon.playerY = 1;// 12; //12; //11;
   _dungeon.dir  = EAST;
   // prepare player stats
-  _dungeon.playerHP = 10;
+  _dungeon.playerHP = 12;
   _dungeon.playerDamage = 3;
   //_dungeon.displayXorEffect = 0;
 
@@ -832,7 +832,7 @@ void Dungeon::renderImage()
           }
         }
         // did the player win?
-        if ( y == VICTORY_ROW )
+        if ( y >= VICTORY_ROW )
         {
           if ( !(_dungeon.playerItems & ITEM_VICTORY ) ) { pixels = 0; }
         }

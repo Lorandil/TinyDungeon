@@ -176,8 +176,8 @@ const MONSTER_STATS monsterStats[MAX_MONSTERS] PROGMEM =
   {   3 +  5 * LEVEL_WIDTH,  RAT        ,  5 ,     -4      ,      1       ,           0                               }, // rat
   {  13 +  6 * LEVEL_WIDTH,  SKELETON   , 15 ,     +4      ,      0       ,  ITEM_SWORD | ITEM_SHIELD                 }, // skeleton
   {   7 +  8 * LEVEL_WIDTH,  SKELETON   , 12 ,     +3      ,      0       ,  ITEM_SWORD | ITEM_SHIELD                 }, // skeleton
-  {   3 + 10 * LEVEL_WIDTH,  MIMIC      , 15 ,     -1      ,      1       ,     ITEM_POTION | ITEM_SWORD              }, // mimic
-  {  11 + 10 * LEVEL_WIDTH,  MIMIC      , 15 ,     +1      ,      0       ,  ITEM_SWORD | ITEM_SHIELD | ITEM_POTION   }, // mimic
+  {   3 + 10 * LEVEL_WIDTH,  MIMIC      , 15 ,     -1      ,      1       ,  ITEM_SWORD | ITEM_POTION                 }, // mimic
+  {  11 + 10 * LEVEL_WIDTH,  MIMIC      , 15 ,     +1      ,      0       ,  ITEM_SWORD | ITEM_POTION                 }, // mimic
   {   3 + 14 * LEVEL_WIDTH,  SKELETON   , 12 ,     +3      ,      0       ,  ITEM_SWORD | ITEM_SHIELD                 }, // skeleton
   {  13 + 14 * LEVEL_WIDTH,  SKELETON   , 12 ,     +3      ,      0       ,  ITEM_SWORD | ITEM_SHIELD                 }, // skeleton
 };

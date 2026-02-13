@@ -26,9 +26,9 @@ const int8_t   POTION_HITPOINT_BONUS     =  8;
 // rows in the dashboard
 const uint8_t  COMPASS_ROW               =  0;
 const uint8_t  SKELETON_ROW              =  3;
-const uint8_t  HIT_POINTS_ROW            =  4;
-const uint8_t  ITEMS_ROW                 =  5;
-const uint8_t  VICTORY_ROW               =  6;
+const uint8_t  HIT_POINTS_ROW            =  3;
+const uint8_t  ITEMS_ROW                 =  4;
+const uint8_t  VICTORY_ROW               =  5;
 
 // icon positions for the different objects
 const uint8_t  ITEM_SWORD_POS_X          =  2;
