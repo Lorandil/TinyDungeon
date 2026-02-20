@@ -1,6 +1,5 @@
 Bugs
 * Fix error of partial rendering, when an object is sideways in front of the player, next to a wall on the same side
-* Potion's effect doesn't show immediately - why?
 
 Open Issues
 * teleporters and spinners cannot be removed/enabled
@@ -23,3 +22,5 @@ Fixed Issues
 + death animation is broken
 + code doesn't fit into ATTiny85 anymore, need to optimize SSD1306 initialization
 + integrate Daniel C's fast OLED driver
++ Potion's healing effect applies immediately now
+

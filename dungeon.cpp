@@ -117,6 +117,17 @@ void Dungeon::gameLoop()
       // update player's position and orientation
       checkPlayerMovement();
 
+      // potion found?
+      if (_dungeon.playerItems & ITEM_POTION)
+      {
+        // add hitpoints to player's status
+        _dungeon.playerHP += POTION_HITPOINT_BONUS + getDice(8);
+        // remove potion from inventory
+        _dungeon.playerItems -= ITEM_POTION;
+        // play some "swallowing" sound
+        potionSound();
+      }
+
       // wait a litte while to give the player a chance to navigate the dungeon ;)
       _delay_ms( 200 );
 
@@ -699,17 +710,6 @@ void Dungeon::playerInteraction( uint8_t *cell, const uint8_t cellValue )
             // just grab the item!
             _dungeon.playerItems |= interactionInfo.newItem;
           }
-        }
-
-        // potion found?
-        if ( _dungeon.playerItems & ITEM_POTION )
-        {
-          // add hitpoints to player's status
-          _dungeon.playerHP += POTION_HITPOINT_BONUS + getDice( 8 );
-          // remove potion from inventory
-          _dungeon.playerItems -= ITEM_POTION;
-          // play some "swallowing" sound
-          potionSound();
         }
 
         if ( modifyCurrentPosition )
