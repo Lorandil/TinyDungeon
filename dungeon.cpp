@@ -437,10 +437,16 @@ uint8_t *Dungeon::getCellRaw( int8_t x, int8_t y, const int8_t distance, const i
 // Limits the position in the dungeon, but enables wrap-around :)
 void Dungeon::limitDungeonPosition( int8_t &x, int8_t &y )
 {
+#ifdef __AVR_ATtiny85__
+  // on ATtiny85 the dungeon is 16x16 and won't become any larger...
+  x = x & 0x0f;
+  y = y & 0x0f;
+#else
   if ( x < 0 ) { x += getLevelWidth(); }
   if ( x >= getLevelWidth() ) { x -= getLevelWidth(); }
   if ( y < 0 ) { y += getLevelHeight(); }
   if ( y >= getLevelHeight() ) { y -= getLevelHeight(); }
+#endif
 }
 
 
